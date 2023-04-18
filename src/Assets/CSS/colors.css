@@ -1,0 +1,38 @@
+:root {
+  --pink-default: #ffeff2;
+
+  --blue-default: #07387c;
+
+  --gray-default: #9a9ab0;
+  --gray-primary: #aeaeae;
+  --gray-secondary: #797979;
+  --gray-tertiary: #d3d3d3;
+
+  --purple-default: #40189d;
+  --purple-primary: #f3eaff;
+  --purple-secondary: #cecce4;
+
+  --black-default: #3d3d3d;
+
+  --red-default: #9d1818;
+}
+
+.gray-text {
+  color: var(--gray-default);
+}
+.gray-primary-text {
+  color: var(--gray-primary);
+}
+.gray-secondary-text {
+  color: var(--gray-secondary);
+}
+.black-default-text {
+  color: var(--black-default);
+}
+.purple-default-text {
+  color: var(--purple-default);
+}
+
+a {
+  text-decoration: none;
+}

@@ -1,0 +1,36 @@
+.application-container {
+  padding-top: 100px;
+}
+.surrogate-form-container {
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 40px 0;
+}
+.surrogate-form-left,
+.surrogate-form-right {
+  border: 1px solid #e2e4e5;
+  border-radius: 10px;
+  padding: 30px;
+}
+.surrogate-form-right {
+  height: fit-content;
+}
+.surrogate-form-about {
+  max-width: 500px;
+}
+.surrogate-form-input {
+  justify-content: space-between;
+  margin: 10px 0;
+  max-width: 500px;
+}
+.surrogate-form-label {
+  margin-bottom: 5px;
+}
+.submit-application-form {
+  background-color: var(--purple-secondary);
+  width: fit-content;
+  padding: 10px 30px;
+  margin-top: 20px;
+  border-radius: 6px;
+}

@@ -1,0 +1,48 @@
+@import url("./fonts.css");
+@import url("./colors.css");
+@import url("./auth.css");
+@import url("./default-input.css");
+@import url("./top-nav.css");
+@import url("./side-nav.css");
+
+@import url("./modal.css");
+@import url("./youtube-embed.css");
+
+@import url("./dashboard/home.css");
+@import url("./dashboard/account-management.css");
+@import url("./dashboard/footer.css");
+@import url("./dashboard/application.css");
+@import url("./dashboard/custom-select.css");
+@import url("./dashboard.css");
+
+@import url("./small/SmallAuth.css");
+@import url("./small/SmallHome.css");
+@import url("./small/SmallTopNav.css");
+@import url("./small/SmallApplication.css");
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+* {
+  box-sizing: border-box;
+  outline: none !important;
+}
+.flex-row {
+  display: flex;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.space-between {
+  justify-content: space-between;
+}
+.align-center {
+  align-items: center;
+}
+.pointer {
+  cursor: pointer;
+}

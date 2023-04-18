@@ -1,0 +1,10 @@
+@media screen and (max-width: 560px) {
+  form.auth-form {
+    width: 90%;
+  }
+}
+@media screen and (max-width: 400px) {
+  img.auth-image {
+    width: 200px;
+  }
+}

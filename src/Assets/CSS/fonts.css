@@ -1,0 +1,18 @@
+@import url("./text.css");
+/* Cinzel */
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap");
+
+/* Mulish */
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800;900;1000&display=swap");
+
+/* Poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,800;1,900&display=swap");
+.mulish {
+  font-family: "Mulish", sans-serif;
+}
+.cinzel {
+  font-family: "Cinzel", serif;
+}
+.poppins {
+  font-family: "Poppins", sans-serif;
+}

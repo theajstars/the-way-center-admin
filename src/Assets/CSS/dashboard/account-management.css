@@ -1,0 +1,31 @@
+.account-management-row {
+  margin-top: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+.account-management-icon {
+  background-color: var(--purple-secondary);
+  /* background-color: var(--gray-tertiary); */
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 18px;
+}
+@media screen and (max-width: 700px) {
+  div.account-management-item {
+    flex-direction: column;
+  }
+}
+@media screen and (max-width: 550px) {
+  div.account-management-row {
+    flex-direction: column;
+  }
+  div.account-management-item {
+    margin-bottom: 30px;
+    flex-direction: row;
+  }
+}

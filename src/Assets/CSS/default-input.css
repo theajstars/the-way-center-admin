@@ -1,0 +1,57 @@
+.default-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+.default-input-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-family: "Cinzel", serif;
+}
+.default-input,
+.default-input-with-addon-container {
+  border: 1px solid var(--blue-default);
+  height: 45px;
+  border-radius: 5px;
+  outline: none;
+  background-color: #ffffff !important;
+  /* background: url(../IMG/fff.png); */
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.default-input,
+.default-input-with-addon {
+  padding-left: 10px;
+}
+.default-input:focus {
+  border: 1px solid #000;
+}
+.default-input-with-addon {
+  border-radius: 5px;
+  border: none;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  background-color: transparent !important;
+}
+.default-input-with-addon:focus {
+  background-color: transparent !important;
+}
+.default-input-addon {
+  width: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.default-input::placeholder,
+.default-input-with-addon::placeholder,
+.default-input-addon {
+  color: var(--gray-default);
+}
+.default-input,
+.default-input-with-addon {
+  font-family: "Mulish", sans-serif;
+}

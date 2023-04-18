@@ -1,0 +1,31 @@
+@media screen and (max-width: 1250px) {
+  div.home-container {
+    flex-direction: column;
+  }
+  div.home-container-right {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 850px) {
+  div.surrogate-reports {
+    flex-direction: column;
+    align-items: center;
+  }
+  div.surrogate-report {
+    margin: 10px 0 !important;
+  }
+}
+@media screen and (max-width: 550px) {
+  span.surrogate-reports-head {
+    font-size: 14px;
+  }
+  span.view-more-reports {
+    font-size: 13px;
+    padding: 6px;
+  }
+  span.surrogate-report-verdict {
+    width: fit-content;
+    padding: 0 7px;
+    font-size: 12px;
+  }
+}

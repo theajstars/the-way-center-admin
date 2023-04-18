@@ -1,0 +1,141 @@
+.home-page {
+  padding-top: 120px;
+}
+.home-container {
+  width: 100%;
+  justify-content: space-between;
+  height: 100%;
+  box-sizing: border-box;
+  margin-top: 30px;
+}
+.home-container-left {
+  height: 100%;
+  align-items: center;
+}
+.home-avatar {
+  width: 150px;
+  border-radius: 50%;
+  background: linear-gradient(234.94deg, #40189d 17.25%, #7a189d 80.15%);
+  padding: 10px;
+}
+.home-username {
+  margin-top: 4px;
+}
+.home-divider {
+  background-color: #cecce4;
+  border: transparent;
+  height: 1px;
+  width: 100%;
+}
+.surrogate-record-overview {
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 10px;
+  overflow: clip;
+}
+.surrogate-record-overview-item {
+  margin: 15px 0;
+  width: 100%;
+  align-items: center;
+}
+.surrogate-record-overview-item:first-child {
+  margin-top: 30px;
+}
+.surrogate-record-overview-icon {
+  border: 1px solid var(--purple-primary);
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+}
+.surrogate-record-overview-image {
+  width: 40px;
+  margin-top: -8px;
+}
+.surrogate-record-overview-text {
+  max-width: 320px;
+}
+.more-surrogates {
+  background-color: #fff;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.25);
+  border-radius: 52px;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
+.more-surrogates:hover {
+  transform: scale(1.1);
+}
+
+.home-container-right {
+  width: 65%;
+}
+.view-more-reports {
+  border: 1px solid var(--purple-default);
+  padding: 5px 9px;
+  cursor: pointer;
+  border-radius: 9px;
+}
+.surrogate-reports {
+  margin: 20px 0;
+}
+.surrogate-report {
+  background: #ffffff;
+  box-shadow: 0px 12px 23px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 0px 10px;
+  justify-content: space-between;
+  height: 270px;
+}
+.surrogate-report:first-child {
+  margin-left: 0;
+}
+.surrogate-report:last-child {
+  margin-right: 0;
+}
+.surrogate-report-top {
+  align-items: center;
+  height: 65px;
+}
+.surrogate-report-type {
+}
+.surrogate-report-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+}
+.surrogate-report-body {
+  line-height: 20px;
+  margin: 7px 0px;
+  margin-bottom: 10px;
+}
+.surrogate-report-verdict {
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  height: 30px;
+  margin-bottom: 5px;
+}
+.surrogate-report-satisfactory {
+  background: #e9e0ff;
+  color: var(--purple-default);
+}
+.surrogate-report-unsatisfactory {
+  background: #ffcaca;
+  color: var(--red-default);
+}
+
+.surrogate-media-item {
+  object-fit: contain;
+}
+.surrogate-media-arrow {
+  margin: 0px 20px;
+}

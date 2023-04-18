@@ -1,0 +1,28 @@
+@media screen and (max-width: 700px) {
+  span.toggle-topnav {
+    display: flex;
+    position: absolute;
+    right: 20px;
+    top: 25px;
+    cursor: pointer;
+    z-index: 99999;
+  }
+  div.top-nav-container {
+    right: 0px;
+    padding: 30px 40px;
+    background-color: white;
+  }
+  div.top-nav-right {
+    background-color: white;
+    position: absolute;
+    width: 320px;
+    right: 0px;
+    top: 80px;
+    padding: 0px 10px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    overflow: clip;
+    height: 100px;
+    align-items: center;
+  }
+}

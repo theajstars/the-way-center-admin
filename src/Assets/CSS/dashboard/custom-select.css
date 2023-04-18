@@ -1,0 +1,53 @@
+.select-container {
+  width: 500px;
+}
+.select-input-container {
+  width: 100%;
+  border: 1px solid rgb(44, 44, 44);
+  padding: 0 10px;
+  box-sizing: border-box;
+  height: 40px;
+  border-radius: 4px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+}
+.select-input {
+}
+.select-input-icon {
+}
+
+.select-options {
+  overflow-y: clip;
+  border: transparent;
+  position: absolute;
+  margin-top: 40px;
+  width: 500px;
+  background-color: white;
+  z-index: 9;
+}
+.select-container-half {
+  width: 230px;
+}
+.select-options-half {
+  width: 230px;
+}
+.select-options-open {
+  border: 1px solid rgb(44, 44, 44);
+  border-top: transparent;
+}
+.select-option {
+  font-family: "poppins";
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
+.select-option:hover {
+  background-color: rgb(233, 233, 233);
+}
+.selected-option {
+  background-color: rgb(198, 198, 198);
+}
