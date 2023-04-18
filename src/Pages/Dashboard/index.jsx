@@ -19,7 +19,7 @@ export default function Dashboard() {
             <Route path="/application" index element={<Application />} />
           </Routes>
 
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </Container>
     </>

@@ -42,7 +42,7 @@ export default function Application() {
   return (
     <div className="flex-column application-container">
       <Typography className="poppins fw-500" variant="h5">
-        PARENT DASHBOARD
+        ADMIN DASHBOARD
       </Typography>
       <br />
       <span className="px-24 fw-600 poppins">Request A Surrogate</span>

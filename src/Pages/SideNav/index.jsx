@@ -125,7 +125,7 @@ export default function SideNav() {
 
           <div className="side-nav-bottom flex-column">
             <span className="poppins fw-600">
-              The Way Center Parent Dashboard
+              The Way Center Admin Dashboard
             </span>
             <small className="poppins">
               &copy; {new Date(Date.now()).getFullYear()} The Way Center. All

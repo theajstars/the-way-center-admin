@@ -1,5 +1,7 @@
+@import url("./home-renewed.css");
+@import url("../small/SmallHomeRenewed.css");
 .home-page {
-  padding-top: 120px;
+  padding-top: 70px;
 }
 .home-container {
   width: 100%;
@@ -74,7 +76,7 @@
 }
 
 .home-container-right {
-  width: 65%;
+  width: 100%;
 }
 .view-more-reports {
   border: 1px solid var(--purple-default);

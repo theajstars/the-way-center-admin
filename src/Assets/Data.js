@@ -200,6 +200,14 @@ const HairColours = [
     value: "red",
   },
 ];
+
+const RecentParents = [
+  { name: "Alicia Thomas" },
+  { name: "Adebayo Thomas" },
+  { name: "Frank Nweke" },
+  { name: "Adebaru Olabanwo" },
+  { name: "Okedipopo Smart" },
+];
 export {
   SurrogateRecords,
   SurrogateReports,
@@ -209,4 +217,5 @@ export {
   Locations,
   SkinColours,
   HairColours,
+  RecentParents,
 };

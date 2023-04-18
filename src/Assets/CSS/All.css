@@ -43,6 +43,21 @@ body {
 .align-center {
   align-items: center;
 }
+.align-end {
+  align-items: flex-end;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+.width-100 {
+  width: 100%;
+}
 .pointer {
   cursor: pointer;
+}
+.underline {
+  text-decoration: underline;
+}
+.uppercase {
+  text-transform: uppercase;
 }

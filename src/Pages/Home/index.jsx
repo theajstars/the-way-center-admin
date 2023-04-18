@@ -5,7 +5,11 @@ import { motion } from "framer-motion";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 
-import { SurrogateRecords, SurrogateReports } from "../../Assets/Data";
+import {
+  RecentParents,
+  SurrogateRecords,
+  SurrogateReports,
+} from "../../Assets/Data";
 
 import AishaAvatar from "../../Assets/IMG/AishaAvatar.svg";
 import PurpleFlower from "../../Assets/IMG/PurpleFlower.svg";
@@ -57,11 +61,12 @@ export default function Home() {
   return (
     <div className="home-page">
       <Typography className="poppins fw-500" variant="h5">
-        PARENT DASHBOARD
+        ADMIN DASHBOARD
       </Typography>
       <br />
+      <br />
       <div className="home-container flex-row">
-        <div className="home-container-left flex-column">
+        {/* <div className="home-container-left flex-column">
           <img src={AishaAvatar} alt="" className="home-avatar" />
           <span className="home-username fw-500 cinzel px-23">
             Aisha Immanuel
@@ -127,9 +132,94 @@ export default function Home() {
               <i className={`far fa-long-arrow-alt-up`}></i>
             </motion.span>
           </span>
-        </div>
+        </div> */}
 
         <div className="home-container-right flex-column">
+          <div className="flex-row dashboard-blocks">
+            <div className="flex-column dashboard-block">
+              <span className="cinzel px-28 dashboard-block-header">
+                PARENTS
+              </span>
+              <div className="flex-row dashboard-block-footer">
+                <span className="pointer px-17 fw-500 poppins underline">
+                  Add New Parent
+                </span>
+                <span className="fw-700 px-40 cinzel">28</span>
+              </div>
+            </div>
+            <div className="flex-column dashboard-block">
+              <span className="cinzel px-28 dashboard-block-header">
+                SURROGATES
+              </span>
+              <div className="flex-row dashboard-block-footer">
+                <span className="pointer px-17 fw-500 poppins underline">
+                  Add New Surrogate
+                </span>
+                <span className="fw-700 px-40 cinzel">42</span>
+              </div>
+            </div>
+            <div className="flex-column dashboard-block">
+              <span className="cinzel px-28 dashboard-block-header">
+                PAIRINGS
+              </span>
+              <div className="flex-row dashboard-block-footer">
+                <span className="pointer px-17 fw-500 poppins underline">
+                  Create New Pairings
+                </span>
+                <span className="fw-700 px-40 cinzel">12</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="recent-blocks flex-row">
+            <div className="recent-block flex-column">
+              <span className="px-16 cinzel">RECENT PARENTS</span>
+              <br />
+              <div className="flex-column">
+                {RecentParents.map((parent, index) => {
+                  return (
+                    <>
+                      <span
+                        key={index}
+                        className="poppins fw-500 px-18 uppercase underline pointer recent-block-text"
+                      >
+                        {parent.name}
+                      </span>
+                    </>
+                  );
+                })}
+              </div>
+              <div className="flex-row width-100 justify-end align-center">
+                <span className="px-16 fw-500 underline pointer poppins">
+                  View All Parents
+                </span>
+              </div>
+            </div>
+            <div className="recent-block flex-column">
+              <span className="px-16 cinzel">RECENT SURROGATES</span>
+              <br />
+              <div className="flex-column">
+                {RecentParents.map((parent, index) => {
+                  return (
+                    <>
+                      <span
+                        key={index}
+                        className="poppins fw-500 px-18 uppercase underline pointer recent-block-text"
+                      >
+                        {parent.name}
+                      </span>
+                    </>
+                  );
+                })}
+              </div>
+              <div className="flex-row width-100 justify-end align-center">
+                <span className="px-16 fw-500 underline pointer poppins">
+                  View All Surrogates
+                </span>
+              </div>
+            </div>
+          </div>
+
           <div className="flex-row space-between align-center">
             <span className="poppins fw-500 px-18 surrogate-reports-head">
               Your Surrogate Reports
@@ -254,49 +344,51 @@ export default function Home() {
               }
             )}
           </div>
-          <span className="poppins fw-500 px-18">Your Surrogate Media</span>
-          <div ref={sliderRef} className="keen-slider">
-            <div className="keen-slider__slide surrogate-media-item">
-              <YoutubeEmbed embedId={"CuSxk_DNau8"} />
+          {/* <>
+            <span className="poppins fw-500 px-18">Your Surrogate Media</span>
+            <div ref={sliderRef} className="keen-slider">
+              <div className="keen-slider__slide surrogate-media-item">
+                <YoutubeEmbed embedId={"CuSxk_DNau8"} />
+              </div>
+              <div className="keen-slider__slide surrogate-media-item">
+                <YoutubeEmbed embedId={"CuSxk_DNau8"} />
+              </div>
+              <div className="keen-slider__slide surrogate-media-item">
+                <YoutubeEmbed embedId={"CuSxk_DNau8"} />
+              </div>
+              <div className="keen-slider__slide surrogate-media-item">
+                <YoutubeEmbed embedId={"CuSxk_DNau8"} />
+              </div>
             </div>
-            <div className="keen-slider__slide surrogate-media-item">
-              <YoutubeEmbed embedId={"CuSxk_DNau8"} />
-            </div>
-            <div className="keen-slider__slide surrogate-media-item">
-              <YoutubeEmbed embedId={"CuSxk_DNau8"} />
-            </div>
-            <div className="keen-slider__slide surrogate-media-item">
-              <YoutubeEmbed embedId={"CuSxk_DNau8"} />
-            </div>
-          </div>
-          <br />
-          {loaded && instanceRef.current && (
-            <center>
-              <span
-                className="px-30 pointer surrogate-media-arrow"
-                onClick={(e) =>
-                  e.stopPropagation() || instanceRef.current?.prev()
-                }
-                disabled={currentSlide === 0}
-              >
-                <i className="fas fa-long-arrow-alt-left"></i>
-              </span>
+            <br />
+            {loaded && instanceRef.current && (
+              <center>
+                <span
+                  className="px-30 pointer surrogate-media-arrow"
+                  onClick={(e) =>
+                    e.stopPropagation() || instanceRef.current?.prev()
+                  }
+                  disabled={currentSlide === 0}
+                >
+                  <i className="fas fa-long-arrow-alt-left"></i>
+                </span>
 
-              <span
-                className="px-30 pointer surrogate-media-arrow"
-                onClick={(e) =>
-                  e.stopPropagation() || instanceRef.current?.next()
-                }
-                disabled={
-                  currentSlide ===
-                  instanceRef.current.track.details.slides.length - 1
-                }
-              >
-                <i className="fas fa-long-arrow-alt-right"></i>
-              </span>
-            </center>
-          )}
-          <AccountManagement />
+                <span
+                  className="px-30 pointer surrogate-media-arrow"
+                  onClick={(e) =>
+                    e.stopPropagation() || instanceRef.current?.next()
+                  }
+                  disabled={
+                    currentSlide ===
+                    instanceRef.current.track.details.slides.length - 1
+                  }
+                >
+                  <i className="fas fa-long-arrow-alt-right"></i>
+                </span>
+              </center>
+            )}
+            <AccountManagement />
+          </> */}
         </div>
       </div>
     </div>
