@@ -61,16 +61,16 @@ export default function SideNav() {
               </span>
               <span
                 className={`side-nav-link cinzel ${
-                  currentActiveLink === "Application"
+                  currentActiveLink === "Parents"
                     ? "side-nav-link-active"
                     : "side-nav-link-inactive"
                 }`}
                 onClick={() => {
-                  navigate("/dashboard/application");
-                  setCurrentActiveLink("Application");
+                  navigate("/dashboard/parents");
+                  setCurrentActiveLink("Parents");
                 }}
               >
-                Application
+                Parents
               </span>
               <span
                 className={`side-nav-link cinzel ${

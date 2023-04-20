@@ -202,11 +202,11 @@ const HairColours = [
 ];
 
 const RecentParents = [
-  { name: "Alicia Thomas" },
-  { name: "Adebayo Thomas" },
-  { name: "Frank Nweke" },
-  { name: "Adebaru Olabanwo" },
-  { name: "Okedipopo Smart" },
+  { name: "Alicia Thomas", email: "janedoe@gmail.com", status: true },
+  { name: "Adebayo Thomas", email: "janedoe@gmail.com", status: false },
+  { name: "Frank Nweke", email: "janedoe@gmail.com", status: true },
+  { name: "Adebaru Olabanwo", email: "janedoe@gmail.com", status: false },
+  { name: "Okedipopo Smart", email: "janedoe@gmail.com", status: true },
 ];
 export {
   SurrogateRecords,

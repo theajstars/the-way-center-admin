@@ -16,6 +16,7 @@ import Dashboard from "./Pages/Dashboard";
 import Home from "./Pages/Home";
 import LandingPage from "./Pages/LandingPage";
 import Application from "./Pages/Application";
+import Parents from "./Pages/Parents";
 function validateEmail(email) {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -25,13 +26,6 @@ function validateEmail(email) {
 function App() {
   const token = Cookies.get("token");
 
-  // useEffect(() => {
-  //   if (!token) {
-  //     window.location.href = "/login";
-  //   } else {
-  //     // Send to dashboard
-  //   }
-  // }, []);
   return (
     <Router>
       <Routes>
@@ -39,6 +33,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<Home />} />
+          <Route path="/dashboard/parents" element={<Parents />} />
           <Route path="/dashboard/application" element={<Application />} />
         </Route>
         <Route path="/forgot-password" element={<ForgotPassword />} />

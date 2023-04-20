@@ -4,6 +4,7 @@ import AccountManagement from "../AccountManagement";
 import Application from "../Application";
 import Footer from "../Footer";
 import Home from "../Home";
+import Parents from "../Parents";
 import SideNav from "../SideNav";
 import TopNav from "../TopNav";
 
@@ -16,7 +17,8 @@ export default function Dashboard() {
         <div className="dashboard-component">
           <Routes>
             <Route path="/" index element={<Home />} />
-            <Route path="/application" index element={<Application />} />
+            <Route path="/parents" index element={<Parents />} />
+            {/* <Route path="/application" index element={<Application />} /> */}
           </Routes>
 
           {/* <Footer /> */}
