@@ -20,6 +20,7 @@
 @import url("./small/SmallDashboard.css");
 @import url("./small/SmallTopNav.css");
 @import url("./small/SmallApplication.css");
+@import url("./small/SmallModal.css");
 html {
   scroll-behavior: smooth;
 }
@@ -61,4 +62,11 @@ body {
 }
 .uppercase {
   text-transform: uppercase;
+}
+
+.purple-btn-default {
+  background-color: var(--purple-secondary);
+  padding: 8px 30px;
+  border-radius: 8px;
+  text-align: center;
 }

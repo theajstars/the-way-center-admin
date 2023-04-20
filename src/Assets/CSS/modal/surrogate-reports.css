@@ -1,10 +1,11 @@
 .surrogate-report-modal {
   height: 900px;
-  width: 800px;
-  max-width: 90vw;
+  width: 1000px;
+  max-width: 95vw;
   max-height: 90vh;
   box-sizing: border-box;
   padding: 30px;
+  overflow: auto;
 }
 .full-surrogate-report-body {
   text-align: justify;

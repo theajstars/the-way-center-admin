@@ -1,0 +1,16 @@
+@media screen and (max-width: 860px) {
+  div.modal-form-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  div.modal-form,
+  div.modal-form-right {
+    width: 100%;
+  }
+  div.modal-form-right {
+    margin-top: 40px;
+  }
+  span.modal-about {
+    width: 100%;
+  }
+}
