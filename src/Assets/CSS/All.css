@@ -70,3 +70,6 @@ body {
   border-radius: 8px;
   text-align: center;
 }
+.none {
+  display: none;
+}
