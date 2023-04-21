@@ -32,7 +32,8 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     secondaryPhone: "",
     image: "",
   });
-  const imageUploadRef = useRef();
+  const primaryImageUploadRef = useRef();
+  const secondaryImageUploadRef = useRef();
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
@@ -48,14 +49,27 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     <>
       <input
         type="file"
-        ref={imageUploadRef}
+        ref={primaryImageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
           setSurrogateForm({
             ...surrogateForm,
-            image: URL.createObjectURL(image),
+            primaryImage: URL.createObjectURL(image),
+          });
+        }}
+      />
+      <input
+        type="file"
+        ref={secondaryImageUploadRef}
+        className="modal-image-hide"
+        onChange={(e) => {
+          console.log(e.target.files);
+          const image = e.target.files[0];
+          setSurrogateForm({
+            ...surrogateForm,
+            secondaryImage: URL.createObjectURL(image),
           });
         }}
       />
@@ -213,12 +227,12 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
             </div>
             <div className="flex-column modal-form-right space-between">
               <span className="flex-column align-center width-100">
-                <div className="modal-form-image-container flex-row">
-                  {surrogateForm.image.length > 0 ? (
+                <div className="modal-form-image-container modal-form-image-container-small flex-row">
+                  {surrogateForm.primaryImage.length > 0 ? (
                     // Image is set
 
                     <img
-                      src={surrogateForm.image}
+                      src={surrogateForm.primaryImage}
                       alt=""
                       className="modal-form-image"
                     />
@@ -235,10 +249,38 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 <span
                   className="purple-btn-default px-16 poppins pointer width-100"
                   onClick={() => {
-                    imageUploadRef.current.click();
+                    primaryImageUploadRef.current.click();
                   }}
                 >
-                  Upload Image
+                  Upload Main Image
+                </span>
+                <br />
+                <div className="modal-form-image-container modal-form-image-container-small flex-row">
+                  {surrogateForm.secondaryImage.length > 0 ? (
+                    // Image is set
+
+                    <img
+                      src={surrogateForm.secondaryImage}
+                      alt=""
+                      className="modal-form-image"
+                    />
+                  ) : (
+                    // <img
+                    //   src={ImageSelectorPlaceholder}
+                    //   alt=""
+                    //   className="modal-form-image"
+                    // />
+                    <span className="px-16 poppins">No Image Selected</span>
+                  )}
+                </div>
+                <br />
+                <span
+                  className="purple-btn-default px-16 poppins pointer width-100"
+                  onClick={() => {
+                    secondaryImageUploadRef.current.click();
+                  }}
+                >
+                  Upload Second Image
                 </span>
               </span>
               <br />
