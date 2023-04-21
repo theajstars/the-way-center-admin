@@ -1,17 +1,34 @@
-import { Modal, TextField } from "@mui/material";
 import { useState, useRef } from "react";
+
+import {
+  InputLabel,
+  Modal,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
-export default function ParentRegistration({ showAddParentModal }) {
+import { DateField, DatePicker } from "@mui/x-date-pickers";
+import { CountriesList } from "../../Assets/Data";
+export default function SurrogateRegistration({ showAddSurrogateModal }) {
   const [isModalOpen, setModalOpen] = useState(true);
-  const [parentForm, setParentForm] = useState({
+  const [surrogateForm, setSurrogateForm] = useState({
     firstName: "",
     lastName: "",
+    dateOfBirth: "",
+    placeOfBirth: "",
+    address: "",
+    primaryPhone: "",
+    primaryEmailAddress: "",
+    bankVerificationNumber: "",
+    nationalIdentificationNumber: "",
+    primaryImage: "",
+    secondaryImage: "",
+
     spouseFirstName: "",
     spouseLastName: "",
-    address: "",
-    primaryEmailAddress: "",
     secondaryEmailAddress: "",
-    primaryPhone: "",
     secondaryPhone: "",
     image: "",
   });
@@ -36,7 +53,10 @@ export default function ParentRegistration({ showAddParentModal }) {
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
-          setParentForm({ ...parentForm, image: URL.createObjectURL(image) });
+          setSurrogateForm({
+            ...surrogateForm,
+            image: URL.createObjectURL(image),
+          });
         }}
       />
       <Modal
@@ -44,74 +64,95 @@ export default function ParentRegistration({ showAddParentModal }) {
         onClose={(e, reason) => {
           if (reason === "backdropClick") {
             setModalOpen(false);
-            showAddParentModal(false);
+            showAddSurrogateModal(false);
           }
         }}
         className="default-modal-container flex-row"
       >
         <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column">
-          <span className="cinzel px-30 uppercase">create parent account</span>
+          <span className="cinzel px-30 uppercase">
+            create surrogate profile
+          </span>
           <br />
           <span className="modal-about poppins px-15">
-            Fill in the data for parent profile correctly. It will take a couple
-            of minutes
+            Fill in the data for surrogate profile correctly. It will take a
+            couple of minutes
           </span>
 
           <div className="modal-form-container flex-row">
             <div className="modal-form flex-column">
               <br />
-              <span className="fw-600 poppins px-24">Parent Bio-Data</span>
+              <span className="fw-600 poppins px-24">Surrogate Bio-Data</span>
               <br />
               <div className="flex-row space-between modal-input-row">
                 <TextField
                   label="First Name"
-                  value={parentForm.firstName}
+                  value={surrogateForm.firstName}
                   {...defaultHalfInputProps}
                   onChange={(e) =>
-                    setParentForm({ ...parentForm, firstName: e.target.value })
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      firstName: e.target.value,
+                    })
                   }
                 />
                 <TextField
                   label="Last Name"
-                  value={parentForm.lastName}
+                  value={surrogateForm.lastName}
                   {...defaultHalfInputProps}
                   onChange={(e) =>
-                    setParentForm({ ...parentForm, lastName: e.target.value })
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      lastName: e.target.value,
+                    })
                   }
                 />
               </div>
               <div className="flex-row space-between modal-input-row">
-                <TextField
-                  label="Spouse First Name"
-                  value={parentForm.spouseFirstName}
-                  {...defaultHalfInputProps}
+                <DatePicker
+                  slotProps={{
+                    textField: { variant: "standard" },
+                  }}
+                  value={surrogateForm.dateOfBirth}
                   onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
-                      spouseFirstName: e.target.value,
-                    })
+                    setSurrogateForm({ ...surrogateForm, dateOfBirth: e })
                   }
+                  label="Date of Birth"
                 />
-                <TextField
-                  label="Spouse Last Name"
-                  value={parentForm.spouseLastName}
-                  {...defaultHalfInputProps}
-                  onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
-                      spouseLastName: e.target.value,
-                    })
-                  }
-                />
+                <FormControl variant="standard" {...defaultHalfInputProps}>
+                  <InputLabel id="demo-simple-select-standard-label">
+                    Place of Birth
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={surrogateForm.placeOfBirth}
+                    onChange={(e) => {
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        placeOfBirth: e.target.value,
+                      });
+                    }}
+                    label="Place of Birth"
+                  >
+                    {CountriesList.map((country, index) => {
+                      return (
+                        <MenuItem value={country.code3} key={country.code3}>
+                          {country.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
               </div>
               <div className="flex-row space-between modal-input-row">
                 <TextField
                   label="Address"
-                  value={parentForm.address}
+                  value={surrogateForm.address}
                   {...defaultFullInputProps}
                   onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
+                    setSurrogateForm({
+                      ...surrogateForm,
                       address: e.target.value,
                     })
                   }
@@ -119,38 +160,12 @@ export default function ParentRegistration({ showAddParentModal }) {
               </div>
               <div className="flex-row space-between modal-input-row">
                 <TextField
-                  label="Primary Email Address"
-                  value={parentForm.primaryEmailAddress}
-                  {...defaultFullInputProps}
-                  onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
-                      primaryEmailAddress: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <TextField
-                  label="Secondary Email Address"
-                  value={parentForm.secondaryEmailAddress}
-                  {...defaultFullInputProps}
-                  onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
-                      secondaryEmailAddress: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <TextField
                   label="Primary Phone Number"
-                  value={parentForm.primaryPhone}
+                  value={surrogateForm.primaryPhone}
                   {...defaultFullInputProps}
                   onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
+                    setSurrogateForm({
+                      ...surrogateForm,
                       primaryPhone: e.target.value,
                     })
                   }
@@ -158,13 +173,39 @@ export default function ParentRegistration({ showAddParentModal }) {
               </div>
               <div className="flex-row space-between modal-input-row">
                 <TextField
-                  label="Secondary Phone Number"
-                  value={parentForm.secondaryPhone}
+                  label="Primary Email Address"
+                  value={surrogateForm.primaryEmailAddress}
                   {...defaultFullInputProps}
                   onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
-                      secondaryPhone: e.target.value,
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      primaryEmailAddress: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="flex-row space-between modal-input-row">
+                <TextField
+                  label="Bank Verification Number"
+                  value={surrogateForm.bankVerificationNumber}
+                  {...defaultFullInputProps}
+                  onChange={(e) =>
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      bankVerificationNumber: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="flex-row space-between modal-input-row">
+                <TextField
+                  label="National Identification Number"
+                  value={surrogateForm.nationalIdentificationNumber}
+                  {...defaultFullInputProps}
+                  onChange={(e) =>
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      nationalIdentificationNumber: e.target.value,
                     })
                   }
                 />
@@ -173,11 +214,11 @@ export default function ParentRegistration({ showAddParentModal }) {
             <div className="flex-column modal-form-right space-between">
               <span className="flex-column align-center width-100">
                 <div className="modal-form-image-container flex-row">
-                  {parentForm.image.length > 0 ? (
+                  {surrogateForm.image.length > 0 ? (
                     // Image is set
 
                     <img
-                      src={parentForm.image}
+                      src={surrogateForm.image}
                       alt=""
                       className="modal-form-image"
                     />

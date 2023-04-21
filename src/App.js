@@ -6,6 +6,9 @@ import {
   Route,
   useNavigate,
 } from "react-router-dom";
+
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Cookies from "js-cookie";
 
 import Login from "./Pages/Login";
@@ -17,6 +20,7 @@ import Home from "./Pages/Home";
 import LandingPage from "./Pages/LandingPage";
 import Application from "./Pages/Application";
 import Parents from "./Pages/Parents";
+import Surrogates from "./Pages/Surrogates";
 function validateEmail(email) {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -27,18 +31,21 @@ function App() {
   const token = Cookies.get("token");
 
   return (
-    <Router>
-      <Routes>
-        <Route index element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />}>
-          <Route index element={<Home />} />
-          <Route path="/dashboard/parents" element={<Parents />} />
-          <Route path="/dashboard/application" element={<Application />} />
-        </Route>
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-      </Routes>
-    </Router>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Router>
+        <Routes>
+          <Route index element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<Home />} />
+            <Route path="/dashboard/parents" element={<Parents />} />
+            <Route path="/dashboard/surrogates" element={<Surrogates />} />
+            <Route path="/dashboard/application" element={<Application />} />
+          </Route>
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+        </Routes>
+      </Router>
+    </LocalizationProvider>
   );
 }
 

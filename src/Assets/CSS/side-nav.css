@@ -51,6 +51,7 @@
   align-items: center;
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
+  color: #000;
 }
 .side-nav-link:hover {
   background-color: #bcbad5;

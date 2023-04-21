@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Logo from "../../Assets/IMG/Logo.png";
 import { motion } from "framer-motion";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { RouteList } from "../../Lib/Routes";
 export default function SideNav() {
   const [currentActiveLink, setCurrentActiveLink] = useState(null);
   const [isSideNavOpen, setSideNavOpen] = useState(true);
@@ -10,7 +11,22 @@ export default function SideNav() {
   const location = useLocation();
 
   useEffect(() => {
-    const pathname = location.pathname;
+    const { pathname } = location;
+    console.log(pathname);
+    if (pathname === "/dashboard") {
+      setCurrentActiveLink("dashboard");
+    } else {
+      const path = pathname.replace("/dashboard", "");
+      const lastIndex = path.lastIndexOf("/");
+      console.clear();
+      if (lastIndex !== -1 && lastIndex !== 0) {
+        const subPathString = path.substring(0, lastIndex);
+        console.log(subPathString);
+      } else {
+        console.log(path);
+        setCurrentActiveLink(path.replace("/", "").toLowerCase());
+      }
+    }
   }, [location]);
 
   return (
@@ -34,80 +50,21 @@ export default function SideNav() {
           <div className="side-nav-top flex-column">
             <img src={Logo} alt="" className="side-nav-image" />
             <div className="side-nav-links flex-column">
-              <span
-                className={`side-nav-link cinzel ${
-                  currentActiveLink === "Dashboard"
-                    ? "side-nav-link-active"
-                    : "side-nav-link-inactive"
-                }`}
-                onClick={() => {
-                  navigate("/dashboard");
-                  setCurrentActiveLink("Dashboard");
-                }}
-              >
-                Dashboard
-              </span>
-              <span
-                className={`side-nav-link cinzel ${
-                  currentActiveLink === "Surrogate"
-                    ? "side-nav-link-active"
-                    : "side-nav-link-inactive"
-                }`}
-                onClick={() => {
-                  setCurrentActiveLink("Surrogate");
-                }}
-              >
-                My Surrogate
-              </span>
-              <span
-                className={`side-nav-link cinzel ${
-                  currentActiveLink === "Parents"
-                    ? "side-nav-link-active"
-                    : "side-nav-link-inactive"
-                }`}
-                onClick={() => {
-                  navigate("/dashboard/parents");
-                  setCurrentActiveLink("Parents");
-                }}
-              >
-                Parents
-              </span>
-              <span
-                className={`side-nav-link cinzel ${
-                  currentActiveLink === "Message"
-                    ? "side-nav-link-active"
-                    : "side-nav-link-inactive"
-                }`}
-                onClick={() => {
-                  setCurrentActiveLink("Message");
-                }}
-              >
-                Message(s)
-              </span>
-              <span
-                className={`side-nav-link cinzel ${
-                  currentActiveLink === "Profile"
-                    ? "side-nav-link-active"
-                    : "side-nav-link-inactive"
-                }`}
-                onClick={() => {
-                  setCurrentActiveLink("Profile");
-                }}
-              >
-                My Profile
-              </span>
-              <span
-                className={`side-nav-link cinzel ${
-                  currentActiveLink === "News"
-                    ? "side-nav-link-active"
-                    : "side-nav-link-inactive"
-                }`}
-                onClick={() => {
-                  setCurrentActiveLink("News");
-                }}
-              >
-                News
-              </span>
+              {RouteList.map((route, index) => {
+                return (
+                  <Link
+                    className={`side-nav-link cinzel ${
+                      currentActiveLink === route.title.toLowerCase()
+                        ? "side-nav-link-active"
+                        : "side-nav-link-inactive"
+                    }`}
+                    to={route.path}
+                  >
+                    {route.title}
+                  </Link>
+                );
+              })}
+
               <span
                 className={`side-nav-link cinzel ${
                   currentActiveLink === "Logout"

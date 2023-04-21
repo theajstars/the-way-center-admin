@@ -1,10 +1,15 @@
 import { useState } from "react";
 import ParentRegistration from "../ParentRegistration";
+import SurrogateRegistration from "../SurrogateRegistration";
 
 export default function DashboardOverview() {
   const [isAddNewParent, setAddNewParent] = useState(false);
+  const [isAddNewSurrogate, setAddNewSurrogate] = useState(false);
   const showAddParentModal = (value) => {
     setAddNewParent(value);
+  };
+  const showAddSurrogateModal = (value) => {
+    setAddNewSurrogate(value);
   };
   return (
     <div className="flex-row dashboard-blocks">
@@ -28,9 +33,19 @@ export default function DashboardOverview() {
       <div className="flex-column dashboard-block">
         <span className="cinzel px-28 dashboard-block-header">SURROGATES</span>
         <div className="flex-row dashboard-block-footer">
-          <span className="pointer px-17 fw-500 poppins underline">
+          <span
+            className="pointer px-17 fw-500 poppins underline"
+            onClick={() => {
+              setAddNewSurrogate(true);
+            }}
+          >
             Add New Surrogate
           </span>
+          {isAddNewSurrogate && (
+            <SurrogateRegistration
+              showAddSurrogateModal={showAddSurrogateModal}
+            />
+          )}
           <span className="fw-700 px-40 cinzel">42</span>
         </div>
       </div>

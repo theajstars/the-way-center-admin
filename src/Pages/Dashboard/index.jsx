@@ -6,6 +6,7 @@ import Footer from "../Footer";
 import Home from "../Home";
 import Parents from "../Parents";
 import SideNav from "../SideNav";
+import Surrogates from "../Surrogates";
 import TopNav from "../TopNav";
 
 export default function Dashboard() {
@@ -18,6 +19,7 @@ export default function Dashboard() {
           <Routes>
             <Route path="/" index element={<Home />} />
             <Route path="/parents" index element={<Parents />} />
+            <Route path="/surrogates" index element={<Surrogates />} />
             {/* <Route path="/application" index element={<Application />} /> */}
           </Routes>
 

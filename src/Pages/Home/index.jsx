@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import { Typography, Modal } from "@mui/material";
 import { motion } from "framer-motion";
 import { useKeenSlider } from "keen-slider/react";
@@ -17,7 +19,9 @@ import YoutubeEmbed from "../YoutubeEmbed";
 import AccountManagement from "../AccountManagement";
 import Footer from "../Footer";
 import DashboardOverview from "../DashboardOverview";
+
 export default function Home() {
+  const navigate = useNavigate();
   const ModifySurrogatesRef = useRef();
   const [SurrogateRecordsToDisplay, setSurrogateRecordsToDisplay] = useState(
     SurrogateRecords.slice(0, 4)
@@ -156,7 +160,12 @@ export default function Home() {
                 })}
               </div>
               <div className="flex-row width-100 justify-end align-center">
-                <span className="px-16 fw-500 underline pointer poppins">
+                <span
+                  className="px-16 fw-500 underline pointer poppins"
+                  onClick={() => {
+                    navigate("/dashboard/parents");
+                  }}
+                >
                   View All Parents
                 </span>
               </div>
@@ -179,7 +188,12 @@ export default function Home() {
                 })}
               </div>
               <div className="flex-row width-100 justify-end align-center">
-                <span className="px-16 fw-500 underline pointer poppins">
+                <span
+                  className="px-16 fw-500 underline pointer poppins"
+                  onClick={() => {
+                    navigate("/dashboard/surrogates");
+                  }}
+                >
                   View All Surrogates
                 </span>
               </div>
