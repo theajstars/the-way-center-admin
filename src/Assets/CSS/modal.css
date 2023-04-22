@@ -75,7 +75,7 @@
   height: 240px;
 }
 .modal-form-image-container-small {
-  width: 180px;
+  width: 220px;
   height: 180px;
 }
 .modal-form-image {
@@ -91,4 +91,8 @@
   position: absolute;
   bottom: 0;
   opacity: 0;
+}
+.surrogate-form-btn {
+  width: 220px !important;
+  font-size: 14px !important;
 }

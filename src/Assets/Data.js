@@ -604,6 +604,32 @@ const CountriesList = [
   { code: "ZW", code3: "ZWE", name: "Zimbabwe", number: "716" },
   { code: "AX", code3: "ALA", name: "Åland Islands", number: "248" },
 ];
+
+const Diseases = [
+  { name: "None", value: "None" },
+  { name: "Diabetes", value: "Diabetes" },
+  { name: "Hypertension", value: "Hypertension" },
+  { name: "Cancer", value: "Cancer" },
+  { name: "Heart Disease", value: "Heart Disease" },
+  { name: "Stroke", value: "Stroke" },
+  { name: "Asthma", value: "Asthma" },
+  { name: "Chronic Obstructive Pulmonary Disease", value: "COPD" },
+  { name: "Chronic Kidney Disease", value: "Chronic Kidney Disease" },
+  { name: "Depression", value: "Depression" },
+  { name: "Alzheimer's Disease", value: "Alzheimer's Disease" },
+  { name: "Dementia", value: "Dementia" },
+  { name: "Osteoporosis", value: "Osteoporosis" },
+  { name: "Arthritis", value: "Arthritis" },
+  { name: "Obesity", value: "Obesity" },
+  { name: "Other", value: "Other" },
+];
+
+const CovidVaccinationDosage = [
+  { name: "3 Vaccines", value: 3 },
+  { name: "2 Vaccines", value: 2 },
+  { name: "1 Vaccine", value: 1 },
+  { name: "No Vaccines", value: 0 },
+];
 export {
   SurrogateRecords,
   SurrogateReports,
@@ -615,4 +641,6 @@ export {
   HairColours,
   RecentParents,
   CountriesList,
+  Diseases,
+  CovidVaccinationDosage,
 };
