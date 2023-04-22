@@ -630,6 +630,22 @@ const CovidVaccinationDosage = [
   { name: "1 Vaccine", value: 1 },
   { name: "No Vaccines", value: 0 },
 ];
+
+// Array of Next of Kin Relationships
+const NextOfKinRelationships = [
+  {
+    value: "sibling",
+    title: "Sibling",
+  },
+  {
+    value: "father",
+    title: "Father",
+  },
+  {
+    value: "mother",
+    title: "Mother",
+  },
+];
 export {
   SurrogateRecords,
   SurrogateReports,
@@ -642,5 +658,6 @@ export {
   RecentParents,
   CountriesList,
   Diseases,
+  NextOfKinRelationships,
   CovidVaccinationDosage,
 };
