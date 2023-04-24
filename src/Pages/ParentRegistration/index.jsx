@@ -1,20 +1,23 @@
 import { Modal, TextField } from "@mui/material";
 import { useState, useRef } from "react";
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
+import Confirmation from "../Confirmation";
+
+const initialParentForm = {
+  firstName: "",
+  lastName: "",
+  spouseFirstName: "",
+  spouseLastName: "",
+  address: "",
+  primaryEmailAddress: "",
+  secondaryEmailAddress: "",
+  primaryPhone: "",
+  secondaryPhone: "",
+  image: "",
+};
 export default function ParentRegistration({ showAddParentModal }) {
   const [isModalOpen, setModalOpen] = useState(true);
-  const [parentForm, setParentForm] = useState({
-    firstName: "",
-    lastName: "",
-    spouseFirstName: "",
-    spouseLastName: "",
-    address: "",
-    primaryEmailAddress: "",
-    secondaryEmailAddress: "",
-    primaryPhone: "",
-    secondaryPhone: "",
-    image: "",
-  });
+  const [parentForm, setParentForm] = useState(initialParentForm);
   const imageUploadRef = useRef();
   const defaultFullInputProps = {
     variant: "standard",
@@ -27,8 +30,34 @@ export default function ParentRegistration({ showAddParentModal }) {
     spellCheck: false,
   };
 
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const getConfirmationModalStatus = (value) => {
+    setShowConfirmationModal(value);
+    if (!value) {
+      showAddParentModal(false);
+    }
+  };
   return (
     <>
+      {showConfirmationModal && (
+        <Confirmation
+          modalHeaderText="ACCOUNT CREATED SUCCESSFULLY"
+          modalBodyText="Email with secured login information has been sent to primary email"
+          modalAction={{
+            method: () => {
+              setShowConfirmationModal(false);
+              setModalOpen(true);
+              setParentForm(initialParentForm);
+            },
+            text: "Create Another Account",
+          }}
+          modalLink={{
+            text: "Back to Dashboard",
+            route: "/dashboard",
+          }}
+          getConfirmationModalStatus={getConfirmationModalStatus}
+        />
+      )}
       <input
         type="file"
         ref={imageUploadRef}
@@ -201,7 +230,12 @@ export default function ParentRegistration({ showAddParentModal }) {
                 </span>
               </span>
               <br />
-              <span className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit">
+              <span
+                className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit"
+                onClick={() => {
+                  setShowConfirmationModal(true);
+                }}
+              >
                 Create Account
               </span>
             </div>

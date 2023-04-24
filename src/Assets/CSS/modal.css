@@ -1,4 +1,5 @@
 @import url("./modal/surrogate-reports.css");
+@import url("./modal/confirmation.css");
 .default-modal-container {
   align-items: center;
   justify-content: center;
@@ -119,4 +120,7 @@
 }
 .modal-form-file-about {
   color: rgba(189, 184, 184, 1);
+}
+.full-border-modal {
+  border-radius: 30px;
 }

@@ -17,45 +17,49 @@ import {
   NextOfKinRelationships,
 } from "../../Assets/Data";
 import dayjs from "dayjs";
+
+import Confirmation from "../Confirmation";
+
+const initialSurrogateForm = {
+  firstName: "",
+  lastName: "",
+  dateOfBirth: dayjs("2023-01-01"),
+  placeOfBirth: "",
+  address: "",
+  primaryPhone: "",
+  primaryEmailAddress: "",
+  bankVerificationNumber: "",
+  nationalIdentificationNumber: "",
+  primaryImage: "",
+  secondaryImage: "",
+
+  spouseFirstName: "",
+  spouseLastName: "",
+  secondaryEmailAddress: "",
+  secondaryPhone: "",
+  image: "",
+
+  // Form Section B
+  knownDisease: "",
+  covidVaccination: 0,
+  firstTimeParent: false,
+  lastChildBirth: dayjs("2023-01-01"),
+  hivStatus: false,
+  govtIdentificationFile: undefined,
+  covidVaccinationFile: undefined,
+  nextOfKin: {
+    name: "",
+    address: "",
+    phone: "",
+    relationship: "sibling",
+    nationalIdentificationNumber: "",
+  },
+};
 export default function SurrogateRegistration({ showAddSurrogateModal }) {
   const [isModalOpen, setModalOpen] = useState(true);
 
-  const [currentFormSection, setCurrentFormSection] = useState(2);
-  const [surrogateForm, setSurrogateForm] = useState({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: dayjs("2023-01-01"),
-    placeOfBirth: "",
-    address: "",
-    primaryPhone: "",
-    primaryEmailAddress: "",
-    bankVerificationNumber: "",
-    nationalIdentificationNumber: "",
-    primaryImage: "",
-    secondaryImage: "",
-
-    spouseFirstName: "",
-    spouseLastName: "",
-    secondaryEmailAddress: "",
-    secondaryPhone: "",
-    image: "",
-
-    // Form Section B
-    knownDisease: "",
-    covidVaccination: 0,
-    firstTimeParent: false,
-    lastChildBirth: dayjs("2023-01-01"),
-    hivStatus: false,
-    govtIdentificationFile: undefined,
-    covidVaccinationFile: undefined,
-    nextOfKin: {
-      name: "",
-      address: "",
-      phone: "",
-      relationship: "sibling",
-      nationalIdentificationNumber: "",
-    },
-  });
+  const [currentFormSection, setCurrentFormSection] = useState(1);
+  const [surrogateForm, setSurrogateForm] = useState(initialSurrogateForm);
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
@@ -72,8 +76,39 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     spellCheck: false,
   };
 
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const CreateSurrogateProfile = () => {
+    setModalOpen(false);
+    setShowConfirmationModal(true);
+  };
+  const getConfirmationModalStatus = (value) => {
+    setShowConfirmationModal(value);
+    if (!value) {
+      showAddSurrogateModal(false);
+    }
+  };
   return (
     <>
+      {showConfirmationModal && (
+        <Confirmation
+          modalHeaderText=""
+          modalBodyText="Profile Created Successfully"
+          modalAction={{
+            method: () => {
+              setShowConfirmationModal(false);
+              setModalOpen(true);
+              setSurrogateForm(initialSurrogateForm);
+              setCurrentFormSection(1);
+            },
+            text: "Create Another Profile",
+          }}
+          modalLink={{
+            text: "Back to Dashboard",
+            route: "/dashboard",
+          }}
+          getConfirmationModalStatus={getConfirmationModalStatus}
+        />
+      )}
       <input
         type="file"
         accept=".gif"
@@ -655,9 +690,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <br />
                   <span
                     className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                    onClick={() => {
-                      console.log(surrogateForm);
-                    }}
+                    onClick={() => CreateSurrogateProfile()}
                   >
                     Create Profile &nbsp;{" "}
                     <i className="far fa-long-arrow-alt-right" />
