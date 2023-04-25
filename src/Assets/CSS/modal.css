@@ -124,3 +124,28 @@
 .full-border-modal {
   border-radius: 30px;
 }
+.modal-form-create-pairing-container {
+}
+.modal-form-create-pairing {
+  width: 100%;
+  max-width: 600px;
+}
+.modal-form-create-pairing-right {
+  width: 100%;
+  max-width: 600px;
+}
+.modal-about-create-pairing {
+  padding: 15px 30px !important;
+}
+
+.pairing-person-tag {
+  border: 1px solid #000000;
+  border-radius: 15px;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+.pairing-modal-submit {
+  width: 240px;
+}
