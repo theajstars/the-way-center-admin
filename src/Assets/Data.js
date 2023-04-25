@@ -646,6 +646,41 @@ const NextOfKinRelationships = [
     title: "Mother",
   },
 ];
+
+const InboxMessages = [
+  {
+    name: "Shola Thomas",
+    message: "Please can I",
+    image: "https://www.w3schools.com/howto/img_avatar2.png",
+  },
+  {
+    name: "Uche Junta",
+    message: "When is it going to happen",
+    image:
+      "https://cdn.pixabay.com/photo/2017/01/31/21/23/avatar-2027366__340.png",
+  },
+];
+const ParentMessages = [
+  {
+    name: "His Majesty",
+    image: "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584__340.png",
+  },
+  {
+    name: "Candice Noughts",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO-p9ThJctQTssrg3-NP4nUFYT_BH-AVQXOw&usqp=CAU",
+  },
+  {
+    name: "Mike Hugh",
+    image:
+      "https://lumiere-a.akamaihd.net/v1/images/pp_20cs_avatarwayofwater_herobanner_mobile_1710_f9ba59be.jpeg?region=0,0,640,480",
+  },
+  {
+    name: "Giga Bigger",
+    image:
+      "https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png",
+  },
+];
 export {
   SurrogateRecords,
   SurrogateReports,
@@ -660,4 +695,6 @@ export {
   Diseases,
   NextOfKinRelationships,
   CovidVaccinationDosage,
+  ParentMessages,
+  InboxMessages,
 };
