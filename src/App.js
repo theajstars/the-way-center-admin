@@ -21,6 +21,7 @@ import LandingPage from "./Pages/LandingPage";
 import Application from "./Pages/Application";
 import Parents from "./Pages/Parents";
 import Surrogates from "./Pages/Surrogates";
+import Messages from "./Pages/Messages";
 function validateEmail(email) {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -41,6 +42,7 @@ function App() {
             <Route path="/dashboard/parents" element={<Parents />} />
             <Route path="/dashboard/surrogates" element={<Surrogates />} />
             <Route path="/dashboard/application" element={<Application />} />
+            <Route path="/dashboard/messages" element={<Messages />} />
           </Route>
           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>

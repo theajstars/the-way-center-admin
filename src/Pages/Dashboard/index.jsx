@@ -4,6 +4,7 @@ import AccountManagement from "../AccountManagement";
 import Application from "../Application";
 import Footer from "../Footer";
 import Home from "../Home";
+import Messages from "../Messages";
 import Parents from "../Parents";
 import SideNav from "../SideNav";
 import Surrogates from "../Surrogates";
@@ -20,6 +21,7 @@ export default function Dashboard() {
             <Route path="/" index element={<Home />} />
             <Route path="/parents" index element={<Parents />} />
             <Route path="/surrogates" index element={<Surrogates />} />
+            <Route path="/messages" index element={<Messages />} />
             {/* <Route path="/application" index element={<Application />} /> */}
           </Routes>
 
