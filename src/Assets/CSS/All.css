@@ -21,6 +21,7 @@
 @import url("./small/SmallDashboard.css");
 @import url("./small/SmallTopNav.css");
 @import url("./small/SmallApplication.css");
+@import url("./small/SmallMessages.css");
 @import url("./small/SmallModal.css");
 html {
   scroll-behavior: smooth;

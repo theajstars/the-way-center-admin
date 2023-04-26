@@ -12,6 +12,7 @@
   --purple-primary: #f3eaff;
   --purple-secondary: #cecce4;
   --purple-tertiary: #efe2ff;
+  --purple-another: #6e00ff;
 
   --black-default: #3d3d3d;
 
@@ -21,7 +22,9 @@
 
   --orange-primary: #f24e1e;
 }
-
+.white-text {
+  color: #fff;
+}
 .gray-text {
   color: var(--gray-default);
 }

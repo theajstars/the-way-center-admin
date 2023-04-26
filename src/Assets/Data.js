@@ -681,6 +681,53 @@ const ParentMessages = [
       "https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png",
   },
 ];
+const SampleMessages = [
+  {
+    type: "received",
+    text: "Hello There",
+    date: "Today, 8:30pm",
+  },
+  {
+    type: "received",
+    text: "How are you?",
+    date: "Today, 8:30pm",
+  },
+  {
+    type: "sent",
+    text: "Hello",
+    date: "Today, 8:33pm",
+  },
+  {
+    type: "sent",
+    text: "I am fine and how are you?",
+    date: "Today, 8:34pm",
+  },
+  {
+    type: "received",
+    text: "I am doing well. Can we meet tomorrow?",
+    date: "Today, 8:36pm",
+  },
+  {
+    type: "sent",
+    text: "Yes sure!",
+    date: "Today, 8:58pm",
+  },
+  {
+    type: "sent",
+    text: "I am fine and how are you?",
+    date: "Today, 8:34pm",
+  },
+  {
+    type: "received",
+    text: "I am doing well. Can we meet tomorrow?",
+    date: "Today, 8:36pm",
+  },
+  {
+    type: "sent",
+    text: "Yes sure!",
+    date: "Today, 8:58pm",
+  },
+];
 export {
   SurrogateRecords,
   SurrogateReports,
@@ -697,4 +744,5 @@ export {
   CovidVaccinationDosage,
   ParentMessages,
   InboxMessages,
+  SampleMessages,
 };

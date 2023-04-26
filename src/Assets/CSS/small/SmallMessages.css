@@ -1,0 +1,75 @@
+.toggle-messages {
+  display: none;
+}
+
+@media screen and (max-width: 1050px) {
+  span.toggle-messages {
+    display: flex;
+    color: rgb(31, 30, 30);
+    cursor: pointer;
+    position: absolute;
+    top: 130px;
+    left: 20px;
+    z-index: 9;
+    background-color: var(--purple-secondary);
+    height: 40px;
+    width: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  div.messages-sidebar,
+  div.chat-section {
+    position: absolute;
+    width: 90vw;
+    left: 50%;
+    margin-left: -45vw;
+    /* top: 50px; */
+    margin-top: 150px;
+    bottom: 10px;
+    /* max-height: 100%; */
+    height: -webkit-fill-available;
+    /* height: 100%; */
+  }
+  div.large-messages-sidebar,
+  div.large-chat-section {
+    display: none;
+  }
+  div.sidebar-section {
+    max-height: 400px;
+    overflow: auto;
+    border-radius: 0px;
+  }
+  div.sidebar-section::-webkit-scrollbar,
+  div.chat-messages::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  div.sidebar-section::-webkit-scrollbar-track,
+  div.chat-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    height: 80px;
+    border-radius: 5px;
+  }
+
+  /* Handle */
+  div.sidebar-section::-webkit-scrollbar-thumb,
+  div.chat-messages::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+
+  /* Handle on hover */
+  div.sidebar-section::-webkit-scrollbar-thumb:hover,
+  div.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  div.chat-messages {
+    max-height: 400px;
+    overflow: auto;
+  }
+  div.sent-message-badge {
+    margin-right: 8px;
+  }
+}
