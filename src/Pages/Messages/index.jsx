@@ -72,9 +72,6 @@ export default function Messages() {
                     <span className="px-13 poppins gray-secondary-text">
                       Today, <br /> 12: 43pm
                     </span>
-                    <span className="sidebar-item-badge poppins px-13 flex-row align-center justify-center">
-                      4
-                    </span>
                   </div>
                 </div>
               );
@@ -103,9 +100,6 @@ export default function Messages() {
                     <span className="px-13 poppins gray-secondary-text">
                       Today, <br /> 12: 43pm
                     </span>
-                    <span className="sidebar-item-badge poppins px-13 flex-row align-center justify-center">
-                      4
-                    </span>
                   </div>
                 </div>
               );
@@ -114,14 +108,23 @@ export default function Messages() {
         </div>
 
         <div className="chat-section flex-column">
-          <div className="flex-row chat-header">
-            <div className="chat-header-left flex-row">
+          <div className="flex-row chat-header align-center space-between">
+            <div className="chat-header-left flex-row align-center">
               <img
                 src="https://www.w3schools.com/howto/img_avatar2.png"
                 alt=""
                 className="chat-section-avatar"
               />
+              <div className="flex-column">
+                <span className="poppins px-16 fw-500">Shola Thomas</span>
+                <span className="poppins px-12 gray-secondary-text">
+                  Online - Last seen, 2:02pm
+                </span>
+              </div>
             </div>
+            <span className="chat-menu-btn flex-row align-center justify-center pointer px-16 purple-default-text">
+              <i className="fas fa-ellipsis-v" />
+            </span>
           </div>
         </div>
       </div>
