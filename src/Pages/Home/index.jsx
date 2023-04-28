@@ -19,6 +19,8 @@ import YoutubeEmbed from "../YoutubeEmbed";
 import AccountManagement from "../AccountManagement";
 import Footer from "../Footer";
 import DashboardOverview from "../DashboardOverview";
+import SurrogateUpdate from "../SurrogateUpdate";
+import SurrogateProfileView from "../SurrogateProfileView";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -62,6 +64,12 @@ export default function Home() {
     } else {
       return 2;
     }
+  };
+
+  const [isViewSurrogate, setUpdateSurrogate] = useState(false);
+
+  const showViewSurrogateModal = (value) => {
+    setUpdateSurrogate(value);
   };
   return (
     <div className="home-page">
@@ -173,12 +181,20 @@ export default function Home() {
             <div className="recent-block flex-column">
               <span className="px-16 cinzel">RECENT SURROGATES</span>
               <br />
+              {isViewSurrogate && (
+                <SurrogateProfileView
+                  showViewSurrogateModal={showViewSurrogateModal}
+                />
+              )}
               <div className="flex-column">
                 {RecentParents.map((parent, index) => {
                   return (
                     <>
                       <span
                         key={index}
+                        onClick={() => {
+                          showViewSurrogateModal(true);
+                        }}
                         className="poppins fw-500 px-18 uppercase underline pointer recent-block-text"
                       >
                         {parent.name}

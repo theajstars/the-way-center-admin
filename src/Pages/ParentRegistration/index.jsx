@@ -60,6 +60,7 @@ export default function ParentRegistration({ showAddParentModal }) {
       )}
       <input
         type="file"
+        accept=".pdf, .jpg, .jpeg, .png"
         ref={imageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {

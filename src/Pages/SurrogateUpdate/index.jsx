@@ -55,7 +55,7 @@ const initialSurrogateForm = {
     nationalIdentificationNumber: "",
   },
 };
-export default function SurrogateRegistration({ showAddSurrogateModal }) {
+export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
   const [isModalOpen, setModalOpen] = useState(true);
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
@@ -84,7 +84,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
   const getConfirmationModalStatus = (value) => {
     setShowConfirmationModal(value);
     if (!value) {
-      showAddSurrogateModal(false);
+      showUpdateSurrogateModal(false);
     }
   };
   return (
@@ -170,7 +170,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         onClose={(e, reason) => {
           if (reason === "backdropClick") {
             setModalOpen(false);
-            showAddSurrogateModal(false);
+            showUpdateSurrogateModal(false);
           }
         }}
         className="default-modal-container flex-row"

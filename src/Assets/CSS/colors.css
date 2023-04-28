@@ -25,6 +25,13 @@
 .white-text {
   color: #fff;
 }
+.black-text {
+  color: #000;
+}
+.css-1x51dt5-MuiInputBase-input-MuiInput-input.Mui-disabled {
+  color: rgba(28, 28, 28, 0.8) !important;
+  -webkit-text-fill-color: rgba(28, 28, 28, 0.8) !important;
+}
 .gray-text {
   color: var(--gray-default);
 }

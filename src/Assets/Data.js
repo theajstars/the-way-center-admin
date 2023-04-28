@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 const SurrogateRecords = [
   {
     title: "Your Surrogates next Doctors Appointment on",
@@ -728,6 +730,27 @@ const SampleMessages = [
     date: "Today, 8:58pm",
   },
 ];
+
+const SampleSurrogate = {
+  firstName: "Candice",
+  lastName: "Noughts",
+  parentName: "",
+  spouseName: "",
+  parentAddress: "",
+  dateOfBirth: dayjs("1985-02-10"),
+  placeOfBirth: "FRA",
+  address: "GIGN HQ, Normandy",
+  primaryPhone: "08028015845",
+  secondaryPhone: "",
+  primaryEmailAddress: "candeeznoughts@trap.com",
+  secondaryEmailAddress: "",
+  bankVerificationNumber: "12949387483",
+  nationalIdentificationNumber: "393929495487",
+  image: "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp",
+  video: "",
+  pair: "",
+  isActive: true,
+};
 export {
   SurrogateRecords,
   SurrogateReports,
@@ -745,4 +768,5 @@ export {
   ParentMessages,
   InboxMessages,
   SampleMessages,
+  SampleSurrogate,
 };

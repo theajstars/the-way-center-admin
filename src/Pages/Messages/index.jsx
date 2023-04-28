@@ -413,7 +413,7 @@ function SentMessage({ time, message }) {
   return (
     <div className="flex-column align-end">
       <div className="flex-row sent-message-container">
-        <span className="message-text poppins px-15 sent-message-text">
+        <span className="message-text poppins px-15 sent-message-text white-text">
           {message}
         </span>
         <div className="message-badge sent-message-badge"></div>

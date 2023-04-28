@@ -58,6 +58,7 @@ export default function SideNav() {
                         ? "side-nav-link-active"
                         : "side-nav-link-inactive"
                     }`}
+                    onClick={() => setSideNavOpen(false)}
                     to={route.path}
                   >
                     {route.title}

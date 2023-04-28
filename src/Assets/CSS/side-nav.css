@@ -3,6 +3,7 @@
   background: url("../IMG/SideNavBackground.svg");
   height: 100vh;
   position: fixed;
+  top: 0;
   z-index: 999;
 }
 .toggle-sidenav {

@@ -7,3 +7,14 @@
     width: 100%;
   }
 }
+
+@media screen and (max-width: 600px) {
+  div.dashboard-component {
+    margin-top: 50px;
+  }
+}
+@media screen and (max-width: 480px) {
+  div.dashboard-component {
+    padding: 0 10px;
+  }
+}
