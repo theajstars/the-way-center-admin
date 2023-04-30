@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 
 import Confirmation from "../Confirmation";
 import SurrogateUpdate from "../SurrogateUpdate";
+import ParentUpdate from "../ParentUpdate";
 
 const initialParentForm = {
   firstName: "",
@@ -92,7 +93,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
 
   const [isUpdateProfile, setUpdateProfile] = useState(isUpdate ?? false);
 
-  const showUpdateSurrogateModal = (value) => {
+  const showUpdateParentModal = (value) => {
     setUpdateProfile(value);
   };
   return (
@@ -118,7 +119,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
         />
       )}
       {isUpdateProfile && (
-        <SurrogateUpdate showUpdateSurrogateModal={showUpdateSurrogateModal} />
+        <ParentUpdate showUpdateParentModal={showUpdateParentModal} />
       )}
       <>
         <input
