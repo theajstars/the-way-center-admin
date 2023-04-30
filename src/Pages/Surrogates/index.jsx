@@ -16,11 +16,26 @@ import {
 import DashboardOverview from "../DashboardOverview";
 import { useState } from "react";
 import { RecentParents as RecentSurrogates } from "../../Assets/Data";
+import SurrogateProfileView from "../SurrogateProfileView";
 
 export default function Surrogates() {
   const [surrogates, setSurrogates] = useState(RecentSurrogates);
+
+  const [isViewSurrogate, setViewSurrogate] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  const showViewSurrogateModal = (value) => {
+    setViewSurrogate(value);
+  };
   return (
     <div className="home-page">
+      {isViewSurrogate && (
+        <SurrogateProfileView
+          // showViewSurrogateModal={(val) => console.log(val)}
+          showViewSurrogateModal={showViewSurrogateModal}
+          // isUpdate={isUpdate}
+        />
+      )}
       <Typography className="poppins fw-500" variant="h5">
         ADMIN DASHBOARD
       </Typography>
@@ -55,10 +70,21 @@ export default function Surrogates() {
                         </Td>
                         <Td>{surrogate.email}</Td>
                         <Td className="flex-row align-center recent-table-actions">
-                          <span className="flex-row recent-table-action align-center">
+                          <span
+                            className="flex-row recent-table-action align-center"
+                            onClick={() => {
+                              showViewSurrogateModal(true);
+                              setIsUpdate(true);
+                            }}
+                          >
                             <i className="far fa-pencil-alt" /> &nbsp; Edit
                           </span>
-                          <span className="flex-row recent-table-action align-center">
+                          <span
+                            className="flex-row recent-table-action align-center"
+                            onClick={() => {
+                              showViewSurrogateModal(true);
+                            }}
+                          >
                             <i className="far fa-eye" /> &nbsp; View
                           </span>
                           <span className="flex-row recent-table-action align-center">
@@ -100,10 +126,20 @@ export default function Surrogates() {
                           </Td>
                           <Td>{surrogate.email}</Td>
                           <Td className="flex-row align-center recent-table-actions table-small-actions">
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                showViewSurrogateModal(true);
+                              }}
+                            >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
                             </span>
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                showViewSurrogateModal(true);
+                              }}
+                            >
                               <i className="far fa-eye" /> &nbsp; View
                             </span>
                           </Td>
@@ -139,11 +175,21 @@ export default function Surrogates() {
                           </Td>
                           <Td>{surrogate.email}</Td>
                           <Td className="flex-row align-center recent-table-actions table-small-actions">
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                showViewSurrogateModal(true);
+                              }}
+                            >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
                             </span>{" "}
                             &nbsp; &nbsp; &nbsp; &nbsp;
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                showViewSurrogateModal(true);
+                              }}
+                            >
                               <i className="far fa-eye" /> &nbsp; View
                             </span>
                             <span className="flex-row recent-table-action table-small-action align-center">

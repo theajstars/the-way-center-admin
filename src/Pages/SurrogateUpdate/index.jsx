@@ -92,7 +92,7 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
       {showConfirmationModal && (
         <Confirmation
           modalHeaderText=""
-          modalBodyText="Profile Created Successfully"
+          modalBodyText="Profile Updated Successfully"
           modalAction={{
             method: () => {
               setShowConfirmationModal(false);
@@ -177,7 +177,7 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
       >
         <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column">
           <span className="cinzel px-30 uppercase">
-            create surrogate profile
+            update surrogate profile
           </span>
           <br />
           <span className="modal-about poppins px-15">

@@ -25,7 +25,7 @@ import dayjs from "dayjs";
 import Confirmation from "../Confirmation";
 import SurrogateUpdate from "../SurrogateUpdate";
 
-const initialSurrogateForm = {
+const initialParentForm = {
   firstName: "",
   lastName: "",
   dateOfBirth: dayjs("2023-01-01"),
@@ -60,14 +60,11 @@ const initialSurrogateForm = {
     nationalIdentificationNumber: "",
   },
 };
-export default function SurrogateProfileView({
-  showViewSurrogateModal,
-  isUpdate,
-}) {
+export default function ParentProfileView({ showViewParentModal, isUpdate }) {
   const [isModalOpen, setModalOpen] = useState(true);
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
-  const [surrogateForm, setSurrogateForm] = useState(initialSurrogateForm);
+  const [parentForm, setParentForm] = useState(initialParentForm);
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
@@ -85,14 +82,11 @@ export default function SurrogateProfileView({
   };
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const CreateSurrogateProfile = () => {
-    setModalOpen(false);
-    setShowConfirmationModal(true);
-  };
+
   const getConfirmationModalStatus = (value) => {
     setShowConfirmationModal(value);
     if (!value) {
-      showViewSurrogateModal(false);
+      showViewParentModal(false);
     }
   };
 
@@ -111,7 +105,7 @@ export default function SurrogateProfileView({
             method: () => {
               setShowConfirmationModal(false);
               setModalOpen(true);
-              setSurrogateForm(initialSurrogateForm);
+              setParentForm(initialParentForm);
               setCurrentFormSection(1);
             },
             text: "Create Another Profile",
@@ -135,8 +129,8 @@ export default function SurrogateProfileView({
           onChange={(e) => {
             console.log(e.target.files);
             const image = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
+            setParentForm({
+              ...parentForm,
               primaryImage: URL.createObjectURL(image),
             });
           }}
@@ -149,8 +143,8 @@ export default function SurrogateProfileView({
           onChange={(e) => {
             console.log(e.target.files);
             const image = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
+            setParentForm({
+              ...parentForm,
               secondaryImage: URL.createObjectURL(image),
             });
           }}
@@ -163,8 +157,8 @@ export default function SurrogateProfileView({
           onChange={(e) => {
             console.log(e.target.files);
             const file = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
+            setParentForm({
+              ...parentForm,
               govtIdentificationFile: file,
             });
           }}
@@ -177,8 +171,8 @@ export default function SurrogateProfileView({
           onChange={(e) => {
             console.log(e.target.files);
             const file = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
+            setParentForm({
+              ...parentForm,
               covidVaccinationFile: file,
             });
           }}
@@ -189,24 +183,17 @@ export default function SurrogateProfileView({
         onClose={(e, reason) => {
           if (reason === "backdropClick") {
             setModalOpen(false);
-            showViewSurrogateModal(false);
+            showViewParentModal(false);
           }
         }}
         className="default-modal-container flex-row"
       >
         <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column">
-          <span className="cinzel px-30 uppercase">VIEW SURROGATE PROFILE</span>
+          <span className="cinzel px-30 uppercase">VIEW PARENT PROFILE</span>
           <br />
-          <span className="modal-about poppins px-15">
-            Fill in the data for surrogate profile correctly. It will take a
-            couple of minutes
-          </span>
 
           <div className="modal-form-container flex-row">
             <div className="modal-form flex-column">
-              <br />
-              <span className="fw-600 poppins px-24">Surrogate Bio-Data</span>
-              <br />
               <div className="flex-row space-between modal-input-row">
                 <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                   <Input
@@ -216,23 +203,7 @@ export default function SurrogateProfileView({
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
-                          Surrogate
-                        </span>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                  <Input
-                    id="standard-adornment-amount"
-                    {...defaultFullInputProps}
-                    value={`${SampleSurrogate.parentName}`}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
-                          Parent Name
+                          Parent
                         </span>
                       </InputAdornment>
                     }
@@ -248,7 +219,7 @@ export default function SurrogateProfileView({
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
-                          Spouse Name
+                          Parent's Spouse Name
                         </span>
                       </InputAdornment>
                     }
@@ -260,7 +231,7 @@ export default function SurrogateProfileView({
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.parentAddress}`}
+                    value={`${SampleSurrogate.address}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -324,7 +295,7 @@ export default function SurrogateProfileView({
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.secondaryPhone}`}
+                    value={`${SampleSurrogate.primaryPhone}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -335,6 +306,7 @@ export default function SurrogateProfileView({
                   />
                 </FormControl>
               </div>
+
               <div className="flex-row space-between modal-input-row">
                 <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                   <Input
@@ -353,15 +325,31 @@ export default function SurrogateProfileView({
                   />
                 </FormControl>
               </div>
+              <div className="flex-row space-between modal-input-row">
+                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                  <Input
+                    id="standard-adornment-amount"
+                    {...defaultFullInputProps}
+                    value={`${SampleSurrogate.firstName} ${SampleSurrogate.lastName}`}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <span className="fw-500 poppins px-15 black-text">
+                          Surrogate
+                        </span>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </div>
             </div>
             <div className="flex-column modal-form-right space-between">
               <span className="flex-column align-center width-100">
                 <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                  {surrogateForm.primaryImage.length > 0 ? (
+                  {parentForm.primaryImage.length > 0 ? (
                     // Image is set
 
                     <img
-                      src={surrogateForm.primaryImage}
+                      src={parentForm.primaryImage}
                       alt=""
                       className="modal-form-image"
                     />
@@ -385,11 +373,11 @@ export default function SurrogateProfileView({
                 </span> */}
                 <br />
                 <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                  {surrogateForm.secondaryImage.length > 0 ? (
+                  {parentForm.secondaryImage.length > 0 ? (
                     // Image is set
 
                     <img
-                      src={surrogateForm.secondaryImage}
+                      src={parentForm.secondaryImage}
                       alt=""
                       className="modal-form-image"
                     />
@@ -416,7 +404,7 @@ export default function SurrogateProfileView({
               <span
                 className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                 onClick={() => {
-                  showViewSurrogateModal(false);
+                  showViewParentModal(false);
                 }}
               >
                 Exit Profile

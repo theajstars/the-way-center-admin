@@ -21,6 +21,7 @@ import Footer from "../Footer";
 import DashboardOverview from "../DashboardOverview";
 import SurrogateUpdate from "../SurrogateUpdate";
 import SurrogateProfileView from "../SurrogateProfileView";
+import ParentProfileView from "../ParentProfileView";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -66,10 +67,14 @@ export default function Home() {
     }
   };
 
-  const [isViewSurrogate, setUpdateSurrogate] = useState(false);
+  const [isViewSurrogate, setViewSurrogate] = useState(false);
+  const [isViewParent, setViewParent] = useState(false);
 
   const showViewSurrogateModal = (value) => {
-    setUpdateSurrogate(value);
+    setViewSurrogate(value);
+  };
+  const showViewParentModal = (value) => {
+    setViewParent(value);
   };
   return (
     <div className="home-page">
@@ -152,6 +157,9 @@ export default function Home() {
           <div className="recent-blocks flex-row">
             <div className="recent-block flex-column">
               <span className="px-16 cinzel">RECENT PARENTS</span>
+              {isViewParent && (
+                <ParentProfileView showViewParentModal={showViewParentModal} />
+              )}
               <br />
               <div className="flex-column">
                 {RecentParents.map((parent, index) => {
@@ -159,6 +167,9 @@ export default function Home() {
                     <>
                       <span
                         key={index}
+                        onClick={() => {
+                          showViewParentModal(true);
+                        }}
                         className="poppins fw-500 px-18 uppercase underline pointer recent-block-text"
                       >
                         {parent.name}

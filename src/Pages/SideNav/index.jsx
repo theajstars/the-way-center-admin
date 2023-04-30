@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { RouteList } from "../../Lib/Routes";
 export default function SideNav() {
   const [currentActiveLink, setCurrentActiveLink] = useState(null);
-  const [isSideNavOpen, setSideNavOpen] = useState(true);
+  const [isSideNavOpen, setSideNavOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
