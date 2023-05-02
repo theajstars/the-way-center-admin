@@ -95,8 +95,8 @@ export default function ParentRegistration({ showAddParentModal }) {
               <div className="flex-row space-between modal-input-row">
                 <TextField
                   label="First Name"
-                  value={parentForm.firstName}
                   {...defaultHalfInputProps}
+                  value={parentForm.firstName}
                   onChange={(e) =>
                     setParentForm({ ...parentForm, firstName: e.target.value })
                   }

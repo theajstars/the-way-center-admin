@@ -1,3 +1,7 @@
+import { useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
 import { Typography } from "@mui/material";
 import {
   Table,
@@ -14,11 +18,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import DashboardOverview from "../DashboardOverview";
-import { useState } from "react";
 import { RecentParents as RecentSurrogates } from "../../Assets/Data";
 import SurrogateProfileView from "../SurrogateProfileView";
+import CreatePairing from "../CreatePairing";
 
 export default function Surrogates() {
+  const navigate = useNavigate();
   const [surrogates, setSurrogates] = useState(RecentSurrogates);
 
   const [isViewSurrogate, setViewSurrogate] = useState(false);
@@ -27,8 +32,16 @@ export default function Surrogates() {
   const showViewSurrogateModal = (value) => {
     setViewSurrogate(value);
   };
+
+  const [isAddNewPairing, setAddNewPairing] = useState(false);
+  const showCreatePairingModal = (value) => {
+    setAddNewPairing(value);
+  };
   return (
     <div className="home-page">
+      {isAddNewPairing && (
+        <CreatePairing showCreatePairingModal={showCreatePairingModal} />
+      )}
       {isViewSurrogate && (
         <SurrogateProfileView
           // showViewSurrogateModal={(val) => console.log(val)}
@@ -99,7 +112,12 @@ export default function Surrogates() {
               <br />
               <br />
               <div className="flex-row width-100 align-center justify-end">
-                <Text className="poppins underline px-14 fw-500 pointer">
+                <Text
+                  className="poppins underline px-14 fw-500 pointer"
+                  onClick={() => {
+                    navigate("/dashboard/surrogates");
+                  }}
+                >
                   View All Surrogates
                 </Text>
               </div>
@@ -192,7 +210,12 @@ export default function Surrogates() {
                             >
                               <i className="far fa-eye" /> &nbsp; View
                             </span>
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                setAddNewPairing(true);
+                              }}
+                            >
                               <i className="far fa-eye" /> &nbsp; Pair
                             </span>
                           </Td>
@@ -204,7 +227,12 @@ export default function Surrogates() {
                 <br />
                 <br />
                 <div className="flex-row width-100 align-center justify-end">
-                  <Text className="poppins underline px-14 fw-500 pointer">
+                  <Text
+                    className="poppins underline px-14 fw-500 pointer"
+                    onClick={() => {
+                      navigate("/dashboard/surrogates");
+                    }}
+                  >
                     View All Surrogates
                   </Text>
                 </div>

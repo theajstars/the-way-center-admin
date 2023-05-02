@@ -1,3 +1,7 @@
+import { useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
 import { Typography } from "@mui/material";
 import {
   Table,
@@ -14,10 +18,20 @@ import {
   Text,
 } from "@chakra-ui/react";
 import DashboardOverview from "../DashboardOverview";
-import { useState } from "react";
 import { RecentParents } from "../../Assets/Data";
+import ParentProfileView from "../ParentProfileView";
+import CreatePairing from "../CreatePairing";
 export default function Parents() {
+  const navigate = useNavigate();
   const [parents, setParents] = useState(RecentParents);
+  const [isViewParent, setViewParent] = useState(false);
+  const showViewParentModal = (value) => {
+    setViewParent(value);
+  };
+  const [isAddNewPairing, setAddNewPairing] = useState(false);
+  const showCreatePairingModal = (value) => {
+    setAddNewPairing(value);
+  };
   return (
     <div className="home-page">
       <Typography className="poppins fw-500" variant="h5">
@@ -31,6 +45,12 @@ export default function Parents() {
           <span className="px-20 fw-600 poppins uppercase">
             Recent Parent(s)
           </span>
+          {isViewParent && (
+            <ParentProfileView showViewParentModal={showViewParentModal} />
+          )}
+          {isAddNewPairing && (
+            <CreatePairing showCreatePairingModal={showCreatePairingModal} />
+          )}
           <ChakraProvider>
             <TableContainer className="recent-table-container table-purple">
               <Table variant="simple" colorScheme="whiteAlpha">
@@ -54,10 +74,20 @@ export default function Parents() {
                         </Td>
                         <Td>{parent.email}</Td>
                         <Td className="flex-row align-center recent-table-actions">
-                          <span className="flex-row recent-table-action align-center">
+                          <span
+                            className="flex-row recent-table-action align-center"
+                            onClick={() => {
+                              showViewParentModal(true);
+                            }}
+                          >
                             <i className="far fa-pencil-alt" /> &nbsp; Edit
                           </span>
-                          <span className="flex-row recent-table-action align-center">
+                          <span
+                            className="flex-row recent-table-action align-center"
+                            onClick={() => {
+                              showViewParentModal(true);
+                            }}
+                          >
                             <i className="far fa-eye" /> &nbsp; View
                           </span>
                           <span className="flex-row recent-table-action align-center">
@@ -99,10 +129,20 @@ export default function Parents() {
                           </Td>
                           <Td>{parent.email}</Td>
                           <Td className="flex-row align-center recent-table-actions table-small-actions">
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                showViewParentModal(true);
+                              }}
+                            >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
                             </span>
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                showViewParentModal(true);
+                              }}
+                            >
                               <i className="far fa-eye" /> &nbsp; View
                             </span>
                           </Td>
@@ -136,14 +176,29 @@ export default function Parents() {
                           </Td>
                           <Td>{parent.email}</Td>
                           <Td className="flex-row align-center recent-table-actions table-small-actions">
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                showViewParentModal(true);
+                              }}
+                            >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
                             </span>{" "}
                             &nbsp; &nbsp; &nbsp; &nbsp;
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                showViewParentModal(true);
+                              }}
+                            >
                               <i className="far fa-eye" /> &nbsp; View
                             </span>
-                            <span className="flex-row recent-table-action table-small-action align-center">
+                            <span
+                              className="flex-row recent-table-action table-small-action align-center"
+                              onClick={() => {
+                                setAddNewPairing(true);
+                              }}
+                            >
                               <i className="far fa-eye" /> &nbsp; Pair
                             </span>
                           </Td>
@@ -155,7 +210,12 @@ export default function Parents() {
                 <br />
                 <br />
                 <div className="flex-row width-100 align-center justify-end">
-                  <Text className="poppins underline px-14 fw-500 pointer">
+                  <Text
+                    className="poppins underline px-14 fw-500 pointer"
+                    onClick={() => {
+                      navigate("/dashboard/surrogates");
+                    }}
+                  >
                     View All Surrogates
                   </Text>
                 </div>

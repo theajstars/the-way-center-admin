@@ -15,52 +15,29 @@ import {
   CovidVaccinationDosage,
   Diseases,
   NextOfKinRelationships,
+  RecentParents,
+  ReportCategories,
 } from "../../Assets/Data";
 import dayjs from "dayjs";
 
 import Confirmation from "../Confirmation";
 
 const initialSurrogateForm = {
-  firstName: "",
-  lastName: "",
-  dateOfBirth: dayjs("2023-01-01"),
-  placeOfBirth: "",
-  address: "",
-  primaryPhone: "",
-  primaryEmailAddress: "",
-  bankVerificationNumber: "",
-  nationalIdentificationNumber: "",
-  primaryImage: "",
-  secondaryImage: "",
-
-  spouseFirstName: "",
-  spouseLastName: "",
-  secondaryEmailAddress: "",
-  secondaryPhone: "",
-  image: "",
-
-  // Form Section B
-  knownDisease: "",
-  covidVaccination: 0,
-  firstTimeParent: false,
-  lastChildBirth: dayjs("2023-01-01"),
-  hivStatus: false,
-  govtIdentificationFile: undefined,
-  covidVaccinationFile: undefined,
-  nextOfKin: {
-    name: "",
-    address: "",
-    phone: "",
-    relationship: "sibling",
-    nationalIdentificationNumber: "",
-  },
+  parent: "",
+  surrogate: "",
+  categoryOfReport: "",
+  doctorName: "",
+  nextAppointmentDate: dayjs("2023-01-01"),
+  overview: "",
+  reportFile: "",
+  reportType: "",
 };
 export default function SurrogateReportCreate({ showSurrogateReportModal }) {
   const [isModalOpen, setModalOpen] = useState(true);
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
-  const [surrogateForm, setSurrogateForm] = useState(initialSurrogateForm);
-  const primaryImageUploadRef = useRef();
+  const [surrogateReport, setSurrogateReport] = useState(initialSurrogateForm);
+  const reportFileUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
   const govtIdentificationUploadRef = useRef();
@@ -74,6 +51,13 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
     variant: "standard",
     className: "modal-input-half px-14",
     spellCheck: false,
+  };
+
+  const disabledInputProps = {
+    disabled: true,
+    style: {
+      cursor: "pointer",
+    },
   };
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -97,7 +81,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
             method: () => {
               setShowConfirmationModal(false);
               setModalOpen(true);
-              setSurrogateForm(initialSurrogateForm);
+              setSurrogateReport(initialSurrogateForm);
               setCurrentFormSection(1);
             },
             text: "Create Another Profile",
@@ -112,14 +96,14 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
       <input
         type="file"
         accept=".pdf, .jpg, .jpeg, .png"
-        ref={primaryImageUploadRef}
+        ref={reportFileUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
-          setSurrogateForm({
-            ...surrogateForm,
-            primaryImage: URL.createObjectURL(image),
+          setSurrogateReport({
+            ...surrogateReport,
+            reportFile: URL.createObjectURL(image),
           });
         }}
       />
@@ -131,8 +115,8 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
-          setSurrogateForm({
-            ...surrogateForm,
+          setSurrogateReport({
+            ...surrogateReport,
             secondaryImage: URL.createObjectURL(image),
           });
         }}
@@ -145,8 +129,8 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
         onChange={(e) => {
           console.log(e.target.files);
           const file = e.target.files[0];
-          setSurrogateForm({
-            ...surrogateForm,
+          setSurrogateReport({
+            ...surrogateReport,
             govtIdentificationFile: file,
           });
         }}
@@ -159,8 +143,8 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
         onChange={(e) => {
           console.log(e.target.files);
           const file = e.target.files[0];
-          setSurrogateForm({
-            ...surrogateForm,
+          setSurrogateReport({
+            ...surrogateReport,
             covidVaccinationFile: file,
           });
         }}
@@ -177,11 +161,11 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
       >
         <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column">
           <span className="cinzel px-30 uppercase">
-            create surrogate profile
+            create surrogate report
           </span>
           <br />
           <span className="modal-about poppins px-15">
-            Fill in the data for surrogate profile correctly. It will take a
+            Fill in the data for surrogate report correctly. It will take a
             couple of minutes
           </span>
 
@@ -189,65 +173,129 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
             <div className="modal-form-container flex-row">
               <div className="modal-form flex-column">
                 <br />
-                <span className="fw-600 poppins px-24">Surrogate Bio-Data</span>
+                <span className="fw-600 poppins px-24">
+                  Surrogate Health Update
+                </span>
                 <br />
+
                 <div className="flex-row space-between modal-input-row">
-                  <TextField
-                    label="First Name"
-                    value={surrogateForm.firstName}
-                    {...defaultHalfInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        firstName: e.target.value,
-                      })
-                    }
-                  />
-                  <TextField
-                    label="Last Name"
-                    value={surrogateForm.lastName}
-                    {...defaultHalfInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        lastName: e.target.value,
-                      })
-                    }
-                  />
+                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                    <InputLabel id="demo-simple-select-standard-label">
+                      Select Parent
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateReport.parent}
+                      onChange={(e) => {
+                        setSurrogateReport({
+                          ...surrogateReport,
+                          parent: e.target.value,
+                        });
+                      }}
+                      label="Select Parent"
+                    >
+                      {RecentParents.map((parent, index) => {
+                        return (
+                          <MenuItem value={parent.name} key={parent.name}>
+                            {parent.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                    <InputLabel id="demo-simple-select-standard-label">
+                      Surrogate-NB (Auto Select)
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateReport.parent}
+                      onChange={(e) => {
+                        setSurrogateReport({
+                          ...surrogateReport,
+                          parent: e.target.value,
+                        });
+                      }}
+                      label="Surrogate-NB (Auto Select)"
+                      {...disabledInputProps}
+                    >
+                      {RecentParents.map((parent, index) => {
+                        return (
+                          <MenuItem value={parent.name} key={parent.name}>
+                            {parent.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
                 </div>
                 <div className="flex-row space-between modal-input-row">
+                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                    <InputLabel id="demo-simple-select-standard-label">
+                      Category of Report
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateReport.categoryOfReport}
+                      onChange={(e) => {
+                        setSurrogateReport({
+                          ...surrogateReport,
+                          categoryOfReport: e.target.value,
+                        });
+                      }}
+                      label="Category of Report"
+                    >
+                      {ReportCategories.map((report, index) => {
+                        return (
+                          <MenuItem value={report.value} key={report.name}>
+                            {report.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
                   <DatePicker
                     defaultValue={dayjs("2023-01-01")}
                     {...defaultHalfInputProps}
                     slotProps={{
                       textField: { variant: "standard" },
                     }}
-                    value={surrogateForm.dateOfBirth}
+                    value={surrogateReport.nextAppointmentDate}
                     onChange={(e) => {
-                      setSurrogateForm({ ...surrogateForm, dateOfBirth: e });
+                      console.log(e);
+                      console.log(dayjs(e).toDate());
+                      setSurrogateReport({
+                        ...surrogateReport,
+                        nextAppointmentDate: e,
+                      });
                     }}
-                    label="Date of Birth"
+                    label="Date of Next Appointment"
                   />
-                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <FormControl variant="standard" {...defaultFullInputProps}>
                     <InputLabel id="demo-simple-select-standard-label">
-                      Place of Birth
+                      Name of Doctor
                     </InputLabel>
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateForm.placeOfBirth}
+                      value={surrogateReport.doctorName}
                       onChange={(e) => {
-                        setSurrogateForm({
-                          ...surrogateForm,
-                          placeOfBirth: e.target.value,
+                        setSurrogateReport({
+                          ...surrogateReport,
+                          doctorName: e.target.value,
                         });
                       }}
-                      label="Place of Birth"
+                      label="Name of Doctor"
                     >
-                      {CountriesList.map((country, index) => {
+                      {RecentParents.map((doctor, index) => {
                         return (
-                          <MenuItem value={country.code3} key={country.code3}>
-                            {country.name}
+                          <MenuItem value={doctor.name} key={doctor.name}>
+                            {doctor.name}
                           </MenuItem>
                         );
                       })}
@@ -256,129 +304,25 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
-                    label="Address"
-                    value={surrogateForm.address}
                     {...defaultFullInputProps}
+                    id="standard-multiline-static"
+                    label="Overview"
+                    multiline
+                    rows={5}
+                    placeholder="Overview"
+                    variant="standard"
+                    value={surrogateReport.overview}
                     onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        address: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <TextField
-                    label="Primary Phone Number"
-                    value={surrogateForm.primaryPhone}
-                    {...defaultFullInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        primaryPhone: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <TextField
-                    label="Primary Email Address"
-                    value={surrogateForm.primaryEmailAddress}
-                    {...defaultFullInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        primaryEmailAddress: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <TextField
-                    label="Bank Verification Number"
-                    value={surrogateForm.bankVerificationNumber}
-                    {...defaultFullInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        bankVerificationNumber: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <TextField
-                    label="National Identification Number"
-                    value={surrogateForm.nationalIdentificationNumber}
-                    {...defaultFullInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        nationalIdentificationNumber: e.target.value,
+                      setSurrogateReport({
+                        ...surrogateReport,
+                        overview: e.target.value,
                       })
                     }
                   />
                 </div>
               </div>
               <div className="flex-column modal-form-right space-between">
-                <span className="flex-column align-center width-100">
-                  <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                    {surrogateForm.primaryImage.length > 0 ? (
-                      // Image is set
-
-                      <img
-                        src={surrogateForm.primaryImage}
-                        alt=""
-                        className="modal-form-image"
-                      />
-                    ) : (
-                      // <img
-                      //   src={ImageSelectorPlaceholder}
-                      //   alt=""
-                      //   className="modal-form-image"
-                      // />
-                      <span className="px-16 poppins">No Image Selected</span>
-                    )}
-                  </div>
-                  <br />
-                  <span
-                    className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
-                    onClick={() => {
-                      primaryImageUploadRef.current.click();
-                    }}
-                  >
-                    Upload Main Image
-                  </span>
-                  <br />
-                  <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                    {surrogateForm.secondaryImage.length > 0 ? (
-                      // Image is set
-
-                      <img
-                        src={surrogateForm.secondaryImage}
-                        alt=""
-                        className="modal-form-image"
-                      />
-                    ) : (
-                      // <img
-                      //   src={ImageSelectorPlaceholder}
-                      //   alt=""
-                      //   className="modal-form-image"
-                      // />
-                      <span className="px-16 poppins">No Image Selected</span>
-                    )}
-                  </div>
-                  <br />
-                  <span
-                    className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
-                    onClick={() => {
-                      secondaryImageUploadRef.current.click();
-                    }}
-                  >
-                    Upload Second Image
-                  </span>
-                </span>
-                <br />
+                <span></span>
                 <span
                   className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                   onClick={() => {
@@ -405,10 +349,10 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateForm.knownDisease}
+                      value={surrogateReport.knownDisease}
                       onChange={(e) => {
-                        setSurrogateForm({
-                          ...surrogateForm,
+                        setSurrogateReport({
+                          ...surrogateReport,
                           knownDisease: e.target.value,
                         });
                       }}
@@ -430,10 +374,10 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateForm.covidVaccination}
+                      value={surrogateReport.covidVaccination}
                       onChange={(e) => {
-                        setSurrogateForm({
-                          ...surrogateForm,
+                        setSurrogateReport({
+                          ...surrogateReport,
                           covidVaccination: e.target.value,
                         });
                       }}
@@ -460,10 +404,10 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateForm.firstTimeParent}
+                      value={surrogateReport.firstTimeParent}
                       onChange={(e) => {
-                        setSurrogateForm({
-                          ...surrogateForm,
+                        setSurrogateReport({
+                          ...surrogateReport,
                           firstTimeParent: e.target.value,
                         });
                       }}
@@ -483,11 +427,14 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     slotProps={{
                       textField: { variant: "standard" },
                     }}
-                    value={surrogateForm.lastChildBirth}
+                    value={surrogateReport.lastChildBirth}
                     onChange={(e) => {
                       console.log(e);
                       console.log(dayjs(e).toDate());
-                      setSurrogateForm({ ...surrogateForm, lastChildBirth: e });
+                      setSurrogateReport({
+                        ...surrogateReport,
+                        lastChildBirth: e,
+                      });
                     }}
                     label="Date of Last Child Birth"
                   />
@@ -500,10 +447,10 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateForm.hivStatus}
+                      value={surrogateReport.hivStatus}
                       onChange={(e) => {
-                        setSurrogateForm({
-                          ...surrogateForm,
+                        setSurrogateReport({
+                          ...surrogateReport,
                           hivStatus: e.target.value,
                         });
                       }}
@@ -523,9 +470,12 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     slotProps={{
                       textField: { variant: "standard" },
                     }}
-                    value={surrogateForm.lastChildBirth}
+                    value={surrogateReport.lastChildBirth}
                     onChange={(e) =>
-                      setSurrogateForm({ ...surrogateForm, lastChildBirth: e })
+                      setSurrogateReport({
+                        ...surrogateReport,
+                        lastChildBirth: e,
+                      })
                     }
                     label="Date of Last Child Birth"
                   />
@@ -533,13 +483,13 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Next of Kin Full Name"
-                    value={surrogateForm.nextOfKin.name}
+                    value={surrogateReport.nextOfKin.name}
                     {...defaultFullInputProps}
                     onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
+                      setSurrogateReport({
+                        ...surrogateReport,
                         nextOfKin: {
-                          ...surrogateForm.nextOfKin,
+                          ...surrogateReport.nextOfKin,
                           name: e.target.value,
                         },
                       })
@@ -549,13 +499,13 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Address"
-                    value={surrogateForm.nextOfKin.address}
+                    value={surrogateReport.nextOfKin.address}
                     {...defaultFullInputProps}
                     onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
+                      setSurrogateReport({
+                        ...surrogateReport,
                         nextOfKin: {
-                          ...surrogateForm.nextOfKin,
+                          ...surrogateReport.nextOfKin,
                           address: e.target.value,
                         },
                       })
@@ -565,13 +515,13 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Next of Kin Phone Number"
-                    value={surrogateForm.nextOfKin.phone}
+                    value={surrogateReport.nextOfKin.phone}
                     {...defaultFullInputProps}
                     onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
+                      setSurrogateReport({
+                        ...surrogateReport,
                         nextOfKin: {
-                          ...surrogateForm.nextOfKin,
+                          ...surrogateReport.nextOfKin,
                           phone: e.target.value,
                         },
                       })
@@ -586,12 +536,12 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateForm.nextOfKin.relationship}
+                      value={surrogateReport.nextOfKin.relationship}
                       onChange={(e) =>
-                        setSurrogateForm({
-                          ...surrogateForm,
+                        setSurrogateReport({
+                          ...surrogateReport,
                           nextOfKin: {
-                            ...surrogateForm.nextOfKin,
+                            ...surrogateReport.nextOfKin,
                             relationship: e.target.value,
                           },
                         })
@@ -611,13 +561,15 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="National Identification Number"
-                    value={surrogateForm.nextOfKin.nationalIdentificationNumber}
+                    value={
+                      surrogateReport.nextOfKin.nationalIdentificationNumber
+                    }
                     {...defaultFullInputProps}
                     onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
+                      setSurrogateReport({
+                        ...surrogateReport,
                         nextOfKin: {
-                          ...surrogateForm.nextOfKin,
+                          ...surrogateReport.nextOfKin,
                           nationalIdentificationNumber: e.target.value,
                         },
                       })
@@ -633,8 +585,8 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     </span>
                     <div className="flex-row modal-form-file width-100">
                       <div className="px-13 poppins fw-500">
-                        {surrogateForm.govtIdentificationFile ? (
-                          surrogateForm.govtIdentificationFile.name
+                        {surrogateReport.govtIdentificationFile ? (
+                          surrogateReport.govtIdentificationFile.name
                         ) : (
                           <span>No File Selected</span>
                         )}
@@ -658,8 +610,8 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     </span>
                     <div className="flex-row modal-form-file width-100">
                       <div className="px-13 poppins fw-500">
-                        {surrogateForm.covidVaccinationFile ? (
-                          surrogateForm.covidVaccinationFile.name
+                        {surrogateReport.covidVaccinationFile ? (
+                          surrogateReport.covidVaccinationFile.name
                         ) : (
                           <span>No File Selected</span>
                         )}

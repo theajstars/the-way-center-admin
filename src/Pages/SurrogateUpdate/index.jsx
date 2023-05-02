@@ -7,6 +7,7 @@ import {
   Select,
   MenuItem,
   FormControl,
+  Button,
 } from "@mui/material";
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
 import { DateField, DatePicker } from "@mui/x-date-pickers";
@@ -19,6 +20,7 @@ import {
 import dayjs from "dayjs";
 
 import Confirmation from "../Confirmation";
+import SurrogateReportCreate from "../SurrogateReportCreate";
 
 const initialSurrogateForm = {
   firstName: "",
@@ -77,15 +79,25 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
   };
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showCreateReport, setShowCreateReport] = useState(false);
   const CreateSurrogateProfile = () => {
     setModalOpen(false);
     setShowConfirmationModal(true);
+  };
+  const CreateSurrogateReport = () => {
+    setModalOpen(false);
+    setShowCreateReport(true);
   };
   const getConfirmationModalStatus = (value) => {
     setShowConfirmationModal(value);
     if (!value) {
       showUpdateSurrogateModal(false);
     }
+  };
+  const showSurrogateReportModal = (value) => {
+    setShowCreateReport(value);
+    setModalOpen(false);
+    showUpdateSurrogateModal(false);
   };
   return (
     <>
@@ -109,48 +121,56 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
           getConfirmationModalStatus={getConfirmationModalStatus}
         />
       )}
-      <input
-        type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
-        ref={primaryImageUploadRef}
-        className="modal-image-hide"
-        onChange={(e) => {
-          console.log(e.target.files);
-          const image = e.target.files[0];
-          setSurrogateForm({
-            ...surrogateForm,
-            primaryImage: URL.createObjectURL(image),
-          });
-        }}
-      />
-      <input
-        type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
-        ref={secondaryImageUploadRef}
-        className="modal-image-hide"
-        onChange={(e) => {
-          console.log(e.target.files);
-          const image = e.target.files[0];
-          setSurrogateForm({
-            ...surrogateForm,
-            secondaryImage: URL.createObjectURL(image),
-          });
-        }}
-      />
-      <input
-        type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
-        ref={govtIdentificationUploadRef}
-        className="modal-image-hide"
-        onChange={(e) => {
-          console.log(e.target.files);
-          const file = e.target.files[0];
-          setSurrogateForm({
-            ...surrogateForm,
-            govtIdentificationFile: file,
-          });
-        }}
-      />
+      {showCreateReport && (
+        <SurrogateReportCreate
+          showSurrogateReportModal={showSurrogateReportModal}
+        />
+      )}
+      <>
+        <input
+          type="file"
+          accept=".pdf, .jpg, .jpeg, .png"
+          ref={primaryImageUploadRef}
+          className="modal-image-hide"
+          onChange={(e) => {
+            console.log(e.target.files);
+            const image = e.target.files[0];
+            setSurrogateForm({
+              ...surrogateForm,
+              primaryImage: URL.createObjectURL(image),
+            });
+          }}
+        />
+        <input
+          type="file"
+          accept=".pdf, .jpg, .jpeg, .png"
+          ref={secondaryImageUploadRef}
+          className="modal-image-hide"
+          onChange={(e) => {
+            console.log(e.target.files);
+            const image = e.target.files[0];
+            setSurrogateForm({
+              ...surrogateForm,
+              secondaryImage: URL.createObjectURL(image),
+            });
+          }}
+        />
+        <input
+          type="file"
+          accept=".pdf, .jpg, .jpeg, .png"
+          ref={govtIdentificationUploadRef}
+          className="modal-image-hide"
+          onChange={(e) => {
+            console.log(e.target.files);
+            const file = e.target.files[0];
+            setSurrogateForm({
+              ...surrogateForm,
+              govtIdentificationFile: file,
+            });
+          }}
+        />
+      </>
+
       <input
         type="file"
         accept=".pdf, .jpg, .jpeg, .png"
@@ -700,6 +720,11 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
               </div>
             </div>
           )}
+          <div className="flex-row width-100">
+            <Button variant="contained" onClick={CreateSurrogateReport}>
+              Create Report
+            </Button>
+          </div>
         </div>
       </Modal>
     </>

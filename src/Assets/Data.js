@@ -751,6 +751,15 @@ const SampleSurrogate = {
   pair: "",
   isActive: true,
 };
+const ReportCategories = [
+  {
+    name: "Ante-Natal",
+    value: "ante_natal",
+  },
+  { name: "Post-Natal", value: "post_natal" },
+  { name: "Medical", value: "medical" },
+  { name: "Other", value: "other" },
+];
 export {
   SurrogateRecords,
   SurrogateReports,
@@ -769,4 +778,5 @@ export {
   InboxMessages,
   SampleMessages,
   SampleSurrogate,
+  ReportCategories,
 };
