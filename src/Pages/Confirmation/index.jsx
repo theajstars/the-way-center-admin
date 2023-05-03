@@ -10,6 +10,7 @@ export default function Confirmation({
   isPairing,
   parentName,
   surrogateName,
+  showModalBody = true,
   getConfirmationModalStatus,
 }) {
   const navigate = useNavigate();
@@ -24,19 +25,21 @@ export default function Confirmation({
             <span className="px-30 cinzel uppercase">{modalHeaderText}</span>
           </center>
 
-          <div className="confirmation-modal-body flex-row poppins uppercase">
-            {!isPairing ? (
-              modalBodyText
-            ) : (
-              <span>
-                {parentName}
-                <br />
-                <span className="px-14">is now matched with</span>
-                <br />
-                {surrogateName}
-              </span>
-            )}
-          </div>
+          {showModalBody && (
+            <div className="confirmation-modal-body flex-row poppins uppercase">
+              {!isPairing ? (
+                modalBodyText
+              ) : (
+                <span>
+                  {parentName}
+                  <br />
+                  <span className="px-14">is now matched with</span>
+                  <br />
+                  {surrogateName}
+                </span>
+              )}
+            </div>
+          )}
           <span
             className="confirmation-modal-action uppercase poppins modal-form-submit flex-row pointer"
             onClick={modalAction.method}

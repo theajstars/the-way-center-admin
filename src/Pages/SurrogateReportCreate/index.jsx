@@ -22,21 +22,23 @@ import dayjs from "dayjs";
 
 import Confirmation from "../Confirmation";
 
-const initialSurrogateForm = {
+const initialSurrogateReport = {
   parent: "",
   surrogate: "",
   categoryOfReport: "",
   doctorName: "",
   nextAppointmentDate: dayjs("2023-01-01"),
   overview: "",
-  reportFile: "",
+  reportFile: undefined,
   reportType: "",
 };
 export default function SurrogateReportCreate({ showSurrogateReportModal }) {
   const [isModalOpen, setModalOpen] = useState(true);
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
-  const [surrogateReport, setSurrogateReport] = useState(initialSurrogateForm);
+  const [surrogateReport, setSurrogateReport] = useState(
+    initialSurrogateReport
+  );
   const reportFileUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
@@ -64,6 +66,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
   const CreateSurrogateProfile = () => {
     setModalOpen(false);
     setShowConfirmationModal(true);
+    showSurrogateReportModal(true);
   };
   const getConfirmationModalStatus = (value) => {
     setShowConfirmationModal(value);
@@ -71,28 +74,42 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
       showSurrogateReportModal(false);
     }
   };
+  const SendReportCreatedNotification = () => {
+    setConfirmationModalParams({
+      modalHeaderText: "great job. message sent",
+      modalAction: {
+        method: () => {
+          setShowConfirmationModal(false);
+          setSurrogateReport(initialSurrogateReport);
+        },
+        text: "submit another report",
+      },
+      showModalBody: false,
+      modalBodyText: "",
+      modalLink: {
+        text: "Back to Dashboard",
+        route: "/dashboard",
+      },
+      getConfirmationModalStatus: { getConfirmationModalStatus },
+    });
+  };
+  const [confirmationModalParams, setConfirmationModalParams] = useState({
+    modalHeaderText: "Surrogate Health Update",
+    modalBodyText:
+      "Aisha Immanuel’s Report has been updated, you can now push a message to Jones.",
+    modalAction: {
+      method: SendReportCreatedNotification,
+      text: "send notification",
+    },
+    modalLink: {
+      text: "Back to Dashboard",
+      route: "/dashboard",
+    },
+    getConfirmationModalStatus: { getConfirmationModalStatus },
+  });
   return (
     <>
-      {showConfirmationModal && (
-        <Confirmation
-          modalHeaderText=""
-          modalBodyText="Profile Created Successfully"
-          modalAction={{
-            method: () => {
-              setShowConfirmationModal(false);
-              setModalOpen(true);
-              setSurrogateReport(initialSurrogateForm);
-              setCurrentFormSection(1);
-            },
-            text: "Create Another Profile",
-          }}
-          modalLink={{
-            text: "Back to Dashboard",
-            route: "/dashboard",
-          }}
-          getConfirmationModalStatus={getConfirmationModalStatus}
-        />
-      )}
+      {showConfirmationModal && <Confirmation {...confirmationModalParams} />}
       <input
         type="file"
         accept=".pdf, .jpg, .jpeg, .png"
@@ -103,7 +120,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
           const image = e.target.files[0];
           setSurrogateReport({
             ...surrogateReport,
-            reportFile: URL.createObjectURL(image),
+            reportFile: image,
           });
         }}
       />
@@ -334,259 +351,46 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
               </div>
             </div>
           ) : (
-            <div className="modal-form-container flex-row">
-              <div className="modal-form flex-column">
+            <div className="modal-form-container flex-column align-center width-100">
+              <div className="modal-form flex-column align-center">
                 <br />
-                <span className="fw-600 poppins px-24">
-                  Surrogate Health Information
-                </span>
+                <span className="fw-600 poppins px-24">Report File</span>
                 <br />
-                <div className="flex-row space-between modal-input-row">
-                  <FormControl variant="standard" {...defaultHalfInputProps}>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      Any Known Disease/Ailment
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateReport.knownDisease}
-                      onChange={(e) => {
-                        setSurrogateReport({
-                          ...surrogateReport,
-                          knownDisease: e.target.value,
-                        });
-                      }}
-                      label="Any Known Disease/Ailment"
-                    >
-                      {Diseases.map((disease, index) => {
-                        return (
-                          <MenuItem value={disease.value} key={disease.value}>
-                            {disease.name}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                  <FormControl variant="standard" {...defaultHalfInputProps}>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      Taken COVID Vaccination
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateReport.covidVaccination}
-                      onChange={(e) => {
-                        setSurrogateReport({
-                          ...surrogateReport,
-                          covidVaccination: e.target.value,
-                        });
-                      }}
-                      label="Taken Covid Vaccination"
-                    >
-                      {CovidVaccinationDosage.map((vaccination, index) => {
-                        return (
-                          <MenuItem
-                            value={vaccination.value}
-                            key={vaccination.value}
-                          >
-                            {vaccination.name}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <FormControl variant="standard" {...defaultHalfInputProps}>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      First Time Parent?
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateReport.firstTimeParent}
-                      onChange={(e) => {
-                        setSurrogateReport({
-                          ...surrogateReport,
-                          firstTimeParent: e.target.value,
-                        });
-                      }}
-                      label="First Time Parent?"
-                    >
-                      <MenuItem value={false} key="first-time-parent-false">
-                        No
-                      </MenuItem>
-                      <MenuItem value={true} key="first-time-parent-true">
-                        Yes
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                  <DatePicker
-                    defaultValue={dayjs("2023-01-01")}
-                    {...defaultHalfInputProps}
-                    slotProps={{
-                      textField: { variant: "standard" },
-                    }}
-                    value={surrogateReport.lastChildBirth}
+                <FormControl variant="standard" {...defaultFullInputProps}>
+                  <InputLabel id="demo-simple-select-standard-label">
+                    Select Report Type
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={surrogateReport.reportType}
                     onChange={(e) => {
-                      console.log(e);
-                      console.log(dayjs(e).toDate());
                       setSurrogateReport({
                         ...surrogateReport,
-                        lastChildBirth: e,
+                        reportType: e.target.value,
                       });
                     }}
-                    label="Date of Last Child Birth"
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <FormControl variant="standard" {...defaultHalfInputProps}>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      HIV/AIDS STATUS
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateReport.hivStatus}
-                      onChange={(e) => {
-                        setSurrogateReport({
-                          ...surrogateReport,
-                          hivStatus: e.target.value,
-                        });
-                      }}
-                      label="HIV/AIDS STATUS"
-                    >
-                      <MenuItem value={false} key="hiv-status-false">
-                        Negative
-                      </MenuItem>
-                      <MenuItem value={true} key="hiv-status-true">
-                        Positive
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                  <DatePicker
-                    defaultValue={dayjs("2023-01-01")}
-                    {...defaultHalfInputProps}
-                    slotProps={{
-                      textField: { variant: "standard" },
-                    }}
-                    value={surrogateReport.lastChildBirth}
-                    onChange={(e) =>
-                      setSurrogateReport({
-                        ...surrogateReport,
-                        lastChildBirth: e,
-                      })
-                    }
-                    label="Date of Last Child Birth"
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <TextField
-                    label="Next of Kin Full Name"
-                    value={surrogateReport.nextOfKin.name}
-                    {...defaultFullInputProps}
-                    onChange={(e) =>
-                      setSurrogateReport({
-                        ...surrogateReport,
-                        nextOfKin: {
-                          ...surrogateReport.nextOfKin,
-                          name: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <TextField
-                    label="Address"
-                    value={surrogateReport.nextOfKin.address}
-                    {...defaultFullInputProps}
-                    onChange={(e) =>
-                      setSurrogateReport({
-                        ...surrogateReport,
-                        nextOfKin: {
-                          ...surrogateReport.nextOfKin,
-                          address: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <TextField
-                    label="Next of Kin Phone Number"
-                    value={surrogateReport.nextOfKin.phone}
-                    {...defaultFullInputProps}
-                    onChange={(e) =>
-                      setSurrogateReport({
-                        ...surrogateReport,
-                        nextOfKin: {
-                          ...surrogateReport.nextOfKin,
-                          phone: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <FormControl variant="standard" {...defaultFullInputProps}>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      Relationship to Kin
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateReport.nextOfKin.relationship}
-                      onChange={(e) =>
-                        setSurrogateReport({
-                          ...surrogateReport,
-                          nextOfKin: {
-                            ...surrogateReport.nextOfKin,
-                            relationship: e.target.value,
-                          },
-                        })
-                      }
-                      label="HIV/AIDS STATUS"
-                    >
-                      {NextOfKinRelationships.map((rel, index) => {
-                        return (
-                          <MenuItem value={rel.value} key={index}>
-                            {rel.title}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <TextField
-                    label="National Identification Number"
-                    value={
-                      surrogateReport.nextOfKin.nationalIdentificationNumber
-                    }
-                    {...defaultFullInputProps}
-                    onChange={(e) =>
-                      setSurrogateReport({
-                        ...surrogateReport,
-                        nextOfKin: {
-                          ...surrogateReport.nextOfKin,
-                          nationalIdentificationNumber: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="flex-column modal-form-right space-between">
+                    label="Select Report Type"
+                  >
+                    {ReportCategories.map((report, index) => {
+                      return (
+                        <MenuItem value={report.name} key={report.name}>
+                          {report.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+                <br />
                 <span className="flex-column align-center width-100">
                   <div className="flex-column modal-form-file-container">
                     <span className="px-13 poppins fw-500">
-                      &nbsp; &nbsp; Upload Government ID Card
+                      &nbsp; &nbsp; Upload Document
                     </span>
                     <div className="flex-row modal-form-file width-100">
                       <div className="px-13 poppins fw-500">
-                        {surrogateReport.govtIdentificationFile ? (
-                          surrogateReport.govtIdentificationFile.name
+                        {surrogateReport.reportFile ? (
+                          surrogateReport.reportFile.name
                         ) : (
                           <span>No File Selected</span>
                         )}
@@ -594,32 +398,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                       <span
                         className="px-13 poppins fw-500 modal-form-file-btn flex-row pointer"
                         onClick={() => {
-                          govtIdentificationUploadRef.current.click();
-                        }}
-                      >
-                        Upload File
-                      </span>
-                    </div>
-                    <span className="px-13 poppins fw-500 modal-form-file-about">
-                      &nbsp; &nbsp; Acceptable format :PDF/JPG/PNG
-                    </span>
-                  </div>
-                  <div className="flex-column modal-form-file-container">
-                    <span className="px-13 poppins fw-500">
-                      &nbsp; &nbsp; Upload COVID Vaccination
-                    </span>
-                    <div className="flex-row modal-form-file width-100">
-                      <div className="px-13 poppins fw-500">
-                        {surrogateReport.covidVaccinationFile ? (
-                          surrogateReport.covidVaccinationFile.name
-                        ) : (
-                          <span>No File Selected</span>
-                        )}
-                      </div>
-                      <span
-                        className="px-13 poppins fw-500 modal-form-file-btn flex-row pointer"
-                        onClick={() => {
-                          covidVaccinationUploadRef.current.click();
+                          reportFileUploadRef.current.click();
                         }}
                       >
                         Upload File
@@ -630,8 +409,10 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     </span>
                   </div>
                 </span>
+              </div>
+              <div className="flex-column modal-form-right space-between align-center">
                 <br />
-                <div className="width-100 flex-column">
+                <div className="width-100 flex-column align-center">
                   <span
                     className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                     onClick={() => {
@@ -645,7 +426,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                     onClick={() => CreateSurrogateProfile()}
                   >
-                    Create Profile &nbsp;{" "}
+                    Create Report &nbsp;{" "}
                     <i className="far fa-long-arrow-alt-right" />
                   </span>
                 </div>
