@@ -81,6 +81,7 @@
 }
 .modal-form-image {
   height: 150px;
+  max-width: 200px;
   object-fit: contain;
 }
 .modal-form-submit {

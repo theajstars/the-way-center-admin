@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 
 import {
   InputLabel,
@@ -19,25 +19,28 @@ import {
 import dayjs from "dayjs";
 
 import Confirmation from "../Confirmation";
+import { FetchData, UploadFile } from "../../API/FetchData";
+import { Endpoints } from "../../API/Endpoints";
+import { DefaultContext } from "../Dashboard";
+import { validatePhone } from "../../Lib/Validate";
 
 const initialSurrogateForm = {
   firstName: "",
   lastName: "",
   dateOfBirth: dayjs("2023-01-01"),
-  placeOfBirth: "",
+  placeOfBirth: "Nigeria",
   address: "",
   primaryPhone: "",
   primaryEmailAddress: "",
   bankVerificationNumber: "",
   nationalIdentificationNumber: "",
-  primaryImage: "",
-  secondaryImage: "",
+  primaryImage: undefined,
+  secondaryImage: undefined,
 
   spouseFirstName: "",
   spouseLastName: "",
   secondaryEmailAddress: "",
   secondaryPhone: "",
-  image: "",
 
   // Form Section B
   knownDisease: "",
@@ -55,11 +58,45 @@ const initialSurrogateForm = {
     nationalIdentificationNumber: "",
   },
 };
+
 export default function SurrogateRegistration({ showAddSurrogateModal }) {
   const [isModalOpen, setModalOpen] = useState(true);
+  const consumeContext = useContext(DefaultContext);
+
+  const [countriesList, setCountriesList] = useState(
+    consumeContext.CountriesList ?? CountriesList
+  );
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
   const [surrogateForm, setSurrogateForm] = useState(initialSurrogateForm);
+  const [formErrors, setFormErrors] = useState({
+    firstName: false,
+    lastName: false,
+    dateOfBirth: false,
+    placeOfBirth: false,
+    address: false,
+    primaryPhone: false,
+    primaryEmailAddress: false,
+    bankVerificationNumber: false,
+    nationalIdentificationNumber: false,
+    primaryImage: false,
+    secondaryImage: false,
+
+    spouseFirstName: false,
+    spouseLastName: false,
+    secondaryEmailAddress: false,
+    secondaryPhone: false,
+
+    // Form Section B
+    knownDisease: false,
+    covidVaccination: false,
+    firstTimeParent: false,
+    lastChildBirth: false,
+    hivStatus: false,
+    govtIdentificationFile: false,
+    covidVaccinationFile: false,
+    nextOfKin: false,
+  });
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
@@ -76,10 +113,108 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     spellCheck: false,
   };
 
+  const UpdateFormErrors = () => {
+    const isPrimaryPhoneValid = validatePhone(surrogateForm.primaryPhone);
+    console.log(isPrimaryPhoneValid);
+    setFormErrors({
+      ...formErrors,
+      firstName: surrogateForm.firstName.length === 0,
+    });
+    setFormErrors({
+      ...formErrors,
+      lastName: surrogateForm.lastName.length === 0,
+    });
+    setFormErrors({
+      ...formErrors,
+      address: surrogateForm.address.length === 0,
+    });
+    setFormErrors({
+      ...formErrors,
+      primaryPhone: !isPrimaryPhoneValid,
+    });
+  };
+
+  useEffect(() => {
+    UpdateFormErrors();
+  }, [surrogateForm]);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const CreateSurrogateProfile = () => {
-    setModalOpen(false);
-    setShowConfirmationModal(true);
+  const CreateSurrogateProfile = async () => {
+    // setModalOpen(false);
+    // setShowConfirmationModal(true);
+    // let primaryImageFormData = new FormData();
+    // primaryImageFormData.append(
+    //   "file",
+    //   surrogateForm.primaryImage,
+    //   surrogateForm.primaryImage.name.toLowerCase()
+    // );
+
+    // let secondaryImageFormData = new FormData();
+    // secondaryImageFormData.append(
+    //   "file",
+    //   surrogateForm.secondaryImage,
+    //   surrogateForm.secondaryImage.name.toLowerCase()
+    // );
+
+    // let govtIDFormData = new FormData();
+    // govtIDFormData.append(
+    //   "file",
+    //   surrogateForm.govtIdentificationFile,
+    //   surrogateForm.govtIdentificationFile.name.toLowerCase()
+    // );
+    // let covidVaccinationFormData = new FormData();
+    // covidVaccinationFormData.append(
+    //   "file",
+    //   surrogateForm.covidVaccinationFile,
+    //   surrogateForm.covidVaccinationFile.name.toLowerCase()
+    // );
+
+    // const uploadPrimaryImage = await UploadFile({
+    //   formData: primaryImageFormData,
+    // });
+    // const uploadSecondaryImage = await UploadFile({
+    //   formData: secondaryImageFormData,
+    // });
+    // const uploadGovtId = await UploadFile({
+    //   formData: govtIDFormData,
+    // });
+    // const uploadCovidVaccination = await UploadFile({
+    //   formData: covidVaccinationFormData,
+    // });
+    const {
+      firstName,
+      lastName,
+      dateOfBirth,
+      placeOfBirth,
+      address,
+      primaryPhone,
+      primaryEmailAddress,
+      bankVerificationNumber,
+      nationalIdentificationNumber,
+      primaryImage,
+      secondaryImage,
+
+      spouseFirstName,
+      spouseLastName,
+      secondaryEmailAddress,
+      secondaryPhone,
+
+      // Form Section B
+      knownDisease,
+      covidVaccination,
+      firstTimeParent,
+      lastChildBirth,
+      hivStatus,
+      govtIdentificationFile,
+      covidVaccinationFile,
+      nextOfKin,
+    } = surrogateForm;
+    const {
+      name: nextOfKin_name,
+      address: nextOfKin_address,
+      phone: nextOfKin_phone,
+      relationship: nextOfKin_relationship,
+      nationalIdentificationNumber: nextOfKin_nationalIdentificationNumber,
+    } = nextOfKin;
   };
   const getConfirmationModalStatus = (value) => {
     setShowConfirmationModal(value);
@@ -111,21 +246,22 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       )}
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".jpeg, .png"
         ref={primaryImageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
-          console.log(e.target.files);
           const image = e.target.files[0];
+          console.log(image);
+
           setSurrogateForm({
             ...surrogateForm,
-            primaryImage: URL.createObjectURL(image),
+            primaryImage: image,
           });
         }}
       />
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".jpeg, .png"
         ref={secondaryImageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
@@ -133,18 +269,18 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
           const image = e.target.files[0];
           setSurrogateForm({
             ...surrogateForm,
-            secondaryImage: URL.createObjectURL(image),
+            secondaryImage: image,
           });
         }}
       />
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".pdf, .jpg, .png"
         ref={govtIdentificationUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
-          console.log(e.target.files);
           const file = e.target.files[0];
+          console.log(file);
           setSurrogateForm({
             ...surrogateForm,
             govtIdentificationFile: file,
@@ -153,7 +289,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       />
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".pdf, .jpg, .png"
         ref={covidVaccinationUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
@@ -195,6 +331,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <TextField
                     label="First Name"
                     value={surrogateForm.firstName}
+                    error={formErrors.firstName}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -206,6 +343,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <TextField
                     label="Last Name"
                     value={surrogateForm.lastName}
+                    error={formErrors.lastName}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -222,9 +360,12 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     slotProps={{
                       textField: { variant: "standard" },
                     }}
-                    value={surrogateForm.dateOfBirth}
+                    value={dayjs(surrogateForm.dateOfBirth)}
                     onChange={(e) => {
-                      setSurrogateForm({ ...surrogateForm, dateOfBirth: e });
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        dateOfBirth: dayjs(e).format("YYYY-MM-DD"),
+                      });
                     }}
                     label="Date of Birth"
                   />
@@ -244,9 +385,9 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                       }}
                       label="Place of Birth"
                     >
-                      {CountriesList.map((country, index) => {
+                      {countriesList.map((country, index) => {
                         return (
-                          <MenuItem value={country.code3} key={country.code3}>
+                          <MenuItem value={country.name} key={country.name}>
                             {country.name}
                           </MenuItem>
                         );
@@ -270,6 +411,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Primary Phone Number"
+                    placeholder="0802-345-6789"
                     value={surrogateForm.primaryPhone}
                     {...defaultFullInputProps}
                     onChange={(e) =>
@@ -295,6 +437,9 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
+                    inputProps={{
+                      maxLength: 11,
+                    }}
                     label="Bank Verification Number"
                     value={surrogateForm.bankVerificationNumber}
                     {...defaultFullInputProps}
@@ -309,6 +454,9 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="National Identification Number"
+                    inputProps={{
+                      maxLength: 11,
+                    }}
                     value={surrogateForm.nationalIdentificationNumber}
                     {...defaultFullInputProps}
                     onChange={(e) =>
@@ -320,23 +468,17 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   />
                 </div>
               </div>
+
               <div className="flex-column modal-form-right space-between">
                 <span className="flex-column align-center width-100">
                   <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                    {surrogateForm.primaryImage.length > 0 ? (
-                      // Image is set
-
+                    {surrogateForm.primaryImage ? (
                       <img
-                        src={surrogateForm.primaryImage}
+                        src={URL.createObjectURL(surrogateForm.primaryImage)}
                         alt=""
                         className="modal-form-image"
                       />
                     ) : (
-                      // <img
-                      //   src={ImageSelectorPlaceholder}
-                      //   alt=""
-                      //   className="modal-form-image"
-                      // />
                       <span className="px-16 poppins">No Image Selected</span>
                     )}
                   </div>
@@ -351,20 +493,13 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   </span>
                   <br />
                   <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                    {surrogateForm.secondaryImage.length > 0 ? (
-                      // Image is set
-
+                    {surrogateForm.secondaryImage ? (
                       <img
-                        src={surrogateForm.secondaryImage}
+                        src={URL.createObjectURL(surrogateForm.secondaryImage)}
                         alt=""
                         className="modal-form-image"
                       />
                     ) : (
-                      // <img
-                      //   src={ImageSelectorPlaceholder}
-                      //   alt=""
-                      //   className="modal-form-image"
-                      // />
                       <span className="px-16 poppins">No Image Selected</span>
                     )}
                   </div>
@@ -453,6 +588,47 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   </FormControl>
                 </div>
                 <div className="flex-row space-between modal-input-row">
+                  <DatePicker
+                    defaultValue={dayjs("2023-01-01")}
+                    {...defaultFullInputProps}
+                    slotProps={{
+                      textField: { variant: "standard" },
+                    }}
+                    value={dayjs(surrogateForm.lastChildBirth)}
+                    onChange={(e) => {
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        lastChildBirth: dayjs(e).format("YYYY-MM-DD"),
+                      });
+                    }}
+                    label="Date of Last Child Birth"
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                    <InputLabel id="demo-simple-select-standard-label">
+                      HIV/AIDS STATUS
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateForm.hivStatus}
+                      onChange={(e) => {
+                        setSurrogateForm({
+                          ...surrogateForm,
+                          hivStatus: e.target.value,
+                        });
+                      }}
+                      label="HIV/AIDS STATUS"
+                    >
+                      <MenuItem value={"Negative"} key="hiv-status-false">
+                        Negative
+                      </MenuItem>
+                      <MenuItem value={"Positive"} key="hiv-status-true">
+                        Positive
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                   <FormControl variant="standard" {...defaultHalfInputProps}>
                     <InputLabel id="demo-simple-select-standard-label">
                       First Time Parent?
@@ -477,58 +653,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                       </MenuItem>
                     </Select>
                   </FormControl>
-                  <DatePicker
-                    defaultValue={dayjs("2023-01-01")}
-                    {...defaultHalfInputProps}
-                    slotProps={{
-                      textField: { variant: "standard" },
-                    }}
-                    value={surrogateForm.lastChildBirth}
-                    onChange={(e) => {
-                      console.log(e);
-                      console.log(dayjs(e).toDate());
-                      setSurrogateForm({ ...surrogateForm, lastChildBirth: e });
-                    }}
-                    label="Date of Last Child Birth"
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <FormControl variant="standard" {...defaultHalfInputProps}>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      HIV/AIDS STATUS
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateForm.hivStatus}
-                      onChange={(e) => {
-                        setSurrogateForm({
-                          ...surrogateForm,
-                          hivStatus: e.target.value,
-                        });
-                      }}
-                      label="HIV/AIDS STATUS"
-                    >
-                      <MenuItem value={false} key="hiv-status-false">
-                        Negative
-                      </MenuItem>
-                      <MenuItem value={true} key="hiv-status-true">
-                        Positive
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                  <DatePicker
-                    defaultValue={dayjs("2023-01-01")}
-                    {...defaultHalfInputProps}
-                    slotProps={{
-                      textField: { variant: "standard" },
-                    }}
-                    value={surrogateForm.lastChildBirth}
-                    onChange={(e) =>
-                      setSurrogateForm({ ...surrogateForm, lastChildBirth: e })
-                    }
-                    label="Date of Last Child Birth"
-                  />
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
@@ -565,6 +689,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Next of Kin Phone Number"
+                    placeholder="0802-345-6789"
                     value={surrogateForm.nextOfKin.phone}
                     {...defaultFullInputProps}
                     onChange={(e) =>
@@ -596,7 +721,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                           },
                         })
                       }
-                      label="HIV/AIDS STATUS"
+                      label="Relationship to Kin"
                     >
                       {NextOfKinRelationships.map((rel, index) => {
                         return (

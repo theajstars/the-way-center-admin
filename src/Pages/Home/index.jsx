@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { Typography, Modal } from "@mui/material";
+import { Typography, Modal, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
