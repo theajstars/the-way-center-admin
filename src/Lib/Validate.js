@@ -5,11 +5,13 @@ const validatePhone = (phone) => {
     return false;
   } else {
     const isInvalidNum = phone.split("").map((n) => {
-      return isNaN(parseInt(n));
+      if (n !== "+") {
+        return isNaN(parseInt(n));
+      } else {
+        return false;
+      }
     });
-    console.log(isInvalidNum);
     const isAnyInvalid = isInvalidNum.filter((num) => num === true);
-    console.log(isAnyInvalid);
     if (isAnyInvalid.length > 0) {
       return false;
     } else {

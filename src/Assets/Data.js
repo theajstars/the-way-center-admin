@@ -172,34 +172,34 @@ const Locations = [
 ];
 const SkinColours = [
   {
-    title: "Light",
-    value: "light",
+    name: "Light",
+    value: "Light",
   },
   {
-    title: "Medium",
-    value: "medium",
+    name: "Medium",
+    value: "Medium",
   },
   {
-    title: "Dark",
-    value: "dark",
+    name: "Dark",
+    value: "Dark",
   },
 ];
 const HairColours = [
   {
-    title: "Black",
-    value: "black",
+    name: "Black",
+    value: "Black",
   },
   {
-    title: "Brown",
-    value: "brown",
+    name: "Brown",
+    value: "Brown",
   },
   {
-    title: "Blonde",
-    value: "blonde",
+    name: "Blonde",
+    value: "Blonde",
   },
   {
-    title: "Red",
-    value: "red",
+    name: "Red",
+    value: "Red",
   },
 ];
 

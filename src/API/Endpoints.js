@@ -7,6 +7,8 @@ const Endpoints = {
   GetCountries: "/misc/country",
 
   AddTeamMember: "/console/team/add",
+
+  CreateSurrogate: "/surrogate/add",
 };
 
 export { Endpoints };

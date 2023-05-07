@@ -8,13 +8,15 @@ import {
   MenuItem,
   FormControl,
 } from "@mui/material";
-import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
 import { DateField, DatePicker } from "@mui/x-date-pickers";
+import { useToasts } from "react-toast-notifications";
 import {
   CountriesList,
   CovidVaccinationDosage,
   Diseases,
+  HairColours,
   NextOfKinRelationships,
+  SkinColours,
 } from "../../Assets/Data";
 import dayjs from "dayjs";
 
@@ -24,6 +26,8 @@ import { Endpoints } from "../../API/Endpoints";
 import { DefaultContext } from "../Dashboard";
 import { validatePhone } from "../../Lib/Validate";
 import { validateBVN, validateEmail, validateNIN } from "../../App";
+import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
+import { PerformRequest } from "../../API/PerformRequests";
 
 const initialSurrogateForm = {
   firstName: "",
@@ -38,6 +42,8 @@ const initialSurrogateForm = {
   primaryImage: undefined,
   secondaryImage: undefined,
 
+  skinColor: "Light",
+  hairColor: "Black",
   spouseFirstName: "",
   spouseLastName: "",
   secondaryEmailAddress: "",
@@ -61,15 +67,16 @@ const initialSurrogateForm = {
 };
 
 export default function SurrogateRegistration({ showAddSurrogateModal }) {
+  const { addToast, removeAllToasts } = useToasts();
+
   const [isModalOpen, setModalOpen] = useState(true);
   const consumeContext = useContext(DefaultContext);
 
-  const [countriesList, setCountriesList] = useState(
-    consumeContext.CountriesList ?? CountriesList
-  );
+  const [countriesList, setCountriesList] = useState(CountriesList);
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
   const [surrogateForm, setSurrogateForm] = useState(initialSurrogateForm);
+  const [formSubmitting, setFormSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState({
     firstName: false,
     lastName: false,
@@ -116,8 +123,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     className: "modal-input-half px-14",
     spellCheck: false,
   };
-
-  const UpdateFormErrors = () => {
+  const fileIsLarge = () => {
+    addToast("Max File Size: 1.5MB", { appearance: "error" });
+  };
+  const UpdateFormErrors = (action) => {
     const isPrimaryPhoneValid = validatePhone(surrogateForm.primaryPhone);
     const isEmailValid = validateEmail(surrogateForm.primaryEmailAddress);
     const is_BVN_Valid = validateBVN(surrogateForm.bankVerificationNumber);
@@ -153,91 +162,143 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       covidVaccinationFile: !surrogateForm.covidVaccinationFile,
     });
 
-    console.log(formErrors);
+    if (action === "Submit") {
+    }
+
+    // console.log(formErrors);
   };
 
-  useEffect(() => {
-    // UpdateFormErrors();
-  }, [surrogateForm]);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+  useEffect(() => {
+    CreateSurrogateProfile();
+  }, [formErrors]);
+
   const CreateSurrogateProfile = async () => {
-    UpdateFormErrors();
+    const errors = Object.values(formErrors).filter((e) => e === true);
+    if (errors.length > 0) {
+      setFormSubmitting(false);
+
+      addToast("Please fill the form correctly", { appearance: "error" });
+    } else {
+      // setFormSubmitting(false);
+      let primaryImageFormData = new FormData();
+      primaryImageFormData.append(
+        "file",
+        surrogateForm.primaryImage,
+        surrogateForm.primaryImage.name
+          .toLowerCase()
+          .split(" ")
+          .join()
+          .replaceAll(",", "")
+      );
+
+      let secondaryImageFormData = new FormData();
+      secondaryImageFormData.append(
+        "file",
+        surrogateForm.secondaryImage,
+        surrogateForm.secondaryImage.name
+          .toLowerCase()
+          .split(" ")
+          .join()
+          .replaceAll(",", "")
+      );
+
+      let govtIDFormData = new FormData();
+      govtIDFormData.append(
+        "file",
+        surrogateForm.govtIdentificationFile,
+        surrogateForm.govtIdentificationFile.name
+          .toLowerCase()
+          .split(" ")
+          .join()
+          .replaceAll(",", "")
+      );
+      let covidVaccinationFormData = new FormData();
+      covidVaccinationFormData.append(
+        "file",
+        surrogateForm.covidVaccinationFile,
+        surrogateForm.covidVaccinationFile.name
+          .toLowerCase()
+          .split(" ")
+          .join()
+          .replaceAll(",", "")
+      );
+
+      const uploadPrimaryImage = await UploadFile({
+        formData: primaryImageFormData,
+      });
+      const uploadSecondaryImage = await UploadFile({
+        formData: secondaryImageFormData,
+      });
+      const uploadGovtId = await UploadFile({
+        formData: govtIDFormData,
+      });
+      const uploadCovidVaccination = await UploadFile({
+        formData: covidVaccinationFormData,
+      });
+      console.log(uploadCovidVaccination);
+      const {
+        name: nextOfKin_name,
+        address: nextOfKin_address,
+        phone: nextOfKin_phone,
+        nationalIdentificationNumber: nextOfKin_nationalIdentificationNumber,
+        relationship: nextOfKin_relationship,
+      } = surrogateForm.nextOfKin;
+      const data = {
+        firstname: surrogateForm.firstName,
+        lastname: surrogateForm.lastName,
+        email: surrogateForm.primaryEmailAddress,
+        phone: surrogateForm.primaryPhone,
+        address: surrogateForm.address,
+        dateOfBirth: dayjs(surrogateForm.dateOfBirth).format("YYYY-MM-DD"),
+        skinColor: surrogateForm.skinColor,
+        hairColor: surrogateForm.hairColor,
+        placeOfBirth: surrogateForm.placeOfBirth,
+        mainImage: uploadPrimaryImage.data.fileUrl,
+        secondImage: uploadSecondaryImage.data.fileUrl,
+        nin: surrogateForm.nationalIdentificationNumber,
+        bvn: surrogateForm.bankVerificationNumber,
+        governmentID: uploadGovtId.data.fileUrl,
+
+        nok: {
+          fullname: nextOfKin_name,
+          relationship: nextOfKin_relationship,
+          address: nextOfKin_address,
+          phone: nextOfKin_phone,
+          nin: nextOfKin_nationalIdentificationNumber,
+        },
+
+        extendedInfo: {
+          disease: surrogateForm.knownDisease,
+          covidVaccination: surrogateForm.covidVaccination,
+          covidVaccinationCertificate: uploadCovidVaccination.data.fileUrl,
+          firstTimeParent: surrogateForm.firstTimeParent,
+          hivStatus: surrogateForm.hivStatus,
+          lastChildBirthTime: dayjs(surrogateForm.lastChildBirth).format(
+            "YYYY-MM-DD"
+          ),
+        },
+      };
+
+      console.log("Data: ", data);
+      const createSurrogateRequest = await PerformRequest.CreateNewSurrogate(
+        data
+      );
+      setFormSubmitting(false);
+      console.log(createSurrogateRequest);
+      removeAllToasts();
+      const { message: responseMessage } = createSurrogateRequest.data;
+      if (createSurrogateRequest.data.status === "failed") {
+        addToast(responseMessage, { appearance: "error" });
+      } else {
+        addToast(responseMessage, { appearance: "success" });
+        window.location.reload();
+      }
+    }
+
     // setModalOpen(false);
     // setShowConfirmationModal(true);
-    // let primaryImageFormData = new FormData();
-    // primaryImageFormData.append(
-    //   "file",
-    //   surrogateForm.primaryImage,
-    //   surrogateForm.primaryImage.name.toLowerCase()
-    // );
-
-    // let secondaryImageFormData = new FormData();
-    // secondaryImageFormData.append(
-    //   "file",
-    //   surrogateForm.secondaryImage,
-    //   surrogateForm.secondaryImage.name.toLowerCase()
-    // );
-
-    // let govtIDFormData = new FormData();
-    // govtIDFormData.append(
-    //   "file",
-    //   surrogateForm.govtIdentificationFile,
-    //   surrogateForm.govtIdentificationFile.name.toLowerCase()
-    // );
-    // let covidVaccinationFormData = new FormData();
-    // covidVaccinationFormData.append(
-    //   "file",
-    //   surrogateForm.covidVaccinationFile,
-    //   surrogateForm.covidVaccinationFile.name.toLowerCase()
-    // );
-
-    // const uploadPrimaryImage = await UploadFile({
-    //   formData: primaryImageFormData,
-    // });
-    // const uploadSecondaryImage = await UploadFile({
-    //   formData: secondaryImageFormData,
-    // });
-    // const uploadGovtId = await UploadFile({
-    //   formData: govtIDFormData,
-    // });
-    // const uploadCovidVaccination = await UploadFile({
-    //   formData: covidVaccinationFormData,
-    // });
-    const {
-      firstName,
-      lastName,
-      dateOfBirth,
-      placeOfBirth,
-      address,
-      primaryPhone,
-      primaryEmailAddress,
-      bankVerificationNumber,
-      nationalIdentificationNumber,
-      primaryImage,
-      secondaryImage,
-
-      spouseFirstName,
-      spouseLastName,
-      secondaryEmailAddress,
-      secondaryPhone,
-
-      // Form Section B
-      knownDisease,
-      covidVaccination,
-      firstTimeParent,
-      lastChildBirth,
-      hivStatus,
-      govtIdentificationFile,
-      covidVaccinationFile,
-      nextOfKin,
-    } = surrogateForm;
-    const {
-      name: nextOfKin_name,
-      address: nextOfKin_address,
-      phone: nextOfKin_phone,
-      nationalIdentificationNumber: nextOfKin_nationalIdentificationNumber,
-      relationship: nextOfKin_relationship,
-    } = nextOfKin;
   };
   const getConfirmationModalStatus = (value) => {
     setShowConfirmationModal(value);
@@ -269,31 +330,38 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       )}
       <input
         type="file"
-        accept=".jpeg, .png"
+        accept=".jpg, .png"
         ref={primaryImageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
           const image = e.target.files[0];
           console.log(image);
-
-          setSurrogateForm({
-            ...surrogateForm,
-            primaryImage: image,
-          });
+          if (image.size > 1747220) {
+            fileIsLarge();
+          } else {
+            setSurrogateForm({
+              ...surrogateForm,
+              primaryImage: image,
+            });
+          }
         }}
       />
       <input
         type="file"
-        accept=".jpeg, .png"
+        accept=".jpg, .png"
         ref={secondaryImageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
-          setSurrogateForm({
-            ...surrogateForm,
-            secondaryImage: image,
-          });
+          if (image.size > 1747220) {
+            fileIsLarge();
+          } else {
+            setSurrogateForm({
+              ...surrogateForm,
+              secondaryImage: image,
+            });
+          }
         }}
       />
       <input
@@ -304,10 +372,14 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         onChange={(e) => {
           const file = e.target.files[0];
           console.log(file);
-          setSurrogateForm({
-            ...surrogateForm,
-            govtIdentificationFile: file,
-          });
+          if (file.size > 1747220) {
+            fileIsLarge();
+          } else {
+            setSurrogateForm({
+              ...surrogateForm,
+              govtIdentificationFile: file,
+            });
+          }
         }}
       />
       <input
@@ -318,10 +390,14 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         onChange={(e) => {
           console.log(e.target.files);
           const file = e.target.files[0];
-          setSurrogateForm({
-            ...surrogateForm,
-            covidVaccinationFile: file,
-          });
+          if (file.size > 1747220) {
+            fileIsLarge();
+          } else {
+            setSurrogateForm({
+              ...surrogateForm,
+              covidVaccinationFile: file,
+            });
+          }
         }}
       />
       <Modal
@@ -582,6 +658,58 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <FormControl variant="standard" {...defaultHalfInputProps}>
                     <InputLabel id="demo-simple-select-standard-label">
+                      Skin Color
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateForm.skinColor}
+                      onChange={(e) => {
+                        setSurrogateForm({
+                          ...surrogateForm,
+                          skinColor: e.target.value,
+                        });
+                      }}
+                      label="Skin Color"
+                    >
+                      {SkinColours.map((color, index) => {
+                        return (
+                          <MenuItem value={color.value} key={color.value}>
+                            {color.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                    <InputLabel id="demo-simple-select-standard-label">
+                      Hair Color
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateForm.hairColor}
+                      onChange={(e) => {
+                        setSurrogateForm({
+                          ...surrogateForm,
+                          hairColor: e.target.value,
+                        });
+                      }}
+                      label="Hair Color"
+                    >
+                      {HairColours.map((color, index) => {
+                        return (
+                          <MenuItem value={color.value} key={color.value}>
+                            {color.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                    <InputLabel id="demo-simple-select-standard-label">
                       Any Known Disease/Ailment
                     </InputLabel>
                     <Select
@@ -794,6 +922,9 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
+                    inputProps={{
+                      maxLength: 11,
+                    }}
                     label="National Identification Number"
                     value={surrogateForm.nextOfKin.nationalIdentificationNumber}
                     error={formErrors.nextOfKin_nationalIdentificationNumber}
@@ -884,13 +1015,21 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     Back &nbsp; <i className="far fa-long-arrow-alt-left" />
                   </span>
                   <br />
-                  <span
+                  <button
+                    disabled={formSubmitting}
                     className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                    onClick={() => CreateSurrogateProfile()}
+                    onClick={() => {
+                      UpdateFormErrors("Submit");
+                      setFormSubmitting(true);
+                    }}
                   >
                     Create Profile &nbsp;{" "}
-                    <i className="far fa-long-arrow-alt-right" />
-                  </span>
+                    {formSubmitting ? (
+                      <i className="far fa-spinner-third fa-spin" />
+                    ) : (
+                      <i className="far fa-long-arrow-alt-right" />
+                    )}
+                  </button>
                 </div>
               </div>
             </div>

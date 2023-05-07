@@ -2,7 +2,7 @@ import axios from "axios";
 import { Endpoints } from "./Endpoints";
 
 const baseURL = "https://api.thewaycenter.net";
-const FetchData = async ({ method, route, data, isUpload }) => {
+const FetchData = async ({ method, route, data }) => {
   return axios.request({
     method,
     url: `${baseURL}${route}`,
