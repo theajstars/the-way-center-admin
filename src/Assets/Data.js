@@ -2623,24 +2623,24 @@ const Diseases = [
 ];
 
 const CovidVaccinationDosage = [
-  { name: "3 Vaccines", value: 3 },
-  { name: "2 Vaccines", value: 2 },
-  { name: "1 Vaccine", value: 1 },
-  { name: "No Vaccines", value: 0 },
+  { name: "3 Vaccines", value: "3" },
+  { name: "2 Vaccines", value: "2" },
+  { name: "1 Vaccine", value: "1" },
+  { name: "No Vaccines", value: "0" },
 ];
 
 // Array of Next of Kin Relationships
 const NextOfKinRelationships = [
   {
-    value: "sibling",
+    value: "Sibling",
     title: "Sibling",
   },
   {
-    value: "father",
+    value: "Father",
     title: "Father",
   },
   {
-    value: "mother",
+    value: "Mother",
     title: "Mother",
   },
 ];

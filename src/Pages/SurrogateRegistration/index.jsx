@@ -23,6 +23,7 @@ import { FetchData, UploadFile } from "../../API/FetchData";
 import { Endpoints } from "../../API/Endpoints";
 import { DefaultContext } from "../Dashboard";
 import { validatePhone } from "../../Lib/Validate";
+import { validateBVN, validateEmail, validateNIN } from "../../App";
 
 const initialSurrogateForm = {
   firstName: "",
@@ -43,18 +44,18 @@ const initialSurrogateForm = {
   secondaryPhone: "",
 
   // Form Section B
-  knownDisease: "",
-  covidVaccination: 0,
-  firstTimeParent: false,
+  knownDisease: "None",
+  covidVaccination: "0",
+  firstTimeParent: "No",
   lastChildBirth: dayjs("2023-01-01"),
-  hivStatus: false,
+  hivStatus: "Negative",
   govtIdentificationFile: undefined,
   covidVaccinationFile: undefined,
   nextOfKin: {
     name: "",
     address: "",
     phone: "",
-    relationship: "sibling",
+    relationship: "Father",
     nationalIdentificationNumber: "",
   },
 };
@@ -95,7 +96,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     hivStatus: false,
     govtIdentificationFile: false,
     covidVaccinationFile: false,
-    nextOfKin: false,
+    nextOfKin_name: false,
+    nextOfKin_address: false,
+    nextOfKin_phone: false,
+    nextOfKin_nationalIdentificationNumber: false,
   });
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
@@ -115,30 +119,49 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
 
   const UpdateFormErrors = () => {
     const isPrimaryPhoneValid = validatePhone(surrogateForm.primaryPhone);
-    console.log(isPrimaryPhoneValid);
+    const isEmailValid = validateEmail(surrogateForm.primaryEmailAddress);
+    const is_BVN_Valid = validateBVN(surrogateForm.bankVerificationNumber);
+    const is_NIN_Valid = validateNIN(
+      surrogateForm.nationalIdentificationNumber
+    );
+
+    const isNexfOfKinPrimaryPhoneValid = validatePhone(
+      surrogateForm.nextOfKin.phone
+    );
+    const isNexfOfKinNINValid = validateNIN(
+      surrogateForm.nextOfKin.nationalIdentificationNumber
+    );
     setFormErrors({
       ...formErrors,
       firstName: surrogateForm.firstName.length === 0,
-    });
-    setFormErrors({
-      ...formErrors,
       lastName: surrogateForm.lastName.length === 0,
-    });
-    setFormErrors({
-      ...formErrors,
       address: surrogateForm.address.length === 0,
-    });
-    setFormErrors({
-      ...formErrors,
       primaryPhone: !isPrimaryPhoneValid,
+      primaryEmailAddress: !isEmailValid,
+      bankVerificationNumber: !is_BVN_Valid,
+      nationalIdentificationNumber: !is_NIN_Valid,
+
+      nextOfKin_name: surrogateForm.nextOfKin.name.length === 0,
+      nextOfKin_address: surrogateForm.nextOfKin.address.length === 0,
+      nextOfKin_phone: !isNexfOfKinPrimaryPhoneValid,
+      nextOfKin_nationalIdentificationNumber: !isNexfOfKinNINValid,
+
+      primaryImage: !surrogateForm.primaryImage,
+      secondaryImage: !surrogateForm.secondaryImage,
+
+      govtIdentificationFile: !surrogateForm.govtIdentificationFile,
+      covidVaccinationFile: !surrogateForm.covidVaccinationFile,
     });
+
+    console.log(formErrors);
   };
 
   useEffect(() => {
-    UpdateFormErrors();
+    // UpdateFormErrors();
   }, [surrogateForm]);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const CreateSurrogateProfile = async () => {
+    UpdateFormErrors();
     // setModalOpen(false);
     // setShowConfirmationModal(true);
     // let primaryImageFormData = new FormData();
@@ -212,8 +235,8 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       name: nextOfKin_name,
       address: nextOfKin_address,
       phone: nextOfKin_phone,
-      relationship: nextOfKin_relationship,
       nationalIdentificationNumber: nextOfKin_nationalIdentificationNumber,
+      relationship: nextOfKin_relationship,
     } = nextOfKin;
   };
   const getConfirmationModalStatus = (value) => {
@@ -399,6 +422,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <TextField
                     label="Address"
                     value={surrogateForm.address}
+                    error={formErrors.address}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -413,6 +437,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     label="Primary Phone Number"
                     placeholder="0802-345-6789"
                     value={surrogateForm.primaryPhone}
+                    error={formErrors.primaryPhone}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -420,12 +445,22 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         primaryPhone: e.target.value,
                       })
                     }
+                    onBlur={() => {
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        primaryPhone: surrogateForm.primaryPhone.replace(
+                          "+",
+                          ""
+                        ),
+                      });
+                    }}
                   />
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Primary Email Address"
                     value={surrogateForm.primaryEmailAddress}
+                    error={formErrors.primaryEmailAddress}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -442,6 +477,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     }}
                     label="Bank Verification Number"
                     value={surrogateForm.bankVerificationNumber}
+                    error={formErrors.bankVerificationNumber}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -458,6 +494,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                       maxLength: 11,
                     }}
                     value={surrogateForm.nationalIdentificationNumber}
+                    error={formErrors.nationalIdentificationNumber}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -488,6 +525,11 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     onClick={() => {
                       primaryImageUploadRef.current.click();
                     }}
+                    style={{
+                      borderColor: formErrors.primaryImage
+                        ? "red"
+                        : "transparent",
+                    }}
                   >
                     Upload Main Image
                   </span>
@@ -508,6 +550,11 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
                     onClick={() => {
                       secondaryImageUploadRef.current.click();
+                    }}
+                    style={{
+                      borderColor: formErrors.secondaryImage
+                        ? "red"
+                        : "transparent",
                     }}
                   >
                     Upload Second Image
@@ -645,10 +692,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                       }}
                       label="First Time Parent?"
                     >
-                      <MenuItem value={false} key="first-time-parent-false">
+                      <MenuItem value={"No"} key="first-time-parent-false">
                         No
                       </MenuItem>
-                      <MenuItem value={true} key="first-time-parent-true">
+                      <MenuItem value={"Yes"} key="first-time-parent-true">
                         Yes
                       </MenuItem>
                     </Select>
@@ -658,6 +705,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <TextField
                     label="Next of Kin Full Name"
                     value={surrogateForm.nextOfKin.name}
+                    error={formErrors.nextOfKin_name}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -674,6 +722,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <TextField
                     label="Address"
                     value={surrogateForm.nextOfKin.address}
+                    error={formErrors.nextOfKin_address}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -691,6 +740,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     label="Next of Kin Phone Number"
                     placeholder="0802-345-6789"
                     value={surrogateForm.nextOfKin.phone}
+                    error={formErrors.nextOfKin_phone}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -701,6 +751,15 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         },
                       })
                     }
+                    onBlur={() => {
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        nextOfKin: {
+                          ...surrogateForm.nextOfKin,
+                          phone: surrogateForm.nextOfKin.phone.replace("+", ""),
+                        },
+                      });
+                    }}
                   />
                 </div>
                 <div className="flex-row space-between modal-input-row">
@@ -737,6 +796,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <TextField
                     label="National Identification Number"
                     value={surrogateForm.nextOfKin.nationalIdentificationNumber}
+                    error={formErrors.nextOfKin_nationalIdentificationNumber}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -769,6 +829,11 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         onClick={() => {
                           govtIdentificationUploadRef.current.click();
                         }}
+                        style={{
+                          borderColor: formErrors.govtIdentificationFile
+                            ? "red"
+                            : "transparent",
+                        }}
                       >
                         Upload File
                       </span>
@@ -793,6 +858,11 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         className="px-13 poppins fw-500 modal-form-file-btn flex-row pointer"
                         onClick={() => {
                           covidVaccinationUploadRef.current.click();
+                        }}
+                        style={{
+                          borderColor: formErrors.covidVaccinationFile
+                            ? "red"
+                            : "transparent",
                         }}
                       >
                         Upload File
