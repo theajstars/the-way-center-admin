@@ -42,7 +42,7 @@ const initialSurrogateForm = {
   primaryImage: undefined,
   secondaryImage: undefined,
 
-  skinColor: "Light",
+  skinColor: "White",
   hairColor: "Black",
   spouseFirstName: "",
   spouseLastName: "",
@@ -126,7 +126,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
   const fileIsLarge = () => {
     addToast("Max File Size: 1.5MB", { appearance: "error" });
   };
-  const UpdateFormErrors = (action) => {
+  const UpdateFormErrors = () => {
     const isPrimaryPhoneValid = validatePhone(surrogateForm.primaryPhone);
     const isEmailValid = validateEmail(surrogateForm.primaryEmailAddress);
     const is_BVN_Valid = validateBVN(surrogateForm.bankVerificationNumber);
@@ -161,10 +161,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       govtIdentificationFile: !surrogateForm.govtIdentificationFile,
       covidVaccinationFile: !surrogateForm.covidVaccinationFile,
     });
-
-    if (action === "Submit") {
-    }
-
     // console.log(formErrors);
   };
 
@@ -336,7 +332,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         onChange={(e) => {
           const image = e.target.files[0];
           console.log(image);
-          if (image.size > 1747220) {
+          if (image.size > 1547220) {
             fileIsLarge();
           } else {
             setSurrogateForm({
@@ -354,7 +350,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
-          if (image.size > 1747220) {
+          if (image.size > 1547220) {
             fileIsLarge();
           } else {
             setSurrogateForm({
@@ -372,7 +368,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         onChange={(e) => {
           const file = e.target.files[0];
           console.log(file);
-          if (file.size > 1747220) {
+          if (file.size > 1547220) {
             fileIsLarge();
           } else {
             setSurrogateForm({
@@ -390,7 +386,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         onChange={(e) => {
           console.log(e.target.files);
           const file = e.target.files[0];
-          if (file.size > 1747220) {
+          if (file.size > 1547220) {
             fileIsLarge();
           } else {
             setSurrogateForm({
@@ -674,8 +670,8 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     >
                       {SkinColours.map((color, index) => {
                         return (
-                          <MenuItem value={color.value} key={color.value}>
-                            {color.name}
+                          <MenuItem value={color.color} key={color.color}>
+                            {color.color}
                           </MenuItem>
                         );
                       })}
@@ -699,8 +695,8 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     >
                       {HairColours.map((color, index) => {
                         return (
-                          <MenuItem value={color.value} key={color.value}>
-                            {color.name}
+                          <MenuItem value={color.color} key={color.color}>
+                            {color.color}
                           </MenuItem>
                         );
                       })}
@@ -912,8 +908,8 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     >
                       {NextOfKinRelationships.map((rel, index) => {
                         return (
-                          <MenuItem value={rel.value} key={index}>
-                            {rel.title}
+                          <MenuItem value={rel.relationship} key={index}>
+                            {rel.relationship}
                           </MenuItem>
                         );
                       })}
@@ -1019,7 +1015,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                     disabled={formSubmitting}
                     className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                     onClick={() => {
-                      UpdateFormErrors("Submit");
+                      UpdateFormErrors();
                       setFormSubmitting(true);
                     }}
                   >

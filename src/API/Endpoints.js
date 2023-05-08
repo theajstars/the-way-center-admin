@@ -9,6 +9,7 @@ const Endpoints = {
   AddTeamMember: "/console/team/add",
 
   CreateSurrogate: "/surrogate/add",
+  CreateParent: "/parent/add",
 };
 
 export { Endpoints };

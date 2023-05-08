@@ -172,34 +172,36 @@ const Locations = [
 ];
 const SkinColours = [
   {
-    name: "Light",
-    value: "Light",
+    color: "White",
   },
   {
-    name: "Medium",
-    value: "Medium",
+    color: "Light Brown",
   },
   {
-    name: "Dark",
-    value: "Dark",
+    color: "Dark Brown",
+  },
+  {
+    color: "Black",
   },
 ];
 const HairColours = [
   {
-    name: "Black",
-    value: "Black",
+    color: "Black",
   },
   {
-    name: "Brown",
-    value: "Brown",
+    color: "Blond",
   },
   {
-    name: "Blonde",
-    value: "Blonde",
+    color: "White",
   },
   {
-    name: "Red",
-    value: "Red",
+    color: "Gray",
+  },
+  {
+    color: "Red",
+  },
+  {
+    color: "Son",
   },
 ];
 
@@ -2632,16 +2634,31 @@ const CovidVaccinationDosage = [
 // Array of Next of Kin Relationships
 const NextOfKinRelationships = [
   {
-    value: "Sibling",
-    title: "Sibling",
+    relationship: "Father",
   },
   {
-    value: "Father",
-    title: "Father",
+    relationship: "Mother",
   },
   {
-    value: "Mother",
-    title: "Mother",
+    relationship: "Wife",
+  },
+  {
+    relationship: "Husband",
+  },
+  {
+    relationship: "Counsin",
+  },
+  {
+    relationship: "Son",
+  },
+  {
+    relationship: "Daughter",
+  },
+  {
+    relationship: "Uncle",
+  },
+  {
+    relationship: "Aunt",
   },
 ];
 
