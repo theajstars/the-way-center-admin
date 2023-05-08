@@ -11,16 +11,26 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
+
+import { useToasts } from "react-toast-notifications";
+
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
 import Confirmation from "../Confirmation";
 
 import { initialParent } from "../../Assets/Data";
+import { validatePhone } from "../../Lib/Validate";
+import { validateEmail } from "../../App";
+import { useEffect } from "react";
 
 export default function ParentUpdate({
   showUpdateParentModal,
   parent = initialParent,
 }) {
   const navigate = useNavigate();
+  const initialPrimaryImage = parent.primary.image;
+  const initialSpouseImage = parent.spouse.image;
+  const { addToast, removeAllToasts } = useToasts();
+
   const [isModalOpen, setModalOpen] = useState(true);
   const [parentForm, setParentForm] = useState({
     ...parent,
@@ -48,6 +58,55 @@ export default function ParentUpdate({
     if (!value) {
       showUpdateParentModal(false);
     }
+  };
+  const fileIsLarge = () => {
+    addToast("Max File Size: 1.5MB", { appearance: "error" });
+  };
+  const [formSubmitting, setFormSubmitting] = useState(false);
+
+  const [formErrors, setFormErrors] = useState({
+    firstName: false,
+    lastName: false,
+    spouseFirstName: false,
+    spouseLastName: false,
+
+    primaryEmail: false,
+    spouseEmail: false,
+    address: false,
+    primaryPhone: false,
+    spousePhone: false,
+
+    primaryImage: false,
+    spouseImage: false,
+  });
+  const UpdateFormErrors = (action) => {
+    const isPrimaryPhoneValid = validatePhone(parentForm.primary.phone);
+    const isSpousePhoneValid = validatePhone(parentForm.spouse.phone);
+    const isPrimaryEmailValid = validateEmail(parentForm.primary.email);
+    const isSpouseEmailValid = validateEmail(parentForm.spouse.email);
+
+    setFormErrors({
+      ...formErrors,
+      firstName: parentForm.primary.firstname.length === 0,
+      lastName: parentForm.primary.lastname.length === 0,
+      spouseFirstName: parentForm.spouse.firstname.length === 0,
+      spouseLastName: parentForm.spouse.lastname.length === 0,
+      address: parentForm.address.length === 0,
+      primaryEmailAddress: !isPrimaryEmailValid,
+      spouseEmail: !isSpouseEmailValid,
+      primaryPhone: !isPrimaryPhoneValid,
+      spousePhone: !isSpousePhoneValid,
+
+      primaryImage: !parentForm.primary.image,
+      secondaryImage: !parentForm.spouse.image,
+    });
+  };
+  useEffect(() => {
+    UpdateProfile();
+  }, [formErrors]);
+  const UpdateProfile = () => {
+    console.log(parentForm);
+    setFormSubmitting(false);
   };
   return (
     <>
@@ -79,10 +138,14 @@ export default function ParentUpdate({
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
-          setParentForm({
-            ...parentForm,
-            primary: { ...parentForm.primary, image: image },
-          });
+          if (image.size > 1547220) {
+            fileIsLarge();
+          } else {
+            setParentForm({
+              ...parentForm,
+              primary: { ...parentForm.primary, image: image },
+            });
+          }
         }}
       />
       <input
@@ -93,10 +156,14 @@ export default function ParentUpdate({
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
-          setParentForm({
-            ...parentForm,
-            spouse: { ...parentForm.spouse, image: image },
-          });
+          if (image.size > 1547220) {
+            fileIsLarge();
+          } else {
+            setParentForm({
+              ...parentForm,
+              spouse: { ...parentForm.spouse, image: image },
+            });
+          }
         }}
       />
 
@@ -125,6 +192,7 @@ export default function ParentUpdate({
                     <TextField
                       label="First Name"
                       value={parentForm.primary.firstname}
+                      error={formErrors.firstName}
                       {...defaultHalfInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -139,6 +207,7 @@ export default function ParentUpdate({
                     <TextField
                       label="Last Name"
                       value={parentForm.primary.lastname}
+                      error={formErrors.lastName}
                       {...defaultHalfInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -155,6 +224,7 @@ export default function ParentUpdate({
                     <TextField
                       label="Email"
                       value={parentForm.primary.email}
+                      error={formErrors.primaryEmail}
                       {...defaultFullInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -171,6 +241,7 @@ export default function ParentUpdate({
                     <TextField
                       label="Address"
                       value={parentForm.address}
+                      error={formErrors.address}
                       {...defaultFullInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -184,6 +255,7 @@ export default function ParentUpdate({
                     <TextField
                       label="Phone Number"
                       value={parentForm.primary.phone}
+                      error={formErrors.primaryPhone}
                       {...defaultFullInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -227,11 +299,18 @@ export default function ParentUpdate({
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
                         label="Status"
+                        value={parentForm.status}
+                        onChange={(e) =>
+                          setParentForm({
+                            ...parentForm,
+                            status: e.target.value,
+                          })
+                        }
                       >
-                        <MenuItem value={true} key={"Active"}>
+                        <MenuItem value={"active"} key={"active"}>
                           Active
                         </MenuItem>
-                        <MenuItem value={false} key={"Inactive"}>
+                        <MenuItem value={"inactive"} key={"inactive"}>
                           Inactive
                         </MenuItem>
                       </Select>
@@ -254,7 +333,7 @@ export default function ParentUpdate({
                   <div className="flex-row modal-form-file ">
                     <div className="px-13 poppins fw-500">
                       {parentForm.primary.image ? (
-                        URL.createObjectURL(parentForm.primary.image)
+                        parentForm.primary.image.name
                       ) : (
                         <span>No File Selected</span>
                       )}
@@ -274,29 +353,6 @@ export default function ParentUpdate({
                 </div>
 
                 <br />
-                <div className="flex-row width-100 align-center space-between">
-                  <Button
-                    variant="outlined"
-                    style={{
-                      borderColor: "rgba(162, 89, 255, 0.42)",
-                      borderWidth: "2px",
-                      color: "#000",
-                    }}
-                    onClick={() => {
-                      showUpdateParentModal(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <span
-                    className="purple-btn-default px-16 poppins pointer uppercase modal-form-submit"
-                    onClick={() => {
-                      setShowConfirmationModal(true);
-                    }}
-                  >
-                    Update Profile
-                  </span>
-                </div>
               </>
             ) : (
               <>
@@ -308,6 +364,7 @@ export default function ParentUpdate({
                     <TextField
                       label="Spouse First Name"
                       value={parentForm.spouse.firstname}
+                      error={formErrors.spouseFirstName}
                       {...defaultHalfInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -322,6 +379,7 @@ export default function ParentUpdate({
                     <TextField
                       label="Spouse Last Name"
                       value={parentForm.spouse.lastname}
+                      error={formErrors.spouseLastName}
                       {...defaultHalfInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -338,6 +396,7 @@ export default function ParentUpdate({
                     <TextField
                       label="Spouse Email"
                       value={parentForm.spouse.email}
+                      error={formErrors.spouseEmail}
                       {...defaultFullInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -354,6 +413,7 @@ export default function ParentUpdate({
                     <TextField
                       label="Address"
                       value={parentForm.address}
+                      error={formErrors.address}
                       {...defaultFullInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -367,6 +427,7 @@ export default function ParentUpdate({
                     <TextField
                       label="Spouse Phone Number"
                       value={parentForm.spouse.phone}
+                      error={formErrors.spousePhone}
                       {...defaultFullInputProps}
                       onChange={(e) =>
                         setParentForm({
@@ -410,11 +471,18 @@ export default function ParentUpdate({
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
                         label="Status"
+                        value={parentForm.status}
+                        onChange={(e) =>
+                          setParentForm({
+                            ...parentForm,
+                            status: e.target.value,
+                          })
+                        }
                       >
-                        <MenuItem value={true} key={"Active"}>
+                        <MenuItem value={"active"} key={"active"}>
                           Active
                         </MenuItem>
-                        <MenuItem value={false} key={"Inactive"}>
+                        <MenuItem value={"inactive"} key={"inactive"}>
                           Inactive
                         </MenuItem>
                       </Select>
@@ -438,7 +506,7 @@ export default function ParentUpdate({
                   <div className="flex-row modal-form-file ">
                     <div className="px-13 poppins fw-500">
                       {parentForm.spouse.image ? (
-                        URL.createObjectURL(parentForm.spouse.image)
+                        parentForm.spouse.image.name
                       ) : (
                         <span>No File Selected</span>
                       )}
@@ -458,31 +526,37 @@ export default function ParentUpdate({
                 </div>
 
                 <br />
-                <div className="flex-row width-100 align-center space-between">
-                  <Button
-                    variant="outlined"
-                    style={{
-                      borderColor: "rgba(162, 89, 255, 0.42)",
-                      borderWidth: "2px",
-                      color: "#000",
-                    }}
-                    onClick={() => {
-                      showUpdateParentModal(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <span
-                    className="purple-btn-default px-16 poppins pointer uppercase modal-form-submit"
-                    onClick={() => {
-                      setShowConfirmationModal(true);
-                    }}
-                  >
-                    Update Profile
-                  </span>
-                </div>
               </>
             )}
+            <div className="flex-row width-100 align-center space-between">
+              <Button
+                variant="outlined"
+                style={{
+                  borderColor: "rgba(162, 89, 255, 0.42)",
+                  borderWidth: "2px",
+                  color: "#000",
+                }}
+                onClick={() => {
+                  showUpdateParentModal(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <button
+                className="purple-btn-default px-16 poppins pointer uppercase modal-form-submit"
+                onClick={() => {
+                  UpdateFormErrors();
+                  setFormSubmitting(true);
+                }}
+              >
+                Update Profile &nbsp;
+                {formSubmitting ? (
+                  <i className="far fa-spinner-third fa-spin" />
+                ) : (
+                  <i className="far fa-long-arrow-alt-right" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </Modal>
