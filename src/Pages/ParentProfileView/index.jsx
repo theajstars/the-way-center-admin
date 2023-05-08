@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 
 import {
   InputLabel,
@@ -22,18 +22,21 @@ import {
   SampleSurrogate,
 } from "../../Assets/Data";
 import dayjs from "dayjs";
-
+import { useToasts } from "react-toast-notifications";
 import Confirmation from "../Confirmation";
 import SurrogateUpdate from "../SurrogateUpdate";
 import ParentUpdate from "../ParentUpdate";
+import { PerformRequest } from "../../API/PerformRequests";
+import { DefaultContext } from "../Dashboard";
 
 export default function ParentProfileView({
   showViewParentModal,
   isUpdate,
   parent = initialParent,
 }) {
+  const ConsumerContext = useContext(DefaultContext);
   const [isModalOpen, setModalOpen] = useState(true);
-
+  const { addToast, removeAllToasts } = useToasts();
   const [currentFormSection, setCurrentFormSection] = useState(1);
   const [parentForm, setParentForm] = useState(parent);
   const primaryImageUploadRef = useRef();
@@ -73,6 +76,38 @@ export default function ParentProfileView({
     } else {
     }
   };
+
+  const [isParentStatusToggling, setParentStatusToggling] = useState(false);
+  const ActivateParent = async () => {
+    removeAllToasts();
+    setParentStatusToggling(true);
+    const activate = await PerformRequest.UpdateParent({
+      ...parentForm,
+      parentID: parentForm.id,
+      status: "active",
+    });
+    setParentStatusToggling(false);
+    if (activate.data.response_code === 200) {
+      addToast("Parent activated!", { appearance: "success" });
+      ConsumerContext.refetchData();
+      setParentForm({ ...parentForm, status: "active" });
+    }
+  };
+  const DeactivateParent = async () => {
+    removeAllToasts();
+    setParentStatusToggling(true);
+    const deactivate = await PerformRequest.UpdateParent({
+      ...parentForm,
+      parentID: parentForm.id,
+      status: "inactive",
+    });
+    setParentStatusToggling(false);
+    if (deactivate.data.response_code === 200) {
+      addToast("Parent Deactivated!", { appearance: "success" });
+      ConsumerContext.refetchData();
+      setParentForm({ ...parentForm, status: "inactive" });
+    }
+  };
   return (
     <>
       {showConfirmationModal && (
@@ -104,7 +139,7 @@ export default function ParentProfileView({
       <>
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={primaryImageUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -118,7 +153,7 @@ export default function ParentProfileView({
         />
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={secondaryImageUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -132,7 +167,7 @@ export default function ParentProfileView({
         />
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={govtIdentificationUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -146,7 +181,7 @@ export default function ParentProfileView({
         />
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={covidVaccinationUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -371,8 +406,25 @@ export default function ParentProfileView({
                 borderWidth: "2px",
                 color: "#000",
               }}
+              onClick={() => {
+                parentForm.status === "active"
+                  ? DeactivateParent()
+                  : ActivateParent();
+              }}
             >
-              Deactivate Profile &nbsp; <i className="far fa-times" />
+              {parentForm.status === "active" ? "Deactivate" : "Activate"}{" "}
+              Profile &nbsp;
+              {isParentStatusToggling ? (
+                <i className="far fa-spinner-third fa-spin" />
+              ) : (
+                <>
+                  {parentForm.status === "active" ? (
+                    <i className="far fa-times" />
+                  ) : (
+                    <i className="far fa-check" />
+                  )}{" "}
+                </>
+              )}
             </Button>
             <Button
               onClick={() => {

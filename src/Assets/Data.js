@@ -21,6 +21,71 @@ const initialParent = {
   pair: "",
   createdOn: "",
 };
+const initialSurrogate = {
+  id: "5",
+  primary: {
+    lastname: "",
+    firstname: "",
+    email: "",
+    phone: "",
+    mainImage: "",
+    secondImage: "",
+    bvn: "",
+    nin: "",
+    skinColor: "",
+    hairColor: "",
+    governmentID: "",
+    nok: {
+      fullname: " ",
+      address: "",
+      nin: "",
+      phone: "",
+      relationship: "",
+    },
+  },
+  address: "",
+  status: "",
+  pair: "",
+  createdOn: "",
+  extendedInfo: [
+    {
+      kyc: "Disease",
+      value: "",
+      createdOn: "",
+      field: "disease",
+    },
+    {
+      kyc: "First Time Parent",
+      value: "",
+      createdOn: "",
+      field: "firstTimeParent",
+    },
+    {
+      kyc: "HIV Status",
+      value: "",
+      createdOn: "",
+      field: "hivStatus",
+    },
+    {
+      kyc: "Last Child Birth Time",
+      value: "",
+      createdOn: "",
+      field: "lastChildBirthTime",
+    },
+    {
+      kyc: "Covid Vaccination ",
+      value: "",
+      createdOn: "",
+      field: "covidVaccination",
+    },
+    {
+      kyc: "Covid Vaccination Certificate ",
+      value: "",
+      createdOn: "",
+      field: "covidVaccinationCertificate",
+    },
+  ],
+};
 const SurrogateRecords = [
   {
     title: "Your Surrogates next Doctors Appointment on",
@@ -2814,4 +2879,5 @@ export {
   SampleSurrogate,
   ReportCategories,
   initialParent,
+  initialSurrogate,
 };

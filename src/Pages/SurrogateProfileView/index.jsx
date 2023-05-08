@@ -17,6 +17,7 @@ import {
   CountriesList,
   CovidVaccinationDosage,
   Diseases,
+  initialSurrogate,
   NextOfKinRelationships,
   SampleSurrogate,
 } from "../../Assets/Data";
@@ -25,49 +26,15 @@ import dayjs from "dayjs";
 import Confirmation from "../Confirmation";
 import SurrogateUpdate from "../SurrogateUpdate";
 
-const initialSurrogateForm = {
-  firstName: "",
-  lastName: "",
-  dateOfBirth: dayjs("2023-01-01"),
-  placeOfBirth: "",
-  address: "",
-  primaryPhone: "",
-  primaryEmailAddress: "",
-  bankVerificationNumber: "",
-  nationalIdentificationNumber: "",
-  primaryImage: "",
-  secondaryImage: "",
-
-  spouseFirstName: "",
-  spouseLastName: "",
-  secondaryEmailAddress: "",
-  secondaryPhone: "",
-  image: "",
-
-  // Form Section B
-  knownDisease: "",
-  covidVaccination: 0,
-  firstTimeParent: false,
-  lastChildBirth: dayjs("2023-01-01"),
-  hivStatus: false,
-  govtIdentificationFile: undefined,
-  covidVaccinationFile: undefined,
-  nextOfKin: {
-    name: "",
-    address: "",
-    phone: "",
-    relationship: "sibling",
-    nationalIdentificationNumber: "",
-  },
-};
 export default function SurrogateProfileView({
   showViewSurrogateModal,
   isUpdate,
+  surrogate,
 }) {
   const [isModalOpen, setModalOpen] = useState(true);
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
-  const [surrogateForm, setSurrogateForm] = useState(initialSurrogateForm);
+  const [surrogateForm, setSurrogateForm] = useState(surrogate);
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
@@ -79,8 +46,8 @@ export default function SurrogateProfileView({
     // className: "modal-input-full px-14",
   };
   const defaultHalfInputProps = {
-    variant: "standard",
-    className: "modal-input-half px-14",
+    disabled: true,
+    className: "modal-input-half px-14 black-text",
     spellCheck: false,
   };
 
@@ -111,7 +78,7 @@ export default function SurrogateProfileView({
             method: () => {
               setShowConfirmationModal(false);
               setModalOpen(true);
-              setSurrogateForm(initialSurrogateForm);
+              setSurrogateForm(initialSurrogate);
               setCurrentFormSection(1);
             },
             text: "Create Another Profile",
@@ -124,12 +91,15 @@ export default function SurrogateProfileView({
         />
       )}
       {isUpdateProfile && (
-        <SurrogateUpdate showUpdateSurrogateModal={showUpdateSurrogateModal} />
+        <SurrogateUpdate
+          showUpdateSurrogateModal={showUpdateSurrogateModal}
+          surrogate={surrogate}
+        />
       )}
       <>
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={primaryImageUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -143,7 +113,7 @@ export default function SurrogateProfileView({
         />
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={secondaryImageUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -157,7 +127,7 @@ export default function SurrogateProfileView({
         />
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={govtIdentificationUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -171,7 +141,7 @@ export default function SurrogateProfileView({
         />
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={covidVaccinationUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -212,7 +182,7 @@ export default function SurrogateProfileView({
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.firstName} ${SampleSurrogate.lastName}`}
+                    value={`${surrogate.primary.firstname} ${surrogate.primary.lastname}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -228,7 +198,7 @@ export default function SurrogateProfileView({
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.parentName}`}
+                    value={`${"true"}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -239,16 +209,17 @@ export default function SurrogateProfileView({
                   />
                 </FormControl>
               </div>
+
               <div className="flex-row space-between modal-input-row">
                 <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.spouseName}`}
+                    value={`${surrogate.address}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
-                          Spouse Name
+                          Address
                         </span>
                       </InputAdornment>
                     }
@@ -260,23 +231,7 @@ export default function SurrogateProfileView({
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.parentAddress}`}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
-                          Parent's Address
-                        </span>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                  <Input
-                    id="standard-adornment-amount"
-                    {...defaultFullInputProps}
-                    value={`${SampleSurrogate.primaryEmailAddress}`}
+                    value={`${surrogate.primary.email}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -287,28 +242,13 @@ export default function SurrogateProfileView({
                   />
                 </FormControl>
               </div>
+
               <div className="flex-row space-between modal-input-row">
                 <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.secondaryEmailAddress}`}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
-                          Secondary Email Address
-                        </span>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                  <Input
-                    id="standard-adornment-amount"
-                    {...defaultFullInputProps}
-                    value={`${SampleSurrogate.primaryPhone}`}
+                    value={`${surrogate.primary.phone}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -319,29 +259,14 @@ export default function SurrogateProfileView({
                   />
                 </FormControl>
               </div>
-              <div className="flex-row space-between modal-input-row">
-                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                  <Input
-                    id="standard-adornment-amount"
-                    {...defaultFullInputProps}
-                    value={`${SampleSurrogate.secondaryPhone}`}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
-                          Secondary Phone Number
-                        </span>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div>
+
               <div className="flex-row space-between modal-input-row">
                 <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
                     value={`${
-                      SampleSurrogate.pair.length > 0 ? "Paired" : "Unpaired"
+                      parseInt(surrogate.pair) > 0 ? "Paired" : "Unpaired"
                     }`}
                     startAdornment={
                       <InputAdornment position="start">
@@ -353,64 +278,65 @@ export default function SurrogateProfileView({
                   />
                 </FormControl>
               </div>
+              <div className="flex-row space-between modal-input-row">
+                <FormControl
+                  fullWidth
+                  sx={{ m: 1 }}
+                  variant="standard"
+                  {...defaultHalfInputProps}
+                >
+                  <Input
+                    id="standard-adornment-amount"
+                    value={`${surrogate.primary.hairColor}`}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <span className="fw-500 poppins px-15 black-text">
+                          Hair Color
+                        </span>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <FormControl
+                  fullWidth
+                  sx={{ m: 1 }}
+                  variant="standard"
+                  {...defaultHalfInputProps}
+                >
+                  <Input
+                    id="standard-adornment-amount"
+                    value={`${surrogate.primary.skinColor}`}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <span className="fw-500 poppins px-15 black-text">
+                          Skin Color
+                        </span>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </div>
             </div>
             <div className="flex-column modal-form-right space-between">
               <span className="flex-column align-center width-100">
                 <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                  {surrogateForm.primaryImage.length > 0 ? (
-                    // Image is set
-
-                    <img
-                      src={surrogateForm.primaryImage}
-                      alt=""
-                      className="modal-form-image"
-                    />
-                  ) : (
-                    // <img
-                    //   src={ImageSelectorPlaceholder}
-                    //   alt=""
-                    //   className="modal-form-image"
-                    // />
-                    <span className="px-16 poppins">No Image Selected</span>
-                  )}
+                  <img
+                    src={surrogate.primary.mainImage}
+                    alt=""
+                    className="modal-form-image"
+                  />
                 </div>
                 <br />
-                {/* <span
-                  className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
-                  onClick={() => {
-                    primaryImageUploadRef.current.click();
-                  }}
-                >
-                  Upload Main Image
-                </span> */}
+
                 <br />
                 <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                  {surrogateForm.secondaryImage.length > 0 ? (
-                    // Image is set
-
-                    <img
-                      src={surrogateForm.secondaryImage}
-                      alt=""
-                      className="modal-form-image"
-                    />
-                  ) : (
-                    // <img
-                    //   src={ImageSelectorPlaceholder}
-                    //   alt=""
-                    //   className="modal-form-image"
-                    // />
-                    <span className="px-16 poppins">No Image Selected</span>
-                  )}
+                  <img
+                    src={surrogate.primary.secondImage}
+                    alt=""
+                    className="modal-form-image"
+                  />
                 </div>
                 <br />
-                {/* <span
-                  className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
-                  onClick={() => {
-                    secondaryImageUploadRef.current.click();
-                  }}
-                >
-                  Upload Second Image
-                </span> */}
               </span>
               <br />
               <span

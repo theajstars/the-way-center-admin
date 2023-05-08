@@ -15,6 +15,7 @@ import {
   CountriesList,
   CovidVaccinationDosage,
   Diseases,
+  initialSurrogate,
   NextOfKinRelationships,
 } from "../../Assets/Data";
 import dayjs from "dayjs";
@@ -22,46 +23,14 @@ import dayjs from "dayjs";
 import Confirmation from "../Confirmation";
 import SurrogateReportCreate from "../SurrogateReportCreate";
 
-const initialSurrogateForm = {
-  firstName: "",
-  lastName: "",
-  dateOfBirth: dayjs("2023-01-01"),
-  placeOfBirth: "",
-  address: "",
-  primaryPhone: "",
-  primaryEmailAddress: "",
-  bankVerificationNumber: "",
-  nationalIdentificationNumber: "",
-  primaryImage: "",
-  secondaryImage: "",
-
-  spouseFirstName: "",
-  spouseLastName: "",
-  secondaryEmailAddress: "",
-  secondaryPhone: "",
-  image: "",
-
-  // Form Section B
-  knownDisease: "",
-  covidVaccination: 0,
-  firstTimeParent: false,
-  lastChildBirth: dayjs("2023-01-01"),
-  hivStatus: false,
-  govtIdentificationFile: undefined,
-  covidVaccinationFile: undefined,
-  nextOfKin: {
-    name: "",
-    address: "",
-    phone: "",
-    relationship: "sibling",
-    nationalIdentificationNumber: "",
-  },
-};
-export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
+export default function SurrogateUpdate({
+  showUpdateSurrogateModal,
+  surrogate,
+}) {
   const [isModalOpen, setModalOpen] = useState(true);
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
-  const [surrogateForm, setSurrogateForm] = useState(initialSurrogateForm);
+  const [surrogateForm, setSurrogateForm] = useState(surrogate);
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
@@ -109,7 +78,7 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
             method: () => {
               setShowConfirmationModal(false);
               setModalOpen(true);
-              setSurrogateForm(initialSurrogateForm);
+              setSurrogateForm(initialSurrogate);
               setCurrentFormSection(1);
             },
             text: "Create Another Profile",
@@ -129,7 +98,7 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
       <>
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={primaryImageUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -143,7 +112,7 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
         />
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={secondaryImageUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -157,7 +126,7 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
         />
         <input
           type="file"
-          accept=".pdf, .jpg, .jpeg, .png"
+          accept=".pdf, .jpg,  .png"
           ref={govtIdentificationUploadRef}
           className="modal-image-hide"
           onChange={(e) => {
@@ -173,7 +142,7 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
 
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".pdf, .jpg,  .png"
         ref={covidVaccinationUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
@@ -214,28 +183,34 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="First Name"
-                    value={surrogateForm.firstName}
+                    value={surrogateForm.primary.firstname}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
                         ...surrogateForm,
-                        firstName: e.target.value,
+                        primary: {
+                          ...surrogateForm.primary,
+                          firstname: e.target.value,
+                        },
                       })
                     }
                   />
                   <TextField
                     label="Last Name"
-                    value={surrogateForm.lastName}
+                    value={surrogateForm.lastname}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
                         ...surrogateForm,
-                        lastName: e.target.value,
+                        primary: {
+                          ...surrogateForm.primary,
+                          lastname: e.target.value,
+                        },
                       })
                     }
                   />
                 </div>
-                <div className="flex-row space-between modal-input-row">
+                {/* <div className="flex-row space-between modal-input-row">
                   <DatePicker
                     defaultValue={dayjs("2023-01-01")}
                     {...defaultHalfInputProps}
@@ -273,7 +248,7 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
                       })}
                     </Select>
                   </FormControl>
-                </div>
+                </div> */}
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Address"
@@ -290,12 +265,15 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Primary Phone Number"
-                    value={surrogateForm.primaryPhone}
+                    value={surrogateForm.primary.phone}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
                         ...surrogateForm,
-                        primaryPhone: e.target.value,
+                        primary: {
+                          ...surrogateForm.primary,
+                          phone: e.target.value,
+                        },
                       })
                     }
                   />
@@ -303,17 +281,20 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Primary Email Address"
-                    value={surrogateForm.primaryEmailAddress}
+                    value={surrogateForm.primary.email}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
                         ...surrogateForm,
-                        primaryEmailAddress: e.target.value,
+                        primary: {
+                          ...surrogateForm.primary,
+                          email: e.target.value,
+                        },
                       })
                     }
                   />
                 </div>
-                <div className="flex-row space-between modal-input-row">
+                {/* <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Bank Verification Number"
                     value={surrogateForm.bankVerificationNumber}
@@ -338,27 +319,16 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
                       })
                     }
                   />
-                </div>
+                </div> */}
               </div>
               <div className="flex-column modal-form-right space-between">
                 <span className="flex-column align-center width-100">
                   <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                    {surrogateForm.primaryImage.length > 0 ? (
-                      // Image is set
-
-                      <img
-                        src={surrogateForm.primaryImage}
-                        alt=""
-                        className="modal-form-image"
-                      />
-                    ) : (
-                      // <img
-                      //   src={ImageSelectorPlaceholder}
-                      //   alt=""
-                      //   className="modal-form-image"
-                      // />
-                      <span className="px-16 poppins">No Image Selected</span>
-                    )}
+                    <img
+                      src={surrogateForm.primary.mainImage}
+                      alt=""
+                      className="modal-form-image"
+                    />
                   </div>
                   <br />
                   <span
@@ -371,22 +341,11 @@ export default function SurrogateUpdate({ showUpdateSurrogateModal }) {
                   </span>
                   <br />
                   <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                    {surrogateForm.secondaryImage.length > 0 ? (
-                      // Image is set
-
-                      <img
-                        src={surrogateForm.secondaryImage}
-                        alt=""
-                        className="modal-form-image"
-                      />
-                    ) : (
-                      // <img
-                      //   src={ImageSelectorPlaceholder}
-                      //   alt=""
-                      //   className="modal-form-image"
-                      // />
-                      <span className="px-16 poppins">No Image Selected</span>
-                    )}
+                    <img
+                      src={surrogateForm.primary.secondImage}
+                      alt=""
+                      className="modal-form-image"
+                    />
                   </div>
                   <br />
                   <span

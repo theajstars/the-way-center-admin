@@ -62,7 +62,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
       )}
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".pdf, .jpg,  .png"
         ref={imageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {

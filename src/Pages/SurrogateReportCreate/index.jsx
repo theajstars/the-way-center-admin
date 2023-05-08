@@ -112,7 +112,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
       {showConfirmationModal && <Confirmation {...confirmationModalParams} />}
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".pdf, .jpg,  .png"
         ref={reportFileUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
@@ -126,7 +126,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
       />
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".pdf, .jpg,  .png"
         ref={secondaryImageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
@@ -140,7 +140,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
       />
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".pdf, .jpg,  .png"
         ref={govtIdentificationUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
@@ -154,7 +154,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
       />
       <input
         type="file"
-        accept=".pdf, .jpg, .jpeg, .png"
+        accept=".pdf, .jpg,  .png"
         ref={covidVaccinationUploadRef}
         className="modal-image-hide"
         onChange={(e) => {

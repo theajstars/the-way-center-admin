@@ -58,7 +58,7 @@ export default function ParentRegistration({ showAddParentModal }) {
     secondaryImage: false,
   });
 
-  const UpdateFormErrors = (action) => {
+  const UpdateFormErrors = () => {
     const isPrimaryPhoneValid = validatePhone(parentForm.primaryPhone);
     const isSecondaryPhoneValid = validatePhone(parentForm.secondaryPhone);
     const isPrimaryEmailValid = validateEmail(parentForm.primaryEmailAddress);

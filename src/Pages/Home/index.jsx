@@ -9,6 +9,7 @@ import "keen-slider/keen-slider.min.css";
 
 import {
   initialParent,
+  initialSurrogate,
   RecentParents,
   SurrogateRecords,
   SurrogateReports,
@@ -74,6 +75,7 @@ export default function Home() {
   const [isViewSurrogate, setViewSurrogate] = useState(false);
   const [isViewParent, setViewParent] = useState(false);
 
+  const [surrogate, setCurrentSurrogate] = useState(initialSurrogate);
   const showViewSurrogateModal = (value) => {
     setViewSurrogate(value);
   };
@@ -106,7 +108,7 @@ export default function Home() {
                   return (
                     <>
                       <span
-                        key={parent.email}
+                        key={parent.primary.email}
                         onClick={() => {
                           setCurrentParent(parent);
                           showViewParentModal(true);
@@ -136,20 +138,23 @@ export default function Home() {
               {isViewSurrogate && (
                 <SurrogateProfileView
                   showViewSurrogateModal={showViewSurrogateModal}
+                  surrogate={surrogate}
                 />
               )}
               <div className="flex-column">
-                {RecentParents.map((parent, index) => {
+                {ContextConsumer.Surrogates.map((surrogate, index) => {
                   return (
                     <>
                       <span
-                        key={index}
+                        key={surrogate.primary.email}
                         onClick={() => {
+                          setCurrentSurrogate(surrogate);
                           showViewSurrogateModal(true);
                         }}
-                        className="poppins fw-500 px-18 uppercase underline pointer recent-block-text"
+                        className="poppins fw-500 px-18 capitalize underline pointer recent-block-text"
                       >
-                        {parent.name}
+                        {surrogate.primary.firstname}{" "}
+                        {surrogate.primary.lastname}
                       </span>
                     </>
                   );

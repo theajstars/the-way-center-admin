@@ -24,6 +24,7 @@ const initialContext = {
     surrogate: undefined,
     pairing: undefined,
   },
+  refetchData: () => {},
 };
 const DefaultContext = createContext(initialContext);
 export default function Dashboard() {
@@ -60,11 +61,15 @@ export default function Dashboard() {
       setMetrics({ ...r.data.data, set: true });
     }
   };
-  useEffect(() => {
+
+  const FetchAllData = async () => {
     getCountries();
     getSurrogates();
     getParents();
     getMetrics();
+  };
+  useEffect(() => {
+    FetchAllData();
   }, []);
   useEffect(() => {
     console.log({ metrics, parents, surrogates });
@@ -82,6 +87,7 @@ export default function Dashboard() {
               Parents: parents,
               Metrics: metrics,
               Surrogates: surrogates,
+              refetchData: FetchAllData,
             }}
           >
             <Container maxWidth="xl">

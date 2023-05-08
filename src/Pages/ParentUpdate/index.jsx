@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -11,22 +11,25 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
-
+import { PerformRequest } from "../../API/PerformRequests";
 import { useToasts } from "react-toast-notifications";
 
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
 import Confirmation from "../Confirmation";
 
+import { DefaultContext } from "../Dashboard";
 import { initialParent } from "../../Assets/Data";
 import { validatePhone } from "../../Lib/Validate";
 import { validateEmail } from "../../App";
 import { useEffect } from "react";
+import { UploadFile } from "../../API/FetchData";
 
 export default function ParentUpdate({
   showUpdateParentModal,
   parent = initialParent,
 }) {
   const navigate = useNavigate();
+  const ContextConsumer = useContext(DefaultContext);
   const initialPrimaryImage = parent.primary.image;
   const initialSpouseImage = parent.spouse.image;
   const { addToast, removeAllToasts } = useToasts();
@@ -38,7 +41,7 @@ export default function ParentUpdate({
     spouse: { ...parent.spouse, image: undefined },
   });
 
-  const [currentContact, setCurrentContact] = useState("Spouse");
+  const [currentContact, setCurrentContact] = useState("Primary");
 
   const primaryImageUploadRef = useRef();
   const spouseImageUploadRef = useRef();
@@ -75,11 +78,8 @@ export default function ParentUpdate({
     address: false,
     primaryPhone: false,
     spousePhone: false,
-
-    primaryImage: false,
-    spouseImage: false,
   });
-  const UpdateFormErrors = (action) => {
+  const UpdateFormErrors = () => {
     const isPrimaryPhoneValid = validatePhone(parentForm.primary.phone);
     const isSpousePhoneValid = validatePhone(parentForm.spouse.phone);
     const isPrimaryEmailValid = validateEmail(parentForm.primary.email);
@@ -96,17 +96,83 @@ export default function ParentUpdate({
       spouseEmail: !isSpouseEmailValid,
       primaryPhone: !isPrimaryPhoneValid,
       spousePhone: !isSpousePhoneValid,
-
-      primaryImage: !parentForm.primary.image,
-      secondaryImage: !parentForm.spouse.image,
     });
   };
   useEffect(() => {
     UpdateProfile();
   }, [formErrors]);
-  const UpdateProfile = () => {
+  const UpdateProfile = async () => {
+    console.log(formErrors);
     console.log(parentForm);
-    setFormSubmitting(false);
+    if (formSubmitting) {
+      const errors = Object.values(formErrors).filter((e) => e === true);
+      if (errors.length > 0) {
+        setFormSubmitting(false);
+        removeAllToasts();
+        addToast("Please fill the form correctly", { appearance: "error" });
+      } else {
+        const { image: primaryImage } = parentForm.primary;
+        const { image: spouseImage } = parentForm.spouse;
+
+        if (!spouseImage && !primaryImage) {
+          const data = {
+            address: parentForm.address,
+            parentID: parentForm.id,
+            status: parentForm.status,
+            primary: { ...parentForm.primary, image: initialPrimaryImage },
+            spouse: { ...parentForm.spouse, image: initialSpouseImage },
+          };
+          console.log(data);
+          const updateParent = await PerformRequest.UpdateParent(data);
+          console.log(updateParent);
+          if (updateParent.data.response_code === 200) {
+            ContextConsumer.refetchData();
+            setShowConfirmationModal(true);
+          }
+        } else {
+          const checkOrUploadImage = async (image, prevImage) => {
+            if (!image) {
+              return prevImage;
+            } else {
+              let imageFormData = new FormData();
+              imageFormData.append(
+                "file",
+                image,
+                image.name.toLowerCase().split(" ").join().replaceAll(",", "")
+              );
+              const uploadImage = await UploadFile({
+                formData: imageFormData,
+              });
+              return uploadImage.data.fileUrl;
+            }
+          };
+          const data = {
+            address: parentForm.address,
+            parentID: parentForm.id,
+            status: parentForm.status,
+            primary: {
+              ...parentForm.primary,
+              image: await checkOrUploadImage(
+                primaryImage,
+                initialPrimaryImage
+              ),
+            },
+            spouse: {
+              ...parentForm.spouse,
+              image: await checkOrUploadImage(primaryImage, initialSpouseImage),
+            },
+          };
+
+          console.log(data);
+          const updateParent = await PerformRequest.UpdateParent(data);
+          console.log(updateParent);
+          if (updateParent.data.response_code === 200) {
+            ContextConsumer.refetchData();
+            setShowConfirmationModal(true);
+          }
+        }
+      }
+    }
   };
   return (
     <>
@@ -118,6 +184,7 @@ export default function ParentUpdate({
             method: () => {
               setShowConfirmationModal(false);
               setModalOpen(true);
+              showUpdateParentModal(false);
               setParentForm(initialParent);
               navigate("/dashboard/parents");
             },
@@ -132,7 +199,7 @@ export default function ParentUpdate({
       )}
       <input
         type="file"
-        accept=".jpg, .jpeg, .png"
+        accept=".jpg, .png"
         ref={primaryImageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
@@ -150,7 +217,7 @@ export default function ParentUpdate({
       />
       <input
         type="file"
-        accept=".jpg, .jpeg, .png"
+        accept=".jpg, .png"
         ref={spouseImageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
