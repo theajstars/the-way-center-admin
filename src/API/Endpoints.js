@@ -5,11 +5,18 @@ const Endpoints = {
 
   UploadFile: "/misc/file-upload",
   GetCountries: "/misc/country",
+  GetMetrics: "/console/metrics",
 
   AddTeamMember: "/console/team/add",
 
   CreateSurrogate: "/surrogate/add",
   CreateParent: "/parent/add",
+
+  FetchSurrogate: "/surrogate/details",
+  FetchParent: "/parent/details",
+
+  UpdateParent: "/parent/update",
+  UpdateSurrogate: "/surrogate/update",
 };
 
 export { Endpoints };

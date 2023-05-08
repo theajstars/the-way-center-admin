@@ -1,5 +1,26 @@
 import dayjs from "dayjs";
 
+const initialParent = {
+  id: "4",
+  primary: {
+    lastname: "",
+    firstname: "",
+    email: "",
+    phone: "",
+    image: "",
+  },
+  spouse: {
+    lastname: "",
+    firstname: "",
+    email: "",
+    phone: "",
+    image: "",
+  },
+  address: "",
+  status: "",
+  pair: "",
+  createdOn: "",
+};
 const SurrogateRecords = [
   {
     title: "Your Surrogates next Doctors Appointment on",
@@ -2792,4 +2813,5 @@ export {
   SampleMessages,
   SampleSurrogate,
   ReportCategories,
+  initialParent,
 };

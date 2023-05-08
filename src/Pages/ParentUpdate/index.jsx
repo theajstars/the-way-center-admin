@@ -14,23 +14,24 @@ import {
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
 import Confirmation from "../Confirmation";
 
-const initialParentForm = {
-  firstName: "Mike Hugh",
-  lastName: "Chalk",
-  spouseFirstName: "",
-  spouseLastName: "",
-  address: "",
-  primaryEmailAddress: "",
-  secondaryEmailAddress: "",
-  primaryPhone: "",
-  secondaryPhone: "",
-  image: "",
-};
-export default function ParentUpdate({ showUpdateParentModal }) {
+import { initialParent } from "../../Assets/Data";
+
+export default function ParentUpdate({
+  showUpdateParentModal,
+  parent = initialParent,
+}) {
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(true);
-  const [parentForm, setParentForm] = useState(initialParentForm);
-  const imageUploadRef = useRef();
+  const [parentForm, setParentForm] = useState({
+    ...parent,
+    primary: { ...parent.primary, image: undefined },
+    spouse: { ...parent.spouse, image: undefined },
+  });
+
+  const [currentContact, setCurrentContact] = useState("Spouse");
+
+  const primaryImageUploadRef = useRef();
+  const spouseImageUploadRef = useRef();
   const defaultFullInputProps = {
     variant: "outlined",
     spellCheck: false,
@@ -58,7 +59,7 @@ export default function ParentUpdate({ showUpdateParentModal }) {
             method: () => {
               setShowConfirmationModal(false);
               setModalOpen(true);
-              setParentForm(initialParentForm);
+              setParentForm(initialParent);
               navigate("/dashboard/parents");
             },
             text: "Parents",
@@ -73,14 +74,32 @@ export default function ParentUpdate({ showUpdateParentModal }) {
       <input
         type="file"
         accept=".jpg, .jpeg, .png"
-        ref={imageUploadRef}
+        ref={primaryImageUploadRef}
         className="modal-image-hide"
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
-          setParentForm({ ...parentForm, image: URL.createObjectURL(image) });
+          setParentForm({
+            ...parentForm,
+            primary: { ...parentForm.primary, image: image },
+          });
         }}
       />
+      <input
+        type="file"
+        accept=".jpg, .jpeg, .png"
+        ref={spouseImageUploadRef}
+        className="modal-image-hide"
+        onChange={(e) => {
+          console.log(e.target.files);
+          const image = e.target.files[0];
+          setParentForm({
+            ...parentForm,
+            spouse: { ...parentForm.spouse, image: image },
+          });
+        }}
+      />
+
       <Modal
         open={isModalOpen}
         onClose={(e, reason) => {
@@ -96,211 +115,374 @@ export default function ParentUpdate({ showUpdateParentModal }) {
           <br />
 
           <div className="modal-form-container flex-column align-center">
-            <div className="modal-form flex-column">
-              <br />
-              <span className="fw-600 poppins px-24">Parent Bio-Data</span>
-              <br />
-              <div className="flex-row space-between modal-input-row">
-                <TextField
-                  label="First Name"
-                  value={parentForm.firstName}
-                  {...defaultHalfInputProps}
-                  onChange={(e) =>
-                    setParentForm({ ...parentForm, firstName: e.target.value })
-                  }
-                />
-                <TextField
-                  label="Last Name"
-                  value={parentForm.lastName}
-                  {...defaultHalfInputProps}
-                  onChange={(e) =>
-                    setParentForm({ ...parentForm, lastName: e.target.value })
-                  }
-                />
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <TextField
-                  label="Email"
-                  value={parentForm.primaryEmailAddress}
-                  {...defaultFullInputProps}
-                  onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
-                      primaryEmailAddress: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <TextField
-                  label="Address"
-                  value={parentForm.address}
-                  {...defaultFullInputProps}
-                  onChange={(e) =>
-                    setParentForm({ ...parentForm, address: e.target.value })
-                  }
-                />
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <TextField
-                  label="Address"
-                  value={parentForm.primaryPhone}
-                  {...defaultFullInputProps}
-                  onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
-                      primaryPhone: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <TextField
-                  label="Address"
-                  value={parentForm.secondaryEmailAddress}
-                  {...defaultFullInputProps}
-                  onChange={(e) =>
-                    setParentForm({
-                      ...parentForm,
-                      secondaryEmailAddress: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <FormControl variant="standard" {...defaultHalfInputProps}>
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Contact Class
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    // value={surrogateForm.placeOfBirth}
-                    // onChange={(e) => {
-                    //   setSurrogateForm({
-                    //     ...surrogateForm,
-                    //     placeOfBirth: e.target.value,
-                    //   });
-                    // }}
-                    label="Contact Class"
-                  >
-                    <MenuItem value={"Nobody knboww"} key={"Nobody knboww"}>
-                      Shish Kebab
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl variant="standard" {...defaultHalfInputProps}>
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Status
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    // value={surrogateForm.placeOfBirth}
-                    // onChange={(e) => {
-                    //   setSurrogateForm({
-                    //     ...surrogateForm,
-                    //     placeOfBirth: e.target.value,
-                    //   });
-                    // }}
-                    label="Status"
-                  >
-                    <MenuItem value={true} key={"Active"}>
-                      Active
-                    </MenuItem>
-                    <MenuItem value={false} key={"Inactive"}>
-                      Inactive
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-            </div>
-            <br />
-            <br />
-            <div className="flex-column modal-form-right space-between">
-              {/* <span className="flex-column align-center width-100">
-                <div className="modal-form-image-container flex-row">
-                  {parentForm.image.length > 0 ? (
-                    // Image is set
-
-                    <img
-                      src={parentForm.image}
-                      alt=""
-                      className="modal-form-image"
+            {currentContact === "Primary" ? (
+              <>
+                <div className="modal-form flex-column">
+                  <br />
+                  <span className="fw-600 poppins px-24">Parent Bio-Data</span>
+                  <br />
+                  <div className="flex-row space-between modal-input-row">
+                    <TextField
+                      label="First Name"
+                      value={parentForm.primary.firstname}
+                      {...defaultHalfInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          primary: {
+                            ...parentForm.primary,
+                            firstname: e.target.value,
+                          },
+                        })
+                      }
                     />
-                  ) : (
-                    // <img
-                    //   src={ImageSelectorPlaceholder}
-                    //   alt=""
-                    //   className="modal-form-image"
-                    // />
-                    <span className="px-16 poppins">No Image Selected</span>
-                  )}
+                    <TextField
+                      label="Last Name"
+                      value={parentForm.primary.lastname}
+                      {...defaultHalfInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          primary: {
+                            ...parentForm.primary,
+                            lastname: e.target.value,
+                          },
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex-row space-between modal-input-row">
+                    <TextField
+                      label="Email"
+                      value={parentForm.primary.email}
+                      {...defaultFullInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          primary: {
+                            ...parentForm.primary,
+                            email: e.target.value,
+                          },
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex-row space-between modal-input-row">
+                    <TextField
+                      label="Address"
+                      value={parentForm.address}
+                      {...defaultFullInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          address: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex-row space-between modal-input-row">
+                    <TextField
+                      label="Phone Number"
+                      value={parentForm.primary.phone}
+                      {...defaultFullInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          primary: {
+                            ...parentForm.primary,
+                            phone: e.target.value,
+                          },
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="flex-row space-between modal-input-row">
+                    <FormControl variant="standard" {...defaultHalfInputProps}>
+                      <InputLabel id="demo-simple-select-standard-label">
+                        Contact Class
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        label="Contact Class"
+                        value={currentContact}
+                        onChange={(e) => {
+                          setCurrentContact(e.target.value);
+                        }}
+                      >
+                        <MenuItem value={"Primary"} key={"Primary"}>
+                          Primary
+                        </MenuItem>
+                        <MenuItem value={"Spouse"} key={"Spouse"}>
+                          Spouse
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                    <FormControl variant="standard" {...defaultHalfInputProps}>
+                      <InputLabel id="demo-simple-select-standard-label">
+                        Status
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        label="Status"
+                      >
+                        <MenuItem value={true} key={"Active"}>
+                          Active
+                        </MenuItem>
+                        <MenuItem value={false} key={"Inactive"}>
+                          Inactive
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
                 </div>
                 <br />
-                <span
-                  className="purple-btn-default px-16 poppins pointer width-100"
-                  onClick={() => {
-                    imageUploadRef.current.click();
+                <br />
+
+                <br />
+                <div
+                  className="flex-column modal-form-file-container"
+                  style={{
+                    width: 300,
                   }}
                 >
-                  Upload Image
-                </span>
-              </span> */}
-              <br />
-            </div>
-            <br />
-            <div
-              className="flex-column modal-form-file-container"
-              style={{
-                width: 300,
-              }}
-            >
-              <span className="px-13 poppins fw-500">
-                &nbsp; &nbsp; Upload Photo
-              </span>
-              <div className="flex-row modal-form-file ">
-                <div className="px-13 poppins fw-500">
-                  {initialParentForm.image ? (
-                    initialParentForm.image.length
-                  ) : (
-                    <span>No File Selected</span>
-                  )}
+                  <span className="px-13 poppins fw-500">
+                    &nbsp; &nbsp; Upload Photo
+                  </span>
+                  <div className="flex-row modal-form-file ">
+                    <div className="px-13 poppins fw-500">
+                      {parentForm.primary.image ? (
+                        URL.createObjectURL(parentForm.primary.image)
+                      ) : (
+                        <span>No File Selected</span>
+                      )}
+                    </div>
+                    <span
+                      className="px-13 poppins fw-500 modal-form-file-btn flex-row pointer"
+                      onClick={() => {
+                        primaryImageUploadRef.current.click();
+                      }}
+                    >
+                      Upload File
+                    </span>
+                  </div>
+                  <span className="px-13 poppins fw-500 modal-form-file-about">
+                    &nbsp; &nbsp; Acceptable format :JPG/PNG
+                  </span>
                 </div>
-                <span
-                  className="px-13 poppins fw-500 modal-form-file-btn flex-row pointer"
-                  onClick={() => {
-                    imageUploadRef.current.click();
+
+                <br />
+                <div className="flex-row width-100 align-center space-between">
+                  <Button
+                    variant="outlined"
+                    style={{
+                      borderColor: "rgba(162, 89, 255, 0.42)",
+                      borderWidth: "2px",
+                      color: "#000",
+                    }}
+                    onClick={() => {
+                      showUpdateParentModal(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <span
+                    className="purple-btn-default px-16 poppins pointer uppercase modal-form-submit"
+                    onClick={() => {
+                      setShowConfirmationModal(true);
+                    }}
+                  >
+                    Update Profile
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="modal-form flex-column">
+                  <br />
+                  <span className="fw-600 poppins px-24">Spouse Bio-Data</span>
+                  <br />
+                  <div className="flex-row space-between modal-input-row">
+                    <TextField
+                      label="Spouse First Name"
+                      value={parentForm.spouse.firstname}
+                      {...defaultHalfInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          spouse: {
+                            ...parentForm.spouse,
+                            firstname: e.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      label="Spouse Last Name"
+                      value={parentForm.spouse.lastname}
+                      {...defaultHalfInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          spouse: {
+                            ...parentForm.spouse,
+                            lastname: e.target.value,
+                          },
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex-row space-between modal-input-row">
+                    <TextField
+                      label="Spouse Email"
+                      value={parentForm.spouse.email}
+                      {...defaultFullInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          spouse: {
+                            ...parentForm.spouse,
+                            email: e.target.value,
+                          },
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex-row space-between modal-input-row">
+                    <TextField
+                      label="Address"
+                      value={parentForm.address}
+                      {...defaultFullInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          address: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex-row space-between modal-input-row">
+                    <TextField
+                      label="Spouse Phone Number"
+                      value={parentForm.spouse.phone}
+                      {...defaultFullInputProps}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          spouse: {
+                            ...parentForm.spouse,
+                            phone: e.target.value,
+                          },
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="flex-row space-between modal-input-row">
+                    <FormControl variant="standard" {...defaultHalfInputProps}>
+                      <InputLabel id="demo-simple-select-standard-label">
+                        Contact Class
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        label="Contact Class"
+                        value={currentContact}
+                        onChange={(e) => {
+                          setCurrentContact(e.target.value);
+                        }}
+                      >
+                        <MenuItem value={"Primary"} key={"Primary"}>
+                          Primary
+                        </MenuItem>
+                        <MenuItem value={"Spouse"} key={"Spouse"}>
+                          Spouse
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                    <FormControl variant="standard" {...defaultHalfInputProps}>
+                      <InputLabel id="demo-simple-select-standard-label">
+                        Status
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        label="Status"
+                      >
+                        <MenuItem value={true} key={"Active"}>
+                          Active
+                        </MenuItem>
+                        <MenuItem value={false} key={"Inactive"}>
+                          Inactive
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+                </div>
+                <br />
+                <br />
+
+                <br />
+
+                <div
+                  className="flex-column modal-form-file-container"
+                  style={{
+                    width: 300,
                   }}
                 >
-                  Upload File
-                </span>
-              </div>
-              <span className="px-13 poppins fw-500 modal-form-file-about">
-                &nbsp; &nbsp; Acceptable format :JPG/PNG
-              </span>
-            </div>
-            <br />
-            <div className="flex-row width-100 align-center space-between">
-              <Button
-                variant="outlined"
-                style={{
-                  borderColor: "rgba(162, 89, 255, 0.42)",
-                  borderWidth: "2px",
-                  color: "#000",
-                }}
-              >
-                Cancel
-              </Button>
-              <span
-                className="purple-btn-default px-16 poppins pointer uppercase modal-form-submit"
-                onClick={() => {
-                  setShowConfirmationModal(true);
-                }}
-              >
-                Update Profile
-              </span>
-            </div>
+                  <span className="px-13 poppins fw-500">
+                    &nbsp; &nbsp; Upload Photo
+                  </span>
+                  <div className="flex-row modal-form-file ">
+                    <div className="px-13 poppins fw-500">
+                      {parentForm.spouse.image ? (
+                        URL.createObjectURL(parentForm.spouse.image)
+                      ) : (
+                        <span>No File Selected</span>
+                      )}
+                    </div>
+                    <span
+                      className="px-13 poppins fw-500 modal-form-file-btn flex-row pointer"
+                      onClick={() => {
+                        spouseImageUploadRef.current.click();
+                      }}
+                    >
+                      Upload File
+                    </span>
+                  </div>
+                  <span className="px-13 poppins fw-500 modal-form-file-about">
+                    &nbsp; &nbsp; Acceptable format :JPG/PNG
+                  </span>
+                </div>
+
+                <br />
+                <div className="flex-row width-100 align-center space-between">
+                  <Button
+                    variant="outlined"
+                    style={{
+                      borderColor: "rgba(162, 89, 255, 0.42)",
+                      borderWidth: "2px",
+                      color: "#000",
+                    }}
+                    onClick={() => {
+                      showUpdateParentModal(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <span
+                    className="purple-btn-default px-16 poppins pointer uppercase modal-form-submit"
+                    onClick={() => {
+                      setShowConfirmationModal(true);
+                    }}
+                  >
+                    Update Profile
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </Modal>

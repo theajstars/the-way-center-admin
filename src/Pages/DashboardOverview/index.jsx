@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import CreatePairing from "../CreatePairing";
+import { DefaultContext } from "../Dashboard";
 import ParentRegistration from "../ParentRegistration";
 import SurrogateRegistration from "../SurrogateRegistration";
 
 export default function DashboardOverview() {
+  const ContextConsumer = useContext(DefaultContext);
   const [isAddNewParent, setAddNewParent] = useState(false);
   const [isAddNewSurrogate, setAddNewSurrogate] = useState(false);
   const [isAddNewPairing, setAddNewPairing] = useState(false);
@@ -32,7 +34,9 @@ export default function DashboardOverview() {
           {isAddNewParent && (
             <ParentRegistration showAddParentModal={showAddParentModal} />
           )}
-          <span className="fw-700 px-40 cinzel">28</span>
+          <span className="fw-700 px-40 cinzel">
+            {ContextConsumer.Metrics.parent}
+          </span>
         </div>
       </div>
       <div className="flex-column dashboard-block">
@@ -51,7 +55,9 @@ export default function DashboardOverview() {
               showAddSurrogateModal={showAddSurrogateModal}
             />
           )}
-          <span className="fw-700 px-40 cinzel">42</span>
+          <span className="fw-700 px-40 cinzel">
+            {ContextConsumer.Metrics.surrogate}
+          </span>
         </div>
       </div>
       <div className="flex-column dashboard-block">
@@ -68,7 +74,9 @@ export default function DashboardOverview() {
           {isAddNewPairing && (
             <CreatePairing showCreatePairingModal={showCreatePairingModal} />
           )}
-          <span className="fw-700 px-40 cinzel">12</span>
+          <span className="fw-700 px-40 cinzel">
+            {ContextConsumer.Metrics.pairing}
+          </span>
         </div>
       </div>
     </div>

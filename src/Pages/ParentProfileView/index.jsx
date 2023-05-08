@@ -17,6 +17,7 @@ import {
   CountriesList,
   CovidVaccinationDosage,
   Diseases,
+  initialParent,
   NextOfKinRelationships,
   SampleSurrogate,
 } from "../../Assets/Data";
@@ -26,46 +27,15 @@ import Confirmation from "../Confirmation";
 import SurrogateUpdate from "../SurrogateUpdate";
 import ParentUpdate from "../ParentUpdate";
 
-const initialParentForm = {
-  firstName: "",
-  lastName: "",
-  dateOfBirth: dayjs("2023-01-01"),
-  placeOfBirth: "",
-  address: "",
-  primaryPhone: "",
-  primaryEmailAddress: "",
-  bankVerificationNumber: "",
-  nationalIdentificationNumber: "",
-  primaryImage: "",
-  secondaryImage: "",
-
-  spouseFirstName: "",
-  spouseLastName: "",
-  secondaryEmailAddress: "",
-  secondaryPhone: "",
-  image: "",
-
-  // Form Section B
-  knownDisease: "",
-  covidVaccination: 0,
-  firstTimeParent: false,
-  lastChildBirth: dayjs("2023-01-01"),
-  hivStatus: false,
-  govtIdentificationFile: undefined,
-  covidVaccinationFile: undefined,
-  nextOfKin: {
-    name: "",
-    address: "",
-    phone: "",
-    relationship: "sibling",
-    nationalIdentificationNumber: "",
-  },
-};
-export default function ParentProfileView({ showViewParentModal, isUpdate }) {
+export default function ParentProfileView({
+  showViewParentModal,
+  isUpdate,
+  parent = initialParent,
+}) {
   const [isModalOpen, setModalOpen] = useState(true);
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
-  const [parentForm, setParentForm] = useState(initialParentForm);
+  const [parentForm, setParentForm] = useState(parent);
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
@@ -96,6 +66,13 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
   const showUpdateParentModal = (value) => {
     setUpdateProfile(value);
   };
+
+  const getParentSurrogate = () => {
+    if (parseInt(parent.pair) === 0) {
+      return "Unpaired";
+    } else {
+    }
+  };
   return (
     <>
       {showConfirmationModal && (
@@ -106,7 +83,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
             method: () => {
               setShowConfirmationModal(false);
               setModalOpen(true);
-              setParentForm(initialParentForm);
+              setParentForm(initialParent);
               setCurrentFormSection(1);
             },
             text: "Create Another Profile",
@@ -119,7 +96,10 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
         />
       )}
       {isUpdateProfile && (
-        <ParentUpdate showUpdateParentModal={showUpdateParentModal} />
+        <ParentUpdate
+          showUpdateParentModal={showUpdateParentModal}
+          parent={parent}
+        />
       )}
       <>
         <input
@@ -200,7 +180,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.firstName} ${SampleSurrogate.lastName}`}
+                    value={`${parent.primary.firstname} ${parent.primary.lastname}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -216,7 +196,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.spouseName}`}
+                    value={`${parent.spouse.firstname} ${parent.spouse.lastname}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -232,7 +212,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.address}`}
+                    value={`${parent.address}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -248,7 +228,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.primaryEmailAddress}`}
+                    value={`${parent.primary.email}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -264,7 +244,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.secondaryEmailAddress}`}
+                    value={`${parent.spouse.email}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -280,7 +260,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.primaryPhone}`}
+                    value={`${parent.primary.phone}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -296,7 +276,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.primaryPhone}`}
+                    value={`${parent.spouse.phone}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -314,7 +294,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
                     value={`${
-                      SampleSurrogate.pair.length > 0 ? "Paired" : "Unpaired"
+                      parseInt(parent.pair) > 0 ? "Paired" : "Unpaired"
                     }`}
                     startAdornment={
                       <InputAdornment position="start">
@@ -331,7 +311,7 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
                   <Input
                     id="standard-adornment-amount"
                     {...defaultFullInputProps}
-                    value={`${SampleSurrogate.firstName} ${SampleSurrogate.lastName}`}
+                    value={getParentSurrogate()}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
@@ -346,50 +326,21 @@ export default function ParentProfileView({ showViewParentModal, isUpdate }) {
             <div className="flex-column modal-form-right space-between">
               <span className="flex-column align-center width-100">
                 <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                  {parentForm.primaryImage.length > 0 ? (
-                    // Image is set
-
-                    <img
-                      src={parentForm.primaryImage}
-                      alt=""
-                      className="modal-form-image"
-                    />
-                  ) : (
-                    // <img
-                    //   src={ImageSelectorPlaceholder}
-                    //   alt=""
-                    //   className="modal-form-image"
-                    // />
-                    <span className="px-16 poppins">No Image Selected</span>
-                  )}
+                  <img
+                    src={parent.primary.image}
+                    alt=""
+                    className="modal-form-image"
+                  />
                 </div>
                 <br />
-                {/* <span
-                  className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
-                  onClick={() => {
-                    primaryImageUploadRef.current.click();
-                  }}
-                >
-                  Upload Main Image
-                </span> */}
+
                 <br />
                 <div className="modal-form-image-container modal-form-image-container-small flex-row">
-                  {parentForm.secondaryImage.length > 0 ? (
-                    // Image is set
-
-                    <img
-                      src={parentForm.secondaryImage}
-                      alt=""
-                      className="modal-form-image"
-                    />
-                  ) : (
-                    // <img
-                    //   src={ImageSelectorPlaceholder}
-                    //   alt=""
-                    //   className="modal-form-image"
-                    // />
-                    <span className="px-16 poppins">No Image Selected</span>
-                  )}
+                  <img
+                    src={parent.spouse.image}
+                    alt=""
+                    className="modal-form-image"
+                  />
                 </div>
                 <br />
                 {/* <span
