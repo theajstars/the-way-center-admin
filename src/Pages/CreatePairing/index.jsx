@@ -1,3 +1,4 @@
+import { useState, useRef, useContext } from "react";
 import {
   Modal,
   TextField,
@@ -6,17 +7,45 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { useState, useRef } from "react";
+import { useToasts } from "react-toast-notifications";
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
 import Confirmation from "../Confirmation";
 import { RecentParents } from "../../Assets/Data";
+import { DefaultContext } from "../Dashboard";
+import { PerformRequest } from "../../API/PerformRequests";
 const initialPairingForm = {
-  parentName: "",
-  surrogateName: "",
+  parentID: "",
+  surrogateID: "",
 };
+
 export default function CreatePairing({ showCreatePairingModal }) {
+  const { addToast, removeAllToasts } = useToasts();
+  const ConsumerContext = useContext(DefaultContext);
   const [isModalOpen, setModalOpen] = useState(true);
   const [pairingForm, setPairingForm] = useState(initialPairingForm);
+  const getParentImage = () => {
+    return ConsumerContext.Parents.filter(
+      (p) => p.id === pairingForm.parentID
+    )[0].primary.image;
+  };
+  const getSurrogateImage = () => {
+    return ConsumerContext.Surrogates.filter(
+      (s) => s.id === pairingForm.surrogateID
+    )[0].primary.mainImage;
+  };
+  const getParentName = () => {
+    const filter = ConsumerContext.Parents.filter(
+      (p) => p.id === pairingForm.parentID
+    )[0].primary;
+    return `${filter.firstname} ${filter.lastname}`;
+  };
+  const getSurrogateName = () => {
+    const filter = ConsumerContext.Surrogates.filter(
+      (s) => s.id === pairingForm.surrogateID
+    )[0].primary;
+
+    return `${filter.firstname} ${filter.lastname}`;
+  };
   const imageUploadRef = useRef();
   const defaultFullInputProps = {
     variant: "standard",
@@ -36,14 +65,25 @@ export default function CreatePairing({ showCreatePairingModal }) {
       showCreatePairingModal(false);
     }
   };
+  const Pair = async () => {
+    if (pairingForm.parentID.length > 0 && pairingForm.parentID.length > 0) {
+      const pairingRequest = await PerformRequest.CreatePairing(pairingForm);
+      console.log(pairingRequest);
+      if (pairingRequest.data.status === "success") {
+        setShowConfirmationModal(true);
+      } else {
+        addToast(pairingRequest.data.message, { appearance: "error" });
+      }
+    }
+  };
   return (
     <>
       {showConfirmationModal && (
         <Confirmation
-          modalHeaderText="PARENT <> SURROGATE PAIRING SUCCESSFUL"
+          modalHeaderText={`PARENT <> SURROGATE PAIRING SUCCESSFUL`}
           isPairing={true}
-          parentName={pairingForm.parentName}
-          surrogateName={pairingForm.surrogateName}
+          parentName={getParentName()}
+          surrogateName={getSurrogateName()}
           modalBodyText=""
           modalAction={{
             method: () => {
@@ -60,7 +100,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
           getConfirmationModalStatus={getConfirmationModalStatus}
         />
       )}
-      <input
+      {/* <input
         type="file"
         accept=".pdf, .jpg,  .png"
         ref={imageUploadRef}
@@ -70,7 +110,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
           const image = e.target.files[0];
           setPairingForm({ ...pairingForm, image: URL.createObjectURL(image) });
         }}
-      />
+      /> */}
       <Modal
         open={isModalOpen}
         onClose={(e, reason) => {
@@ -111,15 +151,15 @@ export default function CreatePairing({ showCreatePairingModal }) {
                     onChange={(e) => {
                       setPairingForm({
                         ...pairingForm,
-                        parentName: e.target.value,
+                        parentID: e.target.value,
                       });
                     }}
                     label="Parents Name"
                   >
-                    {RecentParents.map((parent, index) => {
+                    {ConsumerContext.Parents.map((parent, index) => {
                       return (
-                        <MenuItem value={parent.name} key={parent.email}>
-                          {parent.name}
+                        <MenuItem value={parent.id} key={parent.id}>
+                          {parent.primary.firstname} {parent.primary.lastname}
                         </MenuItem>
                       );
                     })}
@@ -136,15 +176,16 @@ export default function CreatePairing({ showCreatePairingModal }) {
                     onChange={(e) => {
                       setPairingForm({
                         ...pairingForm,
-                        surrogateName: e.target.value,
+                        surrogateID: e.target.value,
                       });
                     }}
                     label="Surrogates Name"
                   >
-                    {RecentParents.map((surrogate, index) => {
+                    {ConsumerContext.Surrogates.map((surrogate, index) => {
                       return (
-                        <MenuItem value={surrogate.name} key={surrogate.email}>
-                          {surrogate.name}
+                        <MenuItem value={surrogate.id} key={surrogate.id}>
+                          {surrogate.primary.firstname}{" "}
+                          {surrogate.primary.lastname}
                         </MenuItem>
                       );
                     })}
@@ -159,8 +200,8 @@ export default function CreatePairing({ showCreatePairingModal }) {
                     <div className="modal-form-image-container flex-row">
                       <img
                         src={
-                          pairingForm.parentName.length > 0
-                            ? "https://www.w3schools.com/howto/img_avatar.png"
+                          pairingForm.parentID.length > 0
+                            ? getParentImage()
                             : ""
                         }
                         alt=""
@@ -175,8 +216,8 @@ export default function CreatePairing({ showCreatePairingModal }) {
                     <div className="modal-form-image-container flex-row">
                       <img
                         src={
-                          pairingForm.surrogateName.length > 0
-                            ? "https://www.w3schools.com/howto/img_avatar.png"
+                          pairingForm.surrogateID.length > 0
+                            ? getSurrogateImage()
                             : ""
                         }
                         alt=""
@@ -191,14 +232,30 @@ export default function CreatePairing({ showCreatePairingModal }) {
                 <br />
               </span>
               <br />
-              <span
+              <button
+                style={{
+                  opacity:
+                    pairingForm.parentID.length === 0 ||
+                    pairingForm.parentID.length === 0
+                      ? "0.5"
+                      : "1",
+                  cursor:
+                    pairingForm.parentID.length === 0 ||
+                    pairingForm.parentID.length === 0
+                      ? "not-allowed"
+                      : "pointer",
+                }}
+                disabled={
+                  pairingForm.parentID.length === 0 ||
+                  pairingForm.parentID.length === 0
+                }
                 className="purple-btn-default px-16 poppins pointer pairing-modal-submit uppercase modal-form-submit"
                 onClick={() => {
-                  setShowConfirmationModal(true);
+                  Pair();
                 }}
               >
                 Create Pairing
-              </span>
+              </button>
             </div>
           </div>
         </div>

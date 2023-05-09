@@ -17,6 +17,8 @@ const Endpoints = {
 
   UpdateParent: "/parent/update",
   UpdateSurrogate: "/surrogate/update",
+
+  CreatePairing: "/pair/create",
 };
 
 export { Endpoints };

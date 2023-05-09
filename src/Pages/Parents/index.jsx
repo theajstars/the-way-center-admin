@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -17,20 +17,90 @@ import {
   ChakraProvider,
   Text,
 } from "@chakra-ui/react";
+import { useToasts } from "react-toast-notifications";
+
 import DashboardOverview from "../DashboardOverview";
-import { RecentParents } from "../../Assets/Data";
+import {
+  initialParent,
+  initialSurrogate,
+  RecentParents,
+} from "../../Assets/Data";
 import ParentProfileView from "../ParentProfileView";
 import CreatePairing from "../CreatePairing";
+import { DefaultContext } from "../Dashboard";
+import { PerformRequest } from "../../API/PerformRequests";
 export default function Parents() {
+  const ConsumerContext = useContext(DefaultContext);
   const navigate = useNavigate();
+  const { addToast, removeAllToasts } = useToasts();
+
   const [parents, setParents] = useState(RecentParents);
+  const [pairedParents, setPairedParents] = useState([]);
+  const [unPairedParents, setUnPairedParents] = useState([]);
   const [isViewParent, setViewParent] = useState(false);
+  const [parent, setCurrentParent] = useState(initialParent);
+  const [surrogate, setCurrentSurrogate] = useState(initialSurrogate);
+
   const showViewParentModal = (value) => {
     setViewParent(value);
   };
   const [isAddNewPairing, setAddNewPairing] = useState(false);
   const showCreatePairingModal = (value) => {
     setAddNewPairing(value);
+  };
+
+  const getPairedParents = async () => {
+    const r = await PerformRequest.GetAllParents({
+      isPaired: "Yes",
+      orderBy: "new",
+    });
+    console.log(r);
+    if (r.data.response_code === 200) {
+      setPairedParents(r.data.data ?? []);
+    }
+  };
+  const getUnPairedParents = async () => {
+    const r = await PerformRequest.GetAllParents({
+      isPaired: "No",
+      orderBy: "new",
+    });
+    console.log(r);
+    if (r.data.response_code === 200) {
+      setUnPairedParents(r.data.data ?? []);
+    }
+  };
+  useEffect(() => {
+    getPairedParents();
+    getUnPairedParents();
+  }, []);
+  const [isParentStatusToggling, setParentStatusToggling] = useState(false);
+  const ActivateParent = async (thisParent) => {
+    removeAllToasts();
+    setParentStatusToggling(true);
+    const activate = await PerformRequest.UpdateParent({
+      ...thisParent,
+      parentID: thisParent.id,
+      status: "active",
+    });
+    setParentStatusToggling(false);
+    if (activate.data.response_code === 200) {
+      addToast("Parent activated!", { appearance: "success" });
+      ConsumerContext.refetchData();
+    }
+  };
+  const DeactivateParent = async (thisParent) => {
+    removeAllToasts();
+    setParentStatusToggling(true);
+    const deactivate = await PerformRequest.UpdateParent({
+      ...thisParent,
+      parentID: thisParent.id,
+      status: "inactive",
+    });
+    setParentStatusToggling(false);
+    if (deactivate.data.response_code === 200) {
+      addToast("Parent Deactivated!", { appearance: "success" });
+      ConsumerContext.refetchData();
+    }
   };
   return (
     <div className="home-page">
@@ -46,7 +116,10 @@ export default function Parents() {
             Recent Parent(s)
           </span>
           {isViewParent && (
-            <ParentProfileView showViewParentModal={showViewParentModal} />
+            <ParentProfileView
+              showViewParentModal={showViewParentModal}
+              parent={parent}
+            />
           )}
           {isAddNewPairing && (
             <CreatePairing showCreatePairingModal={showCreatePairingModal} />
@@ -62,22 +135,25 @@ export default function Parents() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {parents.map((parent, index) => {
+                  {ConsumerContext.Parents.map((parent, index) => {
                     return (
                       <Tr
                         className="fw-600 poppins recent-table-row table-purple-row "
-                        key={parent.email}
+                        key={parent.primary.email}
                       >
                         <Td>
                           {index + 1}. &nbsp;{" "}
-                          <span className="uppercase">{parent.name}</span>
+                          <span className="uppercase">
+                            {parent.primary.firstname} {parent.primary.lastname}
+                          </span>
                         </Td>
-                        <Td>{parent.email}</Td>
+                        <Td>{parent.primary.email}</Td>
                         <Td className="flex-row align-center recent-table-actions">
                           <span
                             className="flex-row recent-table-action align-center"
                             onClick={() => {
                               showViewParentModal(true);
+                              setCurrentParent(parent);
                             }}
                           >
                             <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -86,12 +162,22 @@ export default function Parents() {
                             className="flex-row recent-table-action align-center"
                             onClick={() => {
                               showViewParentModal(true);
+                              setCurrentParent(parent);
                             }}
                           >
                             <i className="far fa-eye" /> &nbsp; View
                           </span>
-                          <span className="flex-row recent-table-action align-center">
-                            {parent.status ? "Deactivate" : "Activate"}
+                          <span
+                            className="flex-row recent-table-action align-center"
+                            onClick={() => {
+                              parent.status === "active"
+                                ? DeactivateParent(parent)
+                                : ActivateParent(parent);
+                            }}
+                          >
+                            {parent.status === "active"
+                              ? "Deactivate"
+                              : "Activate"}
                           </span>
                         </Td>
                       </Tr>
@@ -117,17 +203,20 @@ export default function Parents() {
                 <br />
                 <Table variant="simple" colorScheme="whiteAlpha">
                   <Tbody>
-                    {parents.map((parent, index) => {
+                    {pairedParents.map((parent, index) => {
                       return (
                         <Tr
                           className="fw-600 poppins recent-table-row table-small-row  table-white-row"
-                          key={parent.email}
+                          key={parent.primary.email}
                         >
                           <Td>
                             {index + 1}. &nbsp;{" "}
-                            <span className="uppercase">{parent.name}</span>
+                            <span className="uppercase">
+                              {parent.primary.firstname}{" "}
+                              {parent.primary.lastname}
+                            </span>
                           </Td>
-                          <Td>{parent.email}</Td>
+                          <Td>{parent.primary.email}</Td>
                           <Td className="flex-row align-center recent-table-actions table-small-actions">
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
@@ -164,15 +253,18 @@ export default function Parents() {
                 <br />
                 <Table variant="simple" colorScheme="whiteAlpha">
                   <Tbody>
-                    {parents.map((parent, index) => {
+                    {unPairedParents.map((parent, index) => {
                       return (
                         <Tr
                           className="fw-600 poppins recent-table-row table-small-row table-white-row "
-                          key={parent.email}
+                          key={parent.primary.email}
                         >
                           <Td>
                             {index + 1}. &nbsp;{" "}
-                            <span className="uppercase">{parent.name}</span>
+                            <span className="uppercase">
+                              {parent.primary.firstname}{" "}
+                              {parent.primary.lastname}
+                            </span>
                           </Td>
                           <Td>{parent.email}</Td>
                           <Td className="flex-row align-center recent-table-actions table-small-actions">

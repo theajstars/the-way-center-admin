@@ -53,6 +53,14 @@ const UpdateParent = async (parent) => {
   });
 };
 
+const CreatePairing = async (pairingForm) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.CreatePairing,
+    data: pairingForm,
+  });
+};
+
 const GetCountries = async () => {
   return FetchData({
     method: "GET",
@@ -75,6 +83,7 @@ const PerformRequest = {
   GetMetrics,
   UpdateSurrogate,
   UpdateParent,
+  CreatePairing,
 };
 
 export { PerformRequest };
