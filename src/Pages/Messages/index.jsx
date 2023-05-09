@@ -1,13 +1,87 @@
+import { useEffect, useState, useContext } from "react";
 import { Typography } from "@mui/material";
-import { useState } from "react";
 import {
   InboxMessages,
   ParentMessages,
   SampleMessages,
 } from "../../Assets/Data";
 import { motion } from "framer-motion";
+import { PerformRequest } from "../../API/PerformRequests";
+import { DefaultContext } from "../Dashboard";
+import { getFullDate } from "../../App";
 
 export default function Messages() {
+  const ContextConsumer = useContext(DefaultContext);
+  const [parents, setParents] = useState(ContextConsumer.Parents);
+
+  const [messages, setMessages] = useState([]);
+  const [messageText, setMessageText] = useState("");
+
+  const [currentParent, setCurrentParent] = useState(undefined);
+  const [reference, setReference] = useState(undefined);
+  const [currentMessages, setCurrentMessages] = useState([]);
+  const [messageSending, setMessageSending] = useState(false);
+  const [messagesLoading, setMessagesLoading] = useState(false);
+
+  const getMessages = async () => {
+    const r = await PerformRequest.GetMessageList();
+    console.log(r);
+    if (r.data.status === "success") {
+      setMessages(r.data.data);
+    }
+  };
+
+  const createReference = async (parentID) => {
+    setMessagesLoading(true);
+    const r = await PerformRequest.CreateMessageReference({
+      parentID: parentID,
+    });
+    console.log(r);
+    if (r.data.message === "Message has been created for this parent") {
+      setReference(r.data.data.reference);
+      await getCurrentMessages(r.data.data.reference);
+      setMessagesLoading(false);
+    }
+    setMessagesLoading(false);
+  };
+
+  const checkSendMessage = async ({ isMedia, media }) => {
+    setMessageSending(true);
+    const r = await PerformRequest.SendMessage({
+      reference,
+      post: messageText,
+    });
+    setMessageSending(false);
+    console.log(r);
+    if (r.data.status === "success") {
+      setMessageText("");
+      getCurrentMessages(reference);
+    }
+  };
+
+  const SendMessage = () => {
+    checkSendMessage({ isMedia: false });
+  };
+  const getCurrentMessages = async (reference) => {
+    if (reference) {
+      const r = await PerformRequest.GetCurrentMessages(reference);
+      console.log(r);
+      if (r.data.status === "success") {
+        setCurrentMessages(r.data.data.reverse());
+      }
+    }
+  };
+  useEffect(() => {
+    if (currentParent) {
+      createReference(currentParent.id);
+    }
+  }, [currentParent]);
+  useEffect(() => {
+    getMessages();
+  }, []);
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
   const isSmallScreen = window.innerWidth <= 1050;
 
   const [currentSmallView, setCurrentSmallView] = useState("sidebar");
@@ -19,9 +93,6 @@ export default function Messages() {
         className="toggle-messages px-18 pointer"
         onClick={() => {
           setCurrentSmallView("sidebar");
-          // setCurrentSmallView(
-          //   currentSmallView === "sidebar" ? "chat-section" : "sidebar"
-          // );
         }}
       >
         <i className="far fa-users" />
@@ -128,24 +199,25 @@ export default function Messages() {
                 <div className="sidebar-section flex-column width-100">
                   <span className="px-20 poppins fw-600">Parents</span>
 
-                  {ParentMessages.map((inboxMessage) => {
+                  {parents.map((parent) => {
                     return (
                       <div
                         className="sidebar-item flex-row align-center space-between width-100"
                         onClick={() => {
                           setCurrentSmallView("chat-section");
-                          setCurrentUser(inboxMessage);
+                          setCurrentParent(parent);
                         }}
                       >
                         <div className="sidebar-item-left flex-row align-center">
                           <img
-                            src={inboxMessage.image}
+                            src={parent.primary.image}
                             alt=""
                             className="sidebar-item-image"
                           />
                           <div className="flex-column sidebar-item-details">
                             <span className="px-15 fw-500 poppins">
-                              {inboxMessage.name}
+                              {parent.primary.firstname}&nbsp;
+                              {parent.primary.lastname}
                             </span>
                             <span className="px-12 poppins">&nbsp;</span>
                           </div>
@@ -246,7 +318,7 @@ export default function Messages() {
                 </div>
                 <div className="sidebar-section flex-column width-100">
                   <span className="px-20 poppins fw-600">Inbox</span>
-                  <div className="sidebar-item flex-row align-center space-between width-100">
+                  {/* <div className="sidebar-item flex-row align-center space-between width-100">
                     <div className="sidebar-item-left flex-row align-center">
                       <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_CQ3IrjZcisW-FO12jxRtSA9shZYuykqA2w&usqp=CAU"
@@ -270,28 +342,28 @@ export default function Messages() {
                         4
                       </span>
                     </div>
-                  </div>
-                  {InboxMessages.map((inboxMessage) => {
+                  </div> */}
+                  {messages.map((inboxMessage) => {
                     return (
                       <div className="sidebar-item flex-row align-center space-between width-100">
                         <div className="sidebar-item-left flex-row align-center">
                           <img
-                            src={inboxMessage.image}
+                            src={inboxMessage.receiver.image}
                             alt=""
                             className="sidebar-item-image"
                           />
                           <div className="flex-column sidebar-item-details">
                             <span className="px-15 fw-500 poppins">
-                              {inboxMessage.name}
+                              {inboxMessage.receiver.fullname}
                             </span>
                             <span className="px-12 poppins">
-                              {inboxMessage.message}
+                              {/* {inboxMessage.message} */}
                             </span>
                           </div>
                         </div>
                         <div className="flex-row align-center">
                           <span className="px-13 poppins gray-secondary-text">
-                            Today, <br /> 12: 43pm
+                            {inboxMessage.lastMessageTime}
                           </span>
                         </div>
                       </div>
@@ -301,26 +373,28 @@ export default function Messages() {
                 <div className="sidebar-section flex-column width-100">
                   <span className="px-20 poppins fw-600">Parents</span>
 
-                  {ParentMessages.map((inboxMessage) => {
+                  {parents.map((parent) => {
                     return (
-                      <div className="sidebar-item flex-row align-center space-between width-100">
-                        <div className="sidebar-item-left flex-row align-center">
+                      <div
+                        className="sidebar-item flex-row align-center space-between width-100"
+                        onClick={() => {
+                          setCurrentSmallView("chat-section");
+                          setCurrentParent(parent);
+                        }}
+                      >
+                        <div className="sidebar-item-left flex-row align-center width-100">
                           <img
-                            src={inboxMessage.image}
+                            src={parent.primary.image}
                             alt=""
                             className="sidebar-item-image"
                           />
                           <div className="flex-column sidebar-item-details">
                             <span className="px-15 fw-500 poppins">
-                              {inboxMessage.name}
+                              {parent.primary.firstname}&nbsp;
+                              {parent.primary.lastname}
                             </span>
                             <span className="px-12 poppins">&nbsp;</span>
                           </div>
-                        </div>
-                        <div className="flex-row align-center">
-                          <span className="px-13 poppins gray-secondary-text">
-                            Today, <br /> 12: 43pm
-                          </span>
                         </div>
                       </div>
                     );
@@ -328,65 +402,100 @@ export default function Messages() {
                 </div>
               </div>
 
-              <div className="chat-section large-chat-section flex-column">
-                <div className="chat-section-top width-100 flex-column">
-                  <div className="flex-row chat-header align-center space-between">
-                    <div className="chat-header-left flex-row align-center">
-                      <img
-                        src="https://www.w3schools.com/howto/img_avatar2.png"
-                        alt=""
-                        className="chat-section-avatar"
-                      />
-                      <div className="flex-column">
-                        <span className="poppins px-16 fw-500">
-                          Shola Thomas
-                        </span>
-                        <span className="poppins px-12 gray-secondary-text">
+              {currentParent && (
+                <div className="chat-section large-chat-section flex-column">
+                  <div className="chat-section-top width-100 flex-column">
+                    <div className="flex-row chat-header align-center space-between">
+                      <div className="chat-header-left flex-row align-center">
+                        <img
+                          src={currentParent.primary.image}
+                          alt=""
+                          className="chat-section-avatar"
+                        />
+                        <div className="flex-column">
+                          <span className="poppins px-16 fw-500">
+                            {currentParent.primary.firstname}{" "}
+                            {currentParent.primary.lastname}
+                          </span>
+                          {/* <span className="poppins px-12 gray-secondary-text">
                           Online - Last seen, 2:02pm
-                        </span>
+                        </span> */}
+                        </div>
                       </div>
+                      <span className="chat-menu-btn flex-row align-center justify-center pointer px-16 purple-default-text">
+                        <i className="fas fa-ellipsis-v" />
+                      </span>
                     </div>
-                    <span className="chat-menu-btn flex-row align-center justify-center pointer px-16 purple-default-text">
-                      <i className="fas fa-ellipsis-v" />
-                    </span>
-                  </div>
-                  <div className="chat-messages flex-column width-100">
-                    {SampleMessages.map((message, index) => {
-                      return (
+                    <div className="chat-messages flex-column width-100">
+                      {messagesLoading ? (
                         <>
-                          {message.type === "sent" ? (
-                            <SentMessage
-                              time={message.date}
-                              message={message.text}
-                            />
-                          ) : (
-                            <ReceivedMessage
-                              time={message.date}
-                              message={message.text}
-                            />
-                          )}
+                          <center>
+                            <span className="px-25">
+                              <i className="far fa-spinner-third fa-spin"></i>
+                            </span>
+                          </center>
                         </>
-                      );
-                    })}
+                      ) : (
+                        <>
+                          {currentMessages.map((message, index) => {
+                            return (
+                              <>
+                                {message.sender.fullname ===
+                                "The Way Center" ? (
+                                  <SentMessage
+                                    time={message.createdOn}
+                                    message={message.post}
+                                  />
+                                ) : (
+                                  <ReceivedMessage
+                                    time={message.createdOn}
+                                    message={message.post}
+                                  />
+                                )}
+                              </>
+                            );
+                          })}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="chat-messages-bottom flex-row align-center width-100 space-between">
+                    <div className="send-message-container flex-row align-center">
+                      <input
+                        type="text"
+                        placeholder="Type your message here..."
+                        spellCheck={false}
+                        value={messageText}
+                        onChange={(e) => setMessageText(e.target.value)}
+                        className="send-message-input poppins px-15"
+                        onKeyDown={(e) => {
+                          // Check if key is enter key
+                          if (e.keyCode === 13) {
+                            SendMessage();
+                          }
+                        }}
+                      />
+                      <span className="px-20 pointer">
+                        <i className="far fa-paperclip" />
+                      </span>
+                    </div>
+                    <button
+                      className="send-message-btn uppercase poppins white-text px-15"
+                      onClick={SendMessage}
+                      disabled={messageSending}
+                      style={{
+                        opacity: messageSending ? "0.5" : "1",
+                      }}
+                    >
+                      {messageSending ? (
+                        <i className="far fa-spinner-third fa-spin" />
+                      ) : (
+                        <>Send Message</>
+                      )}
+                    </button>
                   </div>
                 </div>
-                <div className="chat-messages-bottom flex-row align-center width-100 space-between">
-                  <div className="send-message-container flex-row align-center">
-                    <input
-                      type="text"
-                      placeholder="Type your message here..."
-                      spellCheck={false}
-                      className="send-message-input poppins px-15"
-                    />
-                    <span className="px-20 pointer">
-                      <i className="far fa-paperclip" />
-                    </span>
-                  </div>
-                  <button className="send-message-btn uppercase poppins white-text px-15">
-                    Send Message
-                  </button>
-                </div>
-              </div>
+              )}
             </>
           )}
         </div>
@@ -404,7 +513,7 @@ function ReceivedMessage({ time, message }) {
         </span>
       </div>
       <span className="px-13 poppins gray-secondary-text message-time received-message-time">
-        {time}
+        {getFullDate(time)}
       </span>
     </div>
   );
@@ -420,7 +529,7 @@ function SentMessage({ time, message }) {
       </div>
 
       <span className="px-13 poppins gray-secondary-text message-time sent-message-time">
-        {time}
+        {getFullDate(time)}
       </span>
     </div>
   );

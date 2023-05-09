@@ -74,6 +74,13 @@ const AddReportFile = async (report) => {
     data: report,
   });
 };
+const SendReportNotification = async (parent) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.SendReportNotification,
+    data: parent,
+  });
+};
 
 const GetCountries = async () => {
   return FetchData({
@@ -85,6 +92,33 @@ const GetMetrics = async () => {
   return FetchData({
     method: "GET",
     route: Endpoints.GetMetrics,
+  });
+};
+
+const GetMessageList = async () => {
+  return FetchData({
+    method: "GET",
+    route: Endpoints.GetMessageList,
+  });
+};
+const CreateMessageReference = async (parent) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.CreateMessageReference,
+    data: parent,
+  });
+};
+const SendMessage = async (message) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.SendMessage,
+    data: message,
+  });
+};
+const GetCurrentMessages = async (reference) => {
+  return FetchData({
+    method: "GET",
+    route: `${Endpoints.GetCurrentMessages}?reference=${reference}`,
   });
 };
 
@@ -100,6 +134,11 @@ const PerformRequest = {
   CreatePairing,
   CreateReport,
   AddReportFile,
+  SendReportNotification,
+  CreateMessageReference,
+  SendMessage,
+  GetMessageList,
+  GetCurrentMessages,
 };
 
 export { PerformRequest };

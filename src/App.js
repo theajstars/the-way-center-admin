@@ -49,7 +49,30 @@ function validateNIN(nin) {
     }
   }
 }
+function getFullDate(dateString) {
+  var month = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
+  const d = new Date(dateString);
+  const m = month[d.getMonth()];
+  const date = d.getDate();
+  const hour = d.getHours();
+  const minute = d.getMinutes();
+
+  return `${m} ${date}, ${hour}:${minute}`;
+}
 function App() {
   const token = Cookies.get("token");
 
@@ -74,4 +97,4 @@ function App() {
 }
 
 export default App;
-export { validateEmail, validateBVN, validateNIN };
+export { validateEmail, validateBVN, validateNIN, getFullDate };

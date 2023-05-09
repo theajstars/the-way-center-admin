@@ -21,6 +21,12 @@ const Endpoints = {
   CreatePairing: "/pair/create",
   AddReportFile: "/report/files/add",
   CreateReport: "/report/create",
+  SendReportNotification: "/report/send-notification",
+
+  GetMessageList: "/message/list",
+  SendMessage: "/message/send",
+  CreateMessageReference: "/message/create",
+  GetCurrentMessages: "/message/logs",
 };
 
 export { Endpoints };

@@ -60,7 +60,7 @@
   margin-right: 10px;
 }
 .sidebar-item-details {
-  max-width: 160px;
+  max-width: 180px;
 }
 .sidebar-item-badge {
   background-color: var(--orange-primary);
@@ -113,6 +113,8 @@
 
 .chat-messages {
   margin-top: 20px;
+  max-height: 500px;
+  overflow-y: auto;
 }
 .chat-messages-bottom {
 }

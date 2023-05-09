@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import {
   InputLabel,
@@ -9,6 +9,8 @@ import {
   FormControl,
   Button,
 } from "@mui/material";
+import { useToasts } from "react-toast-notifications";
+
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
 import { DateField, DatePicker } from "@mui/x-date-pickers";
 import {
@@ -22,13 +24,19 @@ import dayjs from "dayjs";
 
 import Confirmation from "../Confirmation";
 import SurrogateReportCreate from "../SurrogateReportCreate";
+import { UploadFile } from "../../API/FetchData";
+import { validatePhone } from "../../Lib/Validate";
+import { validateEmail } from "../../App";
+import { PerformRequest } from "../../API/PerformRequests";
 
 export default function SurrogateUpdate({
   showUpdateSurrogateModal,
   surrogate,
 }) {
   const [isModalOpen, setModalOpen] = useState(true);
+  const { addToast, removeAllToasts } = useToasts();
 
+  console.log(surrogate);
   const [currentFormSection, setCurrentFormSection] = useState(1);
   const [surrogateForm, setSurrogateForm] = useState(surrogate);
   const primaryImageUploadRef = useRef();
@@ -68,6 +76,103 @@ export default function SurrogateUpdate({
     setModalOpen(false);
     showUpdateSurrogateModal(false);
   };
+  const fileIsLarge = () => {
+    addToast("Max File Size: 1.5MB", { appearance: "error" });
+  };
+  const [imageUploading, setImageUploading] = useState(false);
+
+  const UploadSurrogateImage = async (label, image) => {
+    let imageFormData = new FormData();
+
+    imageFormData.append(
+      "file",
+      image,
+      image.name.toLowerCase().split(" ").join().replaceAll(",", "")
+    );
+    setImageUploading(true);
+    const uploadImage = await UploadFile({
+      formData: imageFormData,
+    });
+    console.log(uploadImage);
+    setImageUploading(false);
+    if (label === "Primary") {
+      setSurrogateForm({
+        ...surrogateForm,
+        primary: {
+          ...surrogateForm.primary,
+          mainImage: uploadImage.data.fileUrl,
+        },
+      });
+    } else {
+      setSurrogateForm({
+        ...surrogateForm,
+        primary: {
+          ...surrogateForm.primary,
+          secondImage: uploadImage.data.fileUrl,
+        },
+      });
+    }
+  };
+  const [formSubmitting, setFormSubmitting] = useState(false);
+  const [formErrors, setFormErrors] = useState({
+    firstname: false,
+    lastname: false,
+
+    address: false,
+    primaryPhone: false,
+    primaryEmailAddress: false,
+  });
+  const UpdateFormErrors = () => {
+    const isPrimaryPhoneValid = validatePhone(surrogateForm.primary.phone);
+
+    const isPrimaryEmailValid = validateEmail(surrogateForm.primary.email);
+
+    setFormErrors({
+      ...formErrors,
+      firstname: surrogateForm.primary.firstname.length === 0,
+      lastname: surrogateForm.primary.lastname.length === 0,
+
+      address: surrogateForm.address.length === 0,
+      primaryEmailAddress: !isPrimaryEmailValid,
+
+      primaryPhone: !isPrimaryPhoneValid,
+    });
+  };
+  useEffect(() => {
+    UpdateSurrogate();
+  }, [formErrors]);
+  const UpdateSurrogate = async () => {
+    console.log(formErrors);
+    if (formSubmitting) {
+      const errors = Object.values(formErrors).filter((e) => e === true);
+      if (errors.length > 0) {
+        setFormSubmitting(false);
+
+        addToast("Please fill the form correctly", { appearance: "error" });
+      } else {
+        const data = {
+          surrogateID: surrogate.id,
+          firstname: surrogateForm.primary.firstname,
+          lastname: surrogateForm.primary.lastname,
+          address: surrogateForm.primary.address,
+          phone: surrogateForm.primary.phone,
+          email: surrogateForm.primary.email,
+          mainImage: surrogateForm.primary.mainImage,
+          secondImage: surrogateForm.primary.secondImage,
+        };
+        const updateRequest = await PerformRequest.UpdateSurrogate(data);
+        console.log(updateRequest);
+        const { message: responseMessage } = updateRequest.data;
+        if (updateRequest.data.status === "failed") {
+          addToast(responseMessage, { appearance: "error" });
+        } else {
+          addToast(responseMessage, { appearance: "success" });
+          setShowConfirmationModal(true);
+          showUpdateSurrogateModal(false);
+        }
+      }
+    }
+  };
   return (
     <>
       {showConfirmationModal && (
@@ -105,10 +210,11 @@ export default function SurrogateUpdate({
           onChange={(e) => {
             console.log(e.target.files);
             const image = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
-              primaryImage: URL.createObjectURL(image),
-            });
+            if (image.size > 1547220) {
+              fileIsLarge();
+            } else {
+              UploadSurrogateImage("Primary", image);
+            }
           }}
         />
         <input
@@ -119,10 +225,11 @@ export default function SurrogateUpdate({
           onChange={(e) => {
             console.log(e.target.files);
             const image = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
-              secondaryImage: URL.createObjectURL(image),
-            });
+            if (image.size > 1547220) {
+              fileIsLarge();
+            } else {
+              UploadSurrogateImage("Secondary", image);
+            }
           }}
         />
         <input
@@ -185,6 +292,7 @@ export default function SurrogateUpdate({
                   <TextField
                     label="First Name"
                     value={surrogateForm.primary.firstname}
+                    error={formErrors.firstname}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -198,7 +306,8 @@ export default function SurrogateUpdate({
                   />
                   <TextField
                     label="Last Name"
-                    value={surrogateForm.lastname}
+                    value={surrogateForm.primary.lastname}
+                    error={formErrors.lastname}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -254,6 +363,7 @@ export default function SurrogateUpdate({
                   <TextField
                     label="Address"
                     value={surrogateForm.address}
+                    error={formErrors.address}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -267,6 +377,7 @@ export default function SurrogateUpdate({
                   <TextField
                     label="Primary Phone Number"
                     value={surrogateForm.primary.phone}
+                    error={formErrors.primaryPhone}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -283,6 +394,7 @@ export default function SurrogateUpdate({
                   <TextField
                     label="Primary Email Address"
                     value={surrogateForm.primary.email}
+                    error={formErrors.primaryEmailAddress}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -359,14 +471,25 @@ export default function SurrogateUpdate({
                   </span>
                 </span>
                 <br />
-                <span
+                <button
+                  disabled={formSubmitting || imageUploading}
+                  style={{
+                    opacity: formSubmitting || imageUploading ? "0.5" : "1",
+                  }}
                   className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                   onClick={() => {
-                    setCurrentFormSection(2);
+                    // setCurrentFormSection(2);
+                    setFormSubmitting(true);
+                    UpdateFormErrors();
                   }}
                 >
-                  Next Step &nbsp; <i className="far fa-long-arrow-alt-right" />
-                </span>
+                  Update &nbsp;
+                  {formSubmitting || imageUploading ? (
+                    <i className="far fa-spinner-third fa-spin" />
+                  ) : (
+                    <i className="far fa-long-arrow-alt-right" />
+                  )}
+                </button>
               </div>
             </div>
           ) : (
@@ -513,14 +636,17 @@ export default function SurrogateUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Next of Kin Full Name"
-                    value={surrogateForm.nextOfKin.name}
+                    value={surrogateForm.primary.nok.fullname}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
                         ...surrogateForm,
-                        nextOfKin: {
-                          ...surrogateForm.nextOfKin,
-                          name: e.target.value,
+                        primary: {
+                          ...surrogateForm.primary,
+                          nok: {
+                            ...surrogateForm.primary.nok,
+                            fullname: e.target.value,
+                          },
                         },
                       })
                     }
@@ -529,14 +655,17 @@ export default function SurrogateUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Address"
-                    value={surrogateForm.nextOfKin.address}
+                    value={surrogateForm.primary.nok.address}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
                         ...surrogateForm,
-                        nextOfKin: {
-                          ...surrogateForm.nextOfKin,
-                          address: e.target.value,
+                        primary: {
+                          ...surrogateForm.primary,
+                          nok: {
+                            ...surrogateForm.primary.nok,
+                            address: e.target.value,
+                          },
                         },
                       })
                     }
@@ -545,14 +674,17 @@ export default function SurrogateUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Next of Kin Phone Number"
-                    value={surrogateForm.nextOfKin.phone}
+                    value={surrogateForm.primary.nok.phone}
                     {...defaultFullInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
                         ...surrogateForm,
-                        nextOfKin: {
-                          ...surrogateForm.nextOfKin,
-                          phone: e.target.value,
+                        primary: {
+                          ...surrogateForm.primary,
+                          nok: {
+                            ...surrogateForm.primary.nok,
+                            phone: e.target.value,
+                          },
                         },
                       })
                     }
@@ -566,13 +698,16 @@ export default function SurrogateUpdate({
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateForm.nextOfKin.relationship}
+                      value={surrogateForm.primary.nok.relationship}
                       onChange={(e) =>
                         setSurrogateForm({
                           ...surrogateForm,
-                          nextOfKin: {
-                            ...surrogateForm.nextOfKin,
-                            relationship: e.target.value,
+                          primary: {
+                            ...surrogateForm.primary,
+                            relationship: {
+                              ...surrogateForm.primary.nok,
+                              fullname: e.target.value,
+                            },
                           },
                         })
                       }
@@ -588,7 +723,7 @@ export default function SurrogateUpdate({
                     </Select>
                   </FormControl>
                 </div>
-                <div className="flex-row space-between modal-input-row">
+                {/* <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="National Identification Number"
                     value={surrogateForm.nextOfKin.nationalIdentificationNumber}
@@ -603,7 +738,7 @@ export default function SurrogateUpdate({
                       })
                     }
                   />
-                </div>
+                </div> */}
               </div>
               <div className="flex-column modal-form-right space-between">
                 <span className="flex-column align-center width-100">
