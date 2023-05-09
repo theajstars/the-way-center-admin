@@ -222,6 +222,7 @@ export default function Parents() {
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
                                 showViewParentModal(true);
+                                setCurrentParent(parent);
                               }}
                             >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -230,6 +231,7 @@ export default function Parents() {
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
                                 showViewParentModal(true);
+                                setCurrentParent(parent);
                               }}
                             >
                               <i className="far fa-eye" /> &nbsp; View
@@ -272,6 +274,7 @@ export default function Parents() {
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
                                 showViewParentModal(true);
+                                setCurrentParent(parent);
                               }}
                             >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -281,6 +284,7 @@ export default function Parents() {
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
                                 showViewParentModal(true);
+                                setCurrentParent(parent);
                               }}
                             >
                               <i className="far fa-eye" /> &nbsp; View

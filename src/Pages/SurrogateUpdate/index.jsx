@@ -93,6 +93,7 @@ export default function SurrogateUpdate({
       {showCreateReport && (
         <SurrogateReportCreate
           showSurrogateReportModal={showSurrogateReportModal}
+          surrogate={surrogate}
         />
       )}
       <>

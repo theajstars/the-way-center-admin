@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -18,13 +18,21 @@ import {
   Text,
 } from "@chakra-ui/react";
 import DashboardOverview from "../DashboardOverview";
-import { RecentParents as RecentSurrogates } from "../../Assets/Data";
+import {
+  initialSurrogate,
+  RecentParents as RecentSurrogates,
+} from "../../Assets/Data";
 import SurrogateProfileView from "../SurrogateProfileView";
 import CreatePairing from "../CreatePairing";
+import { DefaultContext } from "../Dashboard";
+import { PerformRequest } from "../../API/PerformRequests";
 
 export default function Surrogates() {
   const navigate = useNavigate();
+  const ContextConsumer = useContext(DefaultContext);
+  console.log(ContextConsumer);
   const [surrogates, setSurrogates] = useState(RecentSurrogates);
+  const [currentSurrogate, setCurrentSurrogate] = useState(initialSurrogate);
 
   const [isViewSurrogate, setViewSurrogate] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -37,6 +45,46 @@ export default function Surrogates() {
   const showCreatePairingModal = (value) => {
     setAddNewPairing(value);
   };
+  const [recentSurrogates, setRecentSurrogates] = useState(
+    ContextConsumer.Surrogates ?? []
+  );
+  const [recentPairedSurrogates, setRecentPairedSurrogates] = useState(
+    ContextConsumer.Surrogates ?? []
+  );
+  const [recentUnPairedSurrogates, setRecentUnPairedSurrogates] = useState(
+    ContextConsumer.Surrogates ?? []
+  );
+
+  const getRecentSurrogates = async () => {
+    const r = await PerformRequest.GetAllSurrogates({
+      orderBy: "new",
+    });
+    console.log(r);
+    if (r.data.response_code === 200) {
+      setRecentSurrogates(r.data.data ?? []);
+    }
+  };
+  const getRecentPairedSurrogates = async () => {
+    const r = await PerformRequest.GetAllSurrogates({
+      orderBy: "new",
+      isPaired: "Yes",
+    });
+    console.log(r);
+    if (r.data.response_code === 200) {
+      setRecentPairedSurrogates(r.data.data ?? []);
+    }
+  };
+  const getRecentUnPairedSurrogates = async () => {
+    const r = await PerformRequest.GetAllSurrogates({
+      orderBy: "new",
+      isPaired: "No",
+    });
+    console.log(r);
+    if (r.data.response_code === 200) {
+      setRecentUnPairedSurrogates(r.data.data ?? []);
+    }
+  };
+
   return (
     <div className="home-page">
       {isAddNewPairing && (
@@ -44,9 +92,8 @@ export default function Surrogates() {
       )}
       {isViewSurrogate && (
         <SurrogateProfileView
-          // showViewSurrogateModal={(val) => console.log(val)}
           showViewSurrogateModal={showViewSurrogateModal}
-          // isUpdate={isUpdate}
+          surrogate={currentSurrogate}
         />
       )}
       <Typography className="poppins fw-500" variant="h5">
@@ -71,23 +118,26 @@ export default function Surrogates() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {surrogates.map((surrogate, index) => {
+                  {ContextConsumer.Surrogates.map((surrogate, index) => {
                     return (
                       <Tr
                         className="fw-600 poppins recent-table-row table-purple-row "
-                        key={surrogate.email}
+                        key={surrogate.primary.email}
                       >
                         <Td>
                           {index + 1}. &nbsp;{" "}
-                          <span className="uppercase">{surrogate.name}</span>
+                          <span className="capitalize">
+                            {surrogate.primary.firstname}&nbsp;
+                            {surrogate.primary.lastname}
+                          </span>
                         </Td>
-                        <Td>{surrogate.email}</Td>
+                        <Td>{surrogate.primary.email}</Td>
                         <Td className="flex-row align-center recent-table-actions">
                           <span
                             className="flex-row recent-table-action align-center"
                             onClick={() => {
                               showViewSurrogateModal(true);
-                              setIsUpdate(true);
+                              setCurrentSurrogate(surrogate);
                             }}
                           >
                             <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -96,6 +146,7 @@ export default function Surrogates() {
                             className="flex-row recent-table-action align-center"
                             onClick={() => {
                               showViewSurrogateModal(true);
+                              setCurrentSurrogate(surrogate);
                             }}
                           >
                             <i className="far fa-eye" /> &nbsp; View
@@ -132,15 +183,16 @@ export default function Surrogates() {
                 <br />
                 <Table variant="simple" colorScheme="whiteAlpha">
                   <Tbody>
-                    {surrogates.map((surrogate, index) => {
+                    {recentPairedSurrogates.map((surrogate, index) => {
                       return (
                         <Tr
                           className="fw-600 poppins recent-table-row table-small-row  table-white-row"
-                          key={surrogate.email}
+                          key={surrogate.primary.email}
                         >
                           <Td>
-                            {index + 1}. &nbsp;{" "}
-                            <span className="uppercase">{surrogate.name}</span>
+                            {index + 1}. &nbsp; {surrogate.primary.firstname}
+                            &nbsp;
+                            {surrogate.primary.lastname}
                           </Td>
                           <Td>{surrogate.email}</Td>
                           <Td className="flex-row align-center recent-table-actions table-small-actions">
@@ -148,6 +200,7 @@ export default function Surrogates() {
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
                                 showViewSurrogateModal(true);
+                                setCurrentSurrogate(surrogate);
                               }}
                             >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -156,6 +209,7 @@ export default function Surrogates() {
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
                                 showViewSurrogateModal(true);
+                                setCurrentSurrogate(surrogate);
                               }}
                             >
                               <i className="far fa-eye" /> &nbsp; View
@@ -181,22 +235,24 @@ export default function Surrogates() {
                 <br />
                 <Table variant="simple" colorScheme="whiteAlpha">
                   <Tbody>
-                    {surrogates.map((surrogate, index) => {
+                    {recentUnPairedSurrogates.map((surrogate, index) => {
                       return (
                         <Tr
                           className="fw-600 poppins recent-table-row table-small-row table-white-row "
-                          key={surrogate.email}
+                          key={surrogate.primary.email}
                         >
                           <Td>
-                            {index + 1}. &nbsp;{" "}
-                            <span className="uppercase">{surrogate.name}</span>
+                            {index + 1}. &nbsp; {surrogate.primary.firstname}
+                            &nbsp;
+                            {surrogate.primary.lastname}
                           </Td>
-                          <Td>{surrogate.email}</Td>
+                          <Td>{surrogate.primary.email}</Td>
                           <Td className="flex-row align-center recent-table-actions table-small-actions">
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
                                 showViewSurrogateModal(true);
+                                setCurrentSurrogate(surrogate);
                               }}
                             >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -206,6 +262,7 @@ export default function Surrogates() {
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
                                 showViewSurrogateModal(true);
+                                setCurrentSurrogate(surrogate);
                               }}
                             >
                               <i className="far fa-eye" /> &nbsp; View

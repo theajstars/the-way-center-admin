@@ -19,6 +19,8 @@ const Endpoints = {
   UpdateSurrogate: "/surrogate/update",
 
   CreatePairing: "/pair/create",
+  AddReportFile: "/report/files/add",
+  CreateReport: "/report/create",
 };
 
 export { Endpoints };

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 
 import {
   InputLabel,
@@ -9,11 +9,13 @@ import {
   FormControl,
 } from "@mui/material";
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
+import { useToasts } from "react-toast-notifications";
 import { DateField, DatePicker } from "@mui/x-date-pickers";
 import {
   CountriesList,
   CovidVaccinationDosage,
   Diseases,
+  initialSurrogateReport,
   NextOfKinRelationships,
   RecentParents,
   ReportCategories,
@@ -21,29 +23,32 @@ import {
 import dayjs from "dayjs";
 
 import Confirmation from "../Confirmation";
+import { DefaultContext } from "../Dashboard";
+import { PerformRequest } from "../../API/PerformRequests";
+import { UploadFile } from "../../API/FetchData";
 
-const initialSurrogateReport = {
-  parent: "",
-  surrogate: "",
-  categoryOfReport: "",
-  doctorName: "",
-  nextAppointmentDate: dayjs("2023-01-01"),
-  overview: "",
-  reportFile: undefined,
-  reportType: "",
-};
-export default function SurrogateReportCreate({ showSurrogateReportModal }) {
+export default function SurrogateReportCreate({
+  showSurrogateReportModal,
+  surrogate,
+}) {
   const [isModalOpen, setModalOpen] = useState(true);
+  const ContextConsumer = useContext(DefaultContext);
+
+  const { addToast, removeAllToasts } = useToasts();
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
   const [surrogateReport, setSurrogateReport] = useState(
     initialSurrogateReport
   );
   const reportFileUploadRef = useRef();
-  const secondaryImageUploadRef = useRef();
+  const [reportFile, setReportFile] = useState(undefined);
+  const [reportFileType, setReportFileType] = useState("");
 
-  const govtIdentificationUploadRef = useRef();
-  const covidVaccinationUploadRef = useRef();
+  const [reportErrors, setReportErrors] = useState({
+    reportFile: false,
+    reportType: false,
+  });
+
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
@@ -63,11 +68,7 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
   };
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const CreateSurrogateProfile = () => {
-    setModalOpen(false);
-    setShowConfirmationModal(true);
-    showSurrogateReportModal(true);
-  };
+
   const getConfirmationModalStatus = (value) => {
     setShowConfirmationModal(value);
     if (!value) {
@@ -107,6 +108,102 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
     },
     getConfirmationModalStatus: { getConfirmationModalStatus },
   });
+
+  const [formSubmitting, setFormSubmitting] = useState(false);
+
+  const [formErrors, setFormErrors] = useState({
+    parentID: false,
+    reportCategory: false,
+    healthPractitioner: false,
+    details: false,
+  });
+
+  const UpdateFormErrors = () => {
+    setFormErrors({
+      ...formErrors,
+      parentID: surrogateReport.parentID.length === 0,
+      reportCategory: surrogateReport.reportCategory.length === 0,
+      healthPractitioner: surrogateReport.healthPractitioner.length === 0,
+      details: surrogateReport.details.length === 0,
+    });
+  };
+  const [reportID, setReportID] = useState("");
+  useEffect(() => {
+    CreateReport();
+  }, [formErrors]);
+  const CreateReport = async () => {
+    console.log(formErrors);
+    if (formSubmitting) {
+      const errors = Object.values(formErrors).filter((e) => e === true);
+      if (errors.length > 0) {
+        setFormSubmitting(false);
+
+        addToast("Please fill the form correctly", { appearance: "error" });
+      } else {
+        const data = {
+          parentID: surrogateReport.parentID,
+          surrogateID: surrogate.id,
+          reportCategory: surrogateReport.reportCategory,
+          healthPractitioner: surrogateReport.healthPractitioner,
+          details: surrogateReport.details,
+          appointmentDate: surrogateReport.appointmentDate,
+        };
+        console.log(data);
+
+        const createReport = await PerformRequest.CreateReport(data);
+        setFormSubmitting(false);
+        removeAllToasts();
+        console.log(createReport);
+        const { message: responseMessage } = createReport.data;
+        if (createReport.data.status === "failed") {
+          addToast(responseMessage, { appearance: "error" });
+        } else {
+          addToast(responseMessage, { appearance: "success" });
+          setCurrentFormSection(2);
+          // setReportID();
+          // window.location.reload();
+        }
+        // setShowConfirmationModal(true);
+      }
+    }
+  };
+  const [isUploadFile, setUploadFile] = useState(false);
+  const UpdateFileErrors = async () => {
+    setReportErrors({
+      reportFile: reportFile === undefined,
+      reportType: reportFileType.length === 0,
+    });
+  };
+  useEffect(() => {
+    attachReportFile();
+  }, [reportErrors]);
+  const attachReportFile = async () => {
+    console.log(reportErrors);
+    if (isUploadFile) {
+      let reportFileFormData = new FormData();
+      reportFileFormData.append(
+        "file",
+        reportFile,
+        reportFile.name.toLowerCase().split(" ").join().replaceAll(",", "")
+      );
+
+      const uploadReportFile = await UploadFile({
+        formData: reportFileFormData,
+      });
+      console.log(uploadReportFile);
+      if (uploadReportFile.data.status === "success") {
+        const data = {
+          reportID: "",
+          reportType: "",
+          file: "",
+        };
+        const createReportFile = await PerformRequest.AddReportFile;
+      }
+    }
+  };
+  const fileIsLarge = () => {
+    addToast("Max File Size: 1.5MB", { appearance: "error" });
+  };
   return (
     <>
       {showConfirmationModal && <Confirmation {...confirmationModalParams} />}
@@ -118,54 +215,14 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
         onChange={(e) => {
           console.log(e.target.files);
           const image = e.target.files[0];
-          setSurrogateReport({
-            ...surrogateReport,
-            reportFile: image,
-          });
+          if (image.size > 1547220) {
+            fileIsLarge();
+          } else {
+            setReportFile(image);
+          }
         }}
       />
-      <input
-        type="file"
-        accept=".pdf, .jpg,  .png"
-        ref={secondaryImageUploadRef}
-        className="modal-image-hide"
-        onChange={(e) => {
-          console.log(e.target.files);
-          const image = e.target.files[0];
-          setSurrogateReport({
-            ...surrogateReport,
-            secondaryImage: URL.createObjectURL(image),
-          });
-        }}
-      />
-      <input
-        type="file"
-        accept=".pdf, .jpg,  .png"
-        ref={govtIdentificationUploadRef}
-        className="modal-image-hide"
-        onChange={(e) => {
-          console.log(e.target.files);
-          const file = e.target.files[0];
-          setSurrogateReport({
-            ...surrogateReport,
-            govtIdentificationFile: file,
-          });
-        }}
-      />
-      <input
-        type="file"
-        accept=".pdf, .jpg,  .png"
-        ref={covidVaccinationUploadRef}
-        className="modal-image-hide"
-        onChange={(e) => {
-          console.log(e.target.files);
-          const file = e.target.files[0];
-          setSurrogateReport({
-            ...surrogateReport,
-            covidVaccinationFile: file,
-          });
-        }}
-      />
+
       <Modal
         open={isModalOpen}
         onClose={(e, reason) => {
@@ -203,19 +260,21 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateReport.parent}
+                      value={surrogateReport.parentID}
+                      error={formErrors.parentID}
                       onChange={(e) => {
                         setSurrogateReport({
                           ...surrogateReport,
-                          parent: e.target.value,
+                          parentID: e.target.value,
                         });
                       }}
                       label="Select Parent"
                     >
-                      {RecentParents.map((parent, index) => {
+                      {ContextConsumer.Parents.map((parent, index) => {
                         return (
-                          <MenuItem value={parent.name} key={parent.name}>
-                            {parent.name}
+                          <MenuItem value={parent.id} key={parent.id}>
+                            {parent.primary.firstname}&nbsp;
+                            {parent.primary.lastname}
                           </MenuItem>
                         );
                       })}
@@ -228,23 +287,14 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateReport.parent}
-                      onChange={(e) => {
-                        setSurrogateReport({
-                          ...surrogateReport,
-                          parent: e.target.value,
-                        });
-                      }}
+                      value={surrogate.id}
                       label="Surrogate-NB (Auto Select)"
                       {...disabledInputProps}
                     >
-                      {RecentParents.map((parent, index) => {
-                        return (
-                          <MenuItem value={parent.name} key={parent.name}>
-                            {parent.name}
-                          </MenuItem>
-                        );
-                      })}
+                      <MenuItem value={surrogate.id} key={surrogate.id}>
+                        {surrogate.primary.firstname} &nbsp;
+                        {surrogate.primary.lastname}
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </div>
@@ -256,11 +306,12 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateReport.categoryOfReport}
+                      value={surrogateReport.reportCategory}
+                      error={formErrors.reportCategory}
                       onChange={(e) => {
                         setSurrogateReport({
                           ...surrogateReport,
-                          categoryOfReport: e.target.value,
+                          reportCategory: e.target.value,
                         });
                       }}
                       label="Category of Report"
@@ -280,31 +331,30 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     slotProps={{
                       textField: { variant: "standard" },
                     }}
-                    value={surrogateReport.nextAppointmentDate}
+                    value={surrogateReport.appointmentDate}
                     onChange={(e) => {
-                      console.log(e);
                       console.log(dayjs(e).toDate());
                       setSurrogateReport({
                         ...surrogateReport,
-                        nextAppointmentDate: e,
+                        appointmentDate: e,
                       });
                     }}
                     label="Date of Next Appointment"
                   />
                 </div>
                 <div className="flex-row space-between modal-input-row">
-                  <FormControl variant="standard" {...defaultFullInputProps}>
+                  {/* <FormControl variant="standard" {...defaultFullInputProps}>
                     <InputLabel id="demo-simple-select-standard-label">
                       Name of Doctor
                     </InputLabel>
                     <Select
                       labelId="demo-simple-select-standard-label"
                       id="demo-simple-select-standard"
-                      value={surrogateReport.doctorName}
+                      value={surrogateReport.healthPractitioner}
                       onChange={(e) => {
                         setSurrogateReport({
                           ...surrogateReport,
-                          doctorName: e.target.value,
+                          healthPractitioner: e.target.value,
                         });
                       }}
                       label="Name of Doctor"
@@ -317,7 +367,22 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                         );
                       })}
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
+                  <TextField
+                    {...defaultFullInputProps}
+                    id="standard-multiline-static"
+                    label="Health Practitioner"
+                    placeholder="Health Practitioner"
+                    variant="standard"
+                    value={surrogateReport.healthPractitioner}
+                    error={formErrors.healthPractitioner}
+                    onChange={(e) =>
+                      setSurrogateReport({
+                        ...surrogateReport,
+                        healthPractitioner: e.target.value,
+                      })
+                    }
+                  />
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
@@ -328,11 +393,12 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     rows={5}
                     placeholder="Overview"
                     variant="standard"
-                    value={surrogateReport.overview}
+                    value={surrogateReport.details}
+                    error={formErrors.details}
                     onChange={(e) =>
                       setSurrogateReport({
                         ...surrogateReport,
-                        overview: e.target.value,
+                        details: e.target.value,
                       })
                     }
                   />
@@ -343,10 +409,13 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                 <span
                   className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                   onClick={() => {
-                    setCurrentFormSection(2);
+                    UpdateFormErrors();
+                    setFormSubmitting(true);
+                    // setCurrentFormSection(2);
                   }}
                 >
-                  Next Step &nbsp; <i className="far fa-long-arrow-alt-right" />
+                  CREATE REPORT &nbsp;{" "}
+                  <i className="far fa-long-arrow-alt-right" />
                 </span>
               </div>
             </div>
@@ -363,12 +432,10 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                   <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
-                    value={surrogateReport.reportType}
+                    value={reportFileType}
+                    error={reportErrors.reportType}
                     onChange={(e) => {
-                      setSurrogateReport({
-                        ...surrogateReport,
-                        reportType: e.target.value,
-                      });
+                      setReportFileType(e.target.value);
                     }}
                     label="Select Report Type"
                   >
@@ -387,7 +454,14 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                     <span className="px-13 poppins fw-500">
                       &nbsp; &nbsp; Upload Document
                     </span>
-                    <div className="flex-row modal-form-file width-100">
+                    <div
+                      className="flex-row modal-form-file width-100"
+                      style={{
+                        borderColor: reportErrors.reportFile
+                          ? "red"
+                          : "#9a9ab0",
+                      }}
+                    >
                       <div className="px-13 poppins fw-500">
                         {surrogateReport.reportFile ? (
                           surrogateReport.reportFile.name
@@ -424,9 +498,12 @@ export default function SurrogateReportCreate({ showSurrogateReportModal }) {
                   <br />
                   <span
                     className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                    onClick={() => CreateSurrogateProfile()}
+                    onClick={() => {
+                      UpdateFileErrors();
+                      setUploadFile(true);
+                    }}
                   >
-                    Create Report &nbsp;{" "}
+                    Upload Report &nbsp;{" "}
                     <i className="far fa-long-arrow-alt-right" />
                   </span>
                 </div>

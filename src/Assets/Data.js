@@ -86,6 +86,14 @@ const initialSurrogate = {
     },
   ],
 };
+const initialSurrogateReport = {
+  parentID: "",
+  surrogateID: "",
+  reportCategory: "",
+  healthPractitioner: "",
+  appointmentDate: dayjs("2023-01-01"),
+  details: "",
+};
 const SurrogateRecords = [
   {
     title: "Your Surrogates next Doctors Appointment on",
@@ -2880,4 +2888,5 @@ export {
   ReportCategories,
   initialParent,
   initialSurrogate,
+  initialSurrogateReport,
 };

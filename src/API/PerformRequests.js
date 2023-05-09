@@ -60,6 +60,20 @@ const CreatePairing = async (pairingForm) => {
     data: pairingForm,
   });
 };
+const CreateReport = async (report) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.CreateReport,
+    data: report,
+  });
+};
+const AddReportFile = async (report) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.AddReportFile,
+    data: report,
+  });
+};
 
 const GetCountries = async () => {
   return FetchData({
@@ -84,6 +98,8 @@ const PerformRequest = {
   UpdateSurrogate,
   UpdateParent,
   CreatePairing,
+  CreateReport,
+  AddReportFile,
 };
 
 export { PerformRequest };
