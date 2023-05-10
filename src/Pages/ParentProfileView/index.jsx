@@ -85,6 +85,8 @@ export default function ParentProfileView({
       ...parentForm,
       parentID: parentForm.id,
       status: "active",
+    }).catch(() => {
+      setParentStatusToggling(false);
     });
     setParentStatusToggling(false);
     if (activate.data.response_code === 200) {
@@ -100,6 +102,8 @@ export default function ParentProfileView({
       ...parentForm,
       parentID: parentForm.id,
       status: "inactive",
+    }).catch(() => {
+      setParentStatusToggling(false);
     });
     setParentStatusToggling(false);
     if (deactivate.data.response_code === 200) {

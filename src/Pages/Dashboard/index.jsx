@@ -11,6 +11,7 @@ import Home from "../Home";
 import MegaLoader from "../Megaloader";
 import Messages from "../Messages";
 import Parents from "../Parents";
+import Reports from "../Reports";
 import SideNav from "../SideNav";
 import Surrogates from "../Surrogates";
 import TopNav from "../TopNav";
@@ -97,6 +98,7 @@ export default function Dashboard() {
                   <Route path="/parents" index element={<Parents />} />
                   <Route path="/surrogates" index element={<Surrogates />} />
                   <Route path="/messages" index element={<Messages />} />
+                  <Route path="/reports" index element={<Reports />} />
                   {/* <Route path="/application" index element={<Application />} /> */}
                 </Routes>
 

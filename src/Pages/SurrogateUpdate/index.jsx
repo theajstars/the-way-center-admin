@@ -162,7 +162,11 @@ export default function SurrogateUpdate({
           mainImage: surrogateForm.primary.mainImage,
           secondImage: surrogateForm.primary.secondImage,
         };
-        const updateRequest = await PerformRequest.UpdateSurrogate(data);
+        const updateRequest = await PerformRequest.UpdateSurrogate(data).catch(
+          () => {
+            setFormSubmitting(false);
+          }
+        );
         console.log(updateRequest);
         const { message: responseMessage } = updateRequest.data;
         if (updateRequest.data.status === "failed") {
@@ -818,11 +822,11 @@ export default function SurrogateUpdate({
               </div>
             </div>
           )}
-          <div className="flex-row width-100">
+          {/* <div className="flex-row width-100">
             <Button variant="contained" onClick={CreateSurrogateReport}>
               Create Report
             </Button>
-          </div>
+          </div> */}
         </div>
       </Modal>
     </>

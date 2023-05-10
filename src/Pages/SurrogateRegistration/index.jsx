@@ -280,7 +280,9 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       console.log("Data: ", data);
       const createSurrogateRequest = await PerformRequest.CreateNewSurrogate(
         data
-      );
+      ).catch(() => {
+        setFormSubmitting(false);
+      });
       setFormSubmitting(false);
       console.log(createSurrogateRequest);
       removeAllToasts();

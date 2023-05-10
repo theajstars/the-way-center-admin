@@ -50,6 +50,8 @@ export default function Messages() {
     const r = await PerformRequest.SendMessage({
       reference,
       post: messageText,
+    }).catch(() => {
+      setMessageSending(false);
     });
     setMessageSending(false);
     console.log(r);

@@ -81,7 +81,9 @@ export default function SurrogateReportCreate({
       modalAction: {
         method: () => {
           setShowConfirmationModal(false);
+          showSurrogateReportModal(false);
           setSurrogateReport(initialSurrogateReport);
+          setCurrentFormSection(1);
         },
         text: "submit another report",
       },
@@ -149,7 +151,11 @@ export default function SurrogateReportCreate({
         };
         console.log(data);
 
-        const createReport = await PerformRequest.CreateReport(data);
+        const createReport = await PerformRequest.CreateReport(data).catch(
+          () => {
+            setFormSubmitting(false);
+          }
+        );
         setFormSubmitting(false);
         removeAllToasts();
         console.log(createReport);
@@ -158,7 +164,6 @@ export default function SurrogateReportCreate({
           addToast(responseMessage, { appearance: "error" });
         } else {
           addToast(responseMessage, { appearance: "success" });
-          setCurrentFormSection(2);
           ContextConsumer.refetchData();
           setShowConfirmationModal(true);
         }
@@ -281,7 +286,7 @@ export default function SurrogateReportCreate({
                   </FormControl>
                   <FormControl variant="standard" {...defaultHalfInputProps}>
                     <InputLabel id="demo-simple-select-standard-label">
-                      Surrogate-NB (Auto Select)
+                      Surrogate-NB
                     </InputLabel>
                     <Select
                       labelId="demo-simple-select-standard-label"

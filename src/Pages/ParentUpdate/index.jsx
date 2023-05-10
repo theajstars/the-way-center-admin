@@ -123,7 +123,11 @@ export default function ParentUpdate({
             spouse: { ...parentForm.spouse, image: initialSpouseImage },
           };
           console.log(data);
-          const updateParent = await PerformRequest.UpdateParent(data);
+          const updateParent = await PerformRequest.UpdateParent(data).catch(
+            () => {
+              setFormSubmitting(false);
+            }
+          );
           console.log(updateParent);
           if (updateParent.data.response_code === 200) {
             ContextConsumer.refetchData();
@@ -164,7 +168,11 @@ export default function ParentUpdate({
           };
 
           console.log(data);
-          const updateParent = await PerformRequest.UpdateParent(data);
+          const updateParent = await PerformRequest.UpdateParent(data).catch(
+            () => {
+              setFormSubmitting(false);
+            }
+          );
           console.log(updateParent);
           if (updateParent.data.response_code === 200) {
             ContextConsumer.refetchData();

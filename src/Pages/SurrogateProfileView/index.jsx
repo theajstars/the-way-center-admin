@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 
 import Confirmation from "../Confirmation";
 import SurrogateUpdate from "../SurrogateUpdate";
+import SurrogateReportCreate from "../SurrogateReportCreate";
 
 export default function SurrogateProfileView({
   showViewSurrogateModal,
@@ -68,6 +69,18 @@ export default function SurrogateProfileView({
   const showUpdateSurrogateModal = (value) => {
     setUpdateProfile(value);
   };
+
+  const [showCreateReport, setShowCreateReport] = useState(false);
+  const showSurrogateReportModal = (value) => {
+    setShowCreateReport(value);
+    // setModalOpen(false);
+    // showUpdateSurrogateModal(false);
+    showViewSurrogateModal(false);
+  };
+  const CreateSurrogateReport = () => {
+    setModalOpen(false);
+    setShowCreateReport(true);
+  };
   return (
     <>
       {showConfirmationModal && (
@@ -88,6 +101,12 @@ export default function SurrogateProfileView({
             route: "/dashboard",
           }}
           getConfirmationModalStatus={getConfirmationModalStatus}
+        />
+      )}
+      {showCreateReport && (
+        <SurrogateReportCreate
+          showSurrogateReportModal={showSurrogateReportModal}
+          surrogate={surrogate}
         />
       )}
       {isUpdateProfile && (
@@ -339,14 +358,25 @@ export default function SurrogateProfileView({
                 <br />
               </span>
               <br />
-              <span
-                className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                onClick={() => {
-                  showViewSurrogateModal(false);
-                }}
-              >
-                Exit Profile
-              </span>
+              <div className="flex-column">
+                <Button
+                  variant="contained"
+                  onClick={CreateSurrogateReport}
+                  fullWidth
+                >
+                  Create Report
+                </Button>
+
+                <br />
+                <span
+                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                  onClick={() => {
+                    showViewSurrogateModal(false);
+                  }}
+                >
+                  Exit Profile
+                </span>
+              </div>
             </div>
           </div>
           <div className="flex-row width-100 align-center">

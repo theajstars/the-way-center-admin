@@ -145,7 +145,11 @@ export default function ParentRegistration({ showAddParentModal }) {
         },
       };
 
-      const createParent = await PerformRequest.CreateNewParent(data);
+      const createParent = await PerformRequest.CreateNewParent(data).catch(
+        () => {
+          setFormSubmitting(false);
+        }
+      );
       setFormSubmitting(false);
       removeAllToasts();
       console.log(createParent);
