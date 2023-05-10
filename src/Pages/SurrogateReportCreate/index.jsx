@@ -96,8 +96,7 @@ export default function SurrogateReportCreate({
   };
   const [confirmationModalParams, setConfirmationModalParams] = useState({
     modalHeaderText: "Surrogate Health Update",
-    modalBodyText:
-      "Aisha Immanuel’s Report has been updated, you can now push a message to Jones.",
+    modalBodyText: "Report has been updated, you can now push a message!",
     modalAction: {
       method: SendReportCreatedNotification,
       text: "send notification",
@@ -160,8 +159,8 @@ export default function SurrogateReportCreate({
         } else {
           addToast(responseMessage, { appearance: "success" });
           setCurrentFormSection(2);
-          // setReportID();
-          // window.location.reload();
+          ContextConsumer.refetchData();
+          setShowConfirmationModal(true);
         }
         // setShowConfirmationModal(true);
       }

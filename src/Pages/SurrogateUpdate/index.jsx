@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 
 import {
   InputLabel,
@@ -28,6 +28,7 @@ import { UploadFile } from "../../API/FetchData";
 import { validatePhone } from "../../Lib/Validate";
 import { validateEmail } from "../../App";
 import { PerformRequest } from "../../API/PerformRequests";
+import { DefaultContext } from "../Dashboard";
 
 export default function SurrogateUpdate({
   showUpdateSurrogateModal,
@@ -35,6 +36,7 @@ export default function SurrogateUpdate({
 }) {
   const [isModalOpen, setModalOpen] = useState(true);
   const { addToast, removeAllToasts } = useToasts();
+  const ContextConsumer = useContext(DefaultContext);
 
   console.log(surrogate);
   const [currentFormSection, setCurrentFormSection] = useState(1);
@@ -169,6 +171,7 @@ export default function SurrogateUpdate({
           addToast(responseMessage, { appearance: "success" });
           setShowConfirmationModal(true);
           showUpdateSurrogateModal(false);
+          ContextConsumer.refetchData();
         }
       }
     }

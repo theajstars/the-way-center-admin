@@ -173,15 +173,14 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex-row space-between align-center">
+          {/* <div className="flex-row space-between align-center">
             <span className="poppins fw-500 px-18 surrogate-reports-head">
               Your Surrogate Reports
-              {/* Your Surrogate Reports from TWC */}
             </span>
             <span className="poppins fw-500 px-16 purple-default-text view-more-reports">
               View More
             </span>
-          </div>
+          </div> */}
           <Modal
             open={surrogateReportModalDetails.state}
             onClose={(e, reason) => {
@@ -243,7 +242,7 @@ export default function Home() {
               </div>
             </div>
           </Modal>
-          <div className="surrogate-reports flex-row space-between">
+          {/* <div className="surrogate-reports flex-row space-between">
             {SurrogateReports.slice(0, getSurrogateOverviewCount()).map(
               (report, index) => {
                 return (
@@ -296,7 +295,7 @@ export default function Home() {
                 );
               }
             )}
-          </div>
+          </div> */}
           {/* <>
             <span className="poppins fw-500 px-18">Your Surrogate Media</span>
             <div ref={sliderRef} className="keen-slider">

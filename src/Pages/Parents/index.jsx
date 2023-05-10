@@ -187,11 +187,11 @@ export default function Parents() {
               </Table>
               <br />
               <br />
-              <div className="flex-row width-100 align-center justify-end">
+              {/* <div className="flex-row width-100 align-center justify-end">
                 <Text className="poppins underline px-14 fw-500 pointer">
                   View All Parents
                 </Text>
-              </div>
+              </div> */}
             </TableContainer>
             <br />
 
@@ -203,6 +203,13 @@ export default function Parents() {
                 <br />
                 <Table variant="simple" colorScheme="whiteAlpha">
                   <Tbody>
+                    {pairedParents.length === 0 && (
+                      <center>
+                        <Text className="poppins fw-500">
+                          No paired parents
+                        </Text>
+                      </center>
+                    )}
                     {pairedParents.map((parent, index) => {
                       return (
                         <Tr
@@ -244,11 +251,11 @@ export default function Parents() {
                 </Table>
                 <br />
                 <br />
-                <div className="flex-row width-100 align-center justify-end">
+                {/* <div className="flex-row width-100 align-center justify-end">
                   <Text className="poppins underline px-14 fw-500 pointer">
                     View All Paired Parents
                   </Text>
-                </div>
+                </div> */}
               </TableContainer>
               <TableContainer className="recent-table-container-small table-white">
                 <Text className="cinzel px-15 uppercase">unpaired parents</Text>
@@ -301,11 +308,18 @@ export default function Parents() {
                         </Tr>
                       );
                     })}
+                    {unPairedParents.length === 0 && (
+                      <center>
+                        <Text className="poppins fw-500">
+                          No unpaired parents
+                        </Text>
+                      </center>
+                    )}
                   </Tbody>
                 </Table>
                 <br />
                 <br />
-                <div className="flex-row width-100 align-center justify-end">
+                {/* <div className="flex-row width-100 align-center justify-end">
                   <Text
                     className="poppins underline px-14 fw-500 pointer"
                     onClick={() => {
@@ -314,7 +328,7 @@ export default function Parents() {
                   >
                     View All Surrogates
                   </Text>
-                </div>
+                </div> */}
               </TableContainer>
             </div>
           </ChakraProvider>
