@@ -41,6 +41,7 @@ export default function ParentProfileView({
   const [parentForm, setParentForm] = useState(parent);
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
+  console.log(parent);
 
   const govtIdentificationUploadRef = useRef();
   const covidVaccinationUploadRef = useRef();

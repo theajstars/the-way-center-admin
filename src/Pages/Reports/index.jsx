@@ -1,10 +1,7 @@
-import { Modal, Typography } from "@mui/material";
-import { useRef, useState } from "react";
-import { useContext } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
+import { Grid, Modal, Pagination, Typography } from "@mui/material";
 import {
-  initialParent,
-  initialSurrogate,
-  RecentParents,
+  ReportCategories,
   SurrogateRecords,
   SurrogateReports,
 } from "../../Assets/Data";
@@ -13,33 +10,22 @@ import AishaAvatar from "../../Assets/IMG/AishaAvatar.svg";
 
 export default function Reports() {
   const ContextConsumer = useContext(DefaultContext);
-  const ModifySurrogatesRef = useRef();
   const [SurrogateRecordsToDisplay, setSurrogateRecordsToDisplay] = useState(
     SurrogateRecords.slice(0, 4)
   );
-  const ModifySurrogateRecordsToDisplay = () => {
-    if (SurrogateRecordsToDisplay.length === SurrogateRecords.length) {
-      setSurrogateRecordsToDisplay(SurrogateRecords.slice(0, 4));
-    } else {
-      setSurrogateRecordsToDisplay(SurrogateRecords);
-    }
-  };
-  const [isViewSurrogate, setViewSurrogate] = useState(false);
+  const { Reports: reports } = ContextConsumer;
 
-  const showViewSurrogateModal = (value) => {
-    setViewSurrogate(value);
-  };
   const [surrogateReportModalDetails, setSurrogateReportModalDetails] =
     useState({ state: false, content: null });
 
   const screenWidth = window.innerWidth;
-  console.log(screenWidth);
-
-  const getSurrogateOverviewCount = () => {
-    if (screenWidth > 1450) {
-      return 3;
+  console.log(ContextConsumer);
+  const getReportCategory = (category) => {
+    const f = ReportCategories.filter((c) => c.value === category);
+    if (f.length === 0) {
+      return "Medical";
     } else {
-      return 2;
+      return f[0].name;
     }
   };
   return (
@@ -48,14 +34,6 @@ export default function Reports() {
         ADMIN DASHBOARD
       </Typography>
 
-      {/* <div className="flex-row space-between align-center">
-            <span className="poppins fw-500 px-18 surrogate-reports-head">
-              Your Surrogate Reports
-            </span>
-            <span className="poppins fw-500 px-16 purple-default-text view-more-reports">
-              View More
-            </span>
-          </div> */}
       <Modal
         open={surrogateReportModalDetails.state}
         onClose={(e, reason) => {
@@ -71,32 +49,51 @@ export default function Reports() {
         <div className="default-modal-content surrogate-report-modal flex-column">
           <div className="flex-row align-center">
             <div className="flex-column">
-              <span className="cinzel px-16 gray-secondary-text surrogate-report-type">
-                {surrogateReportModalDetails.content?.type}
+              <span className="cinzel px-19 capitalize">
+                {surrogateReportModalDetails.content?.parent.firstname}&nbsp;
+                {surrogateReportModalDetails.content?.parent.lastname}
               </span>
               <span className="cinzel px-19 surrogate-report-title">
                 {surrogateReportModalDetails.content?.title}
               </span>
             </div>
             &nbsp; &nbsp; &nbsp;
-            <img src={AishaAvatar} alt="" className="surrogate-report-avatar" />
+            <img
+              src={surrogateReportModalDetails.content?.parent.image}
+              alt=""
+              className="surrogate-report-avatar"
+            />
           </div>
           <br />
-          <br />
           <span className="fw-700 cinzel px-19">FULL REPORT</span>
+
           <br />
+          <span className="fw-600 poppins px-19 underline">
+            {getReportCategory(
+              surrogateReportModalDetails.content?.reportCategory
+            )}{" "}
+            Report
+          </span>
+          <br />
+          <div className="flex-row align-center">
+            <span className="fw-400 poppins px-16">Surrogate: &nbsp;</span>
+            <span className="fw-700 poppins px-16">
+              {surrogateReportModalDetails.content?.surrogate.firstname}&nbsp;
+              {surrogateReportModalDetails.content?.surrogate.lastname}
+            </span>
+          </div>
+          <br />
+          <div className="flex-row align-center">
+            <span className="fw-400 poppins px-16">
+              Health Practitioner: &nbsp;
+            </span>
+            <span className="fw-700 poppins px-16">
+              {surrogateReportModalDetails.content?.healthPractitioner}
+            </span>
+          </div>
           <br />
           <span className="px-15 gray-secondary-text poppins full-surrogate-report-body modal-scrollbar">
-            {surrogateReportModalDetails.content?.body}
-            <br />
-            <br />
-            {surrogateReportModalDetails.content?.body}
-            <br />
-            <br />
-            {surrogateReportModalDetails.content?.body}
-            <br />
-            <br />
-            {surrogateReportModalDetails.content?.body}
+            {surrogateReportModalDetails.content?.details}
           </span>
           <div className="flex-row surrogate-report-modal-footer">
             <span
@@ -113,60 +110,72 @@ export default function Reports() {
           </div>
         </div>
       </Modal>
+      <br />
+      <div className="flex-row space-between align-center">
+        <span className="poppins fw-500 px-18 surrogate-reports-head">
+          Surrogate Reports
+        </span>
+      </div>
       <div className="surrogate-reports flex-row space-between">
-        {SurrogateReports.slice(0, getSurrogateOverviewCount()).map(
-          (report, index) => {
+        {/* {SurrogateReports.slice(0, getSurrogateOverviewCount()).map( */}
+        <Grid container spacing={2}>
+          {reports.map((report, index) => {
             return (
-              <div className="surrogate-report flex-column" key={index}>
-                <div className="flex-row surrogate-report-top space-between">
-                  <div className="flex-column">
-                    <span className="cinzel px-14 gray-secondary-text surrogate-report-type">
-                      {report.type}
+              <Grid item xs={12} sm={12} md={6} lg={4} xl={4} key={report.id}>
+                <div className="surrogate-report flex-column">
+                  <div className="flex-row surrogate-report-top space-between">
+                    <div className="flex-column">
+                      <span className="cinzel px-14 gray-secondary-text surrogate-report-type">
+                        {report.parent.firstname} {report.parent.lastname}
+                      </span>
+                      <span className="cinzel px-16 surrogate-report-title">
+                        {getReportCategory(report.reportCategory)} Report
+                      </span>
+                    </div>
+                    <img
+                      src={report.parent.image}
+                      alt=""
+                      className="surrogate-report-avatar"
+                    />
+                  </div>
+                  <span className="surrogate-report-body poppins px-14 fw-300">
+                    {report.details.length > 120
+                      ? `${report.details.substring(0, 120)}...`
+                      : report.details}
+                  </span>
+                  <div className="flex-row space-between">
+                    <span className="flex-column">
+                      <span
+                        className={`surrogate-report-verdict flex-row poppins fw-500 px-13 surrogate-report-satisfactory`}
+                        // className={`surrogate-report-verdict flex-row poppins fw-500 px-13 surrogate-report-${report.verdict.toLowerCase()}`}
+                      >
+                        Satisfactory
+                        {/* {report.verdict} */}
+                      </span>
+                      <small className="px-10 fw-500 poppins">
+                        Doctor’s Overall Remark
+                      </small>
                     </span>
-                    <span className="cinzel px-16 surrogate-report-title">
-                      {report.title}
+
+                    <span
+                      className="px-14 poppins fw-500 pointer"
+                      onClick={() => {
+                        setSurrogateReportModalDetails({
+                          state: true,
+                          content: report,
+                        });
+                      }}
+                    >
+                      <u>View Full Report</u>
                     </span>
                   </div>
-                  <img
-                    src={AishaAvatar}
-                    alt=""
-                    className="surrogate-report-avatar"
-                  />
                 </div>
-                <span className="surrogate-report-body poppins px-14 fw-300">
-                  {report.body.length > 120
-                    ? `${report.body.substring(0, 120)}...`
-                    : report.body}
-                </span>
-                <div className="flex-row space-between">
-                  <span className="flex-column">
-                    <span
-                      className={`surrogate-report-verdict flex-row poppins fw-500 px-13 surrogate-report-${report.verdict.toLowerCase()}`}
-                    >
-                      {report.verdict}
-                    </span>
-                    <small className="px-10 fw-500 poppins">
-                      Doctor’s Overall Remark
-                    </small>
-                  </span>
-
-                  <span
-                    className="px-14 poppins fw-500 pointer"
-                    onClick={() => {
-                      setSurrogateReportModalDetails({
-                        state: true,
-                        content: report,
-                      });
-                    }}
-                  >
-                    <u>View Full Report</u>
-                  </span>
-                </div>
-              </div>
+              </Grid>
             );
-          }
-        )}
+          })}
+        </Grid>
       </div>
+      <Pagination />
     </div>
   );
 }

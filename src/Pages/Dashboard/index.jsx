@@ -25,6 +25,7 @@ const initialContext = {
     surrogate: undefined,
     pairing: undefined,
   },
+  Reports: [],
   refetchData: () => {},
 };
 const DefaultContext = createContext(initialContext);
@@ -32,6 +33,7 @@ export default function Dashboard() {
   const [countries, setCountries] = useState([]);
   const [parents, setParents] = useState([]);
   const [surrogates, setSurrogates] = useState([]);
+  const [reports, setReports] = useState([]);
   const [metrics, setMetrics] = useState({
     ...initialContext.Metrics,
     set: false,
@@ -62,12 +64,20 @@ export default function Dashboard() {
       setMetrics({ ...r.data.data, set: true });
     }
   };
+  const getReports = async () => {
+    const r = await PerformRequest.GetAllReports();
+    console.log("Reports", r);
+    if (r.data.response_code === 200) {
+      setReports(r.data.data);
+    }
+  };
 
   const FetchAllData = async () => {
     getCountries();
     getSurrogates();
     getParents();
     getMetrics();
+    getReports();
   };
   useEffect(() => {
     FetchAllData();
@@ -89,6 +99,7 @@ export default function Dashboard() {
               Metrics: metrics,
               Surrogates: surrogates,
               refetchData: FetchAllData,
+              Reports: reports,
             }}
           >
             <Container maxWidth="xl">

@@ -94,6 +94,28 @@ const initialSurrogateReport = {
   appointmentDate: dayjs("2023-01-01"),
   details: "",
 };
+const initialReportResponse = {
+  id: "",
+  parent: {
+    lastname: "",
+    firstname: "",
+    email: "",
+    phone: "",
+    image: "",
+  },
+  surrogate: {
+    lastname: "",
+    firstname: "",
+    email: "",
+    phone: "",
+    image: "",
+  },
+  details: "",
+  reportCategory: "",
+  healthPractitioner: "",
+  appointmentDate: "",
+  createdOn: "",
+};
 const SurrogateRecords = [
   {
     title: "Your Surrogates next Doctors Appointment on",
@@ -2889,4 +2911,5 @@ export {
   initialParent,
   initialSurrogate,
   initialSurrogateReport,
+  initialReportResponse,
 };

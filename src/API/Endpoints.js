@@ -19,9 +19,11 @@ const Endpoints = {
   UpdateSurrogate: "/surrogate/update",
 
   CreatePairing: "/pair/create",
+
   AddReportFile: "/report/files/add",
   CreateReport: "/report/create",
   SendReportNotification: "/report/send-notification",
+  GetReports: "/report/details",
 
   GetMessageList: "/message/list",
   SendMessage: "/message/send",
