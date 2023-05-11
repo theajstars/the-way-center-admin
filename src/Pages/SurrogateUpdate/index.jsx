@@ -63,10 +63,6 @@ export default function SurrogateUpdate({
     setModalOpen(false);
     setShowConfirmationModal(true);
   };
-  const CreateSurrogateReport = () => {
-    setModalOpen(false);
-    setShowCreateReport(true);
-  };
   const getConfirmationModalStatus = (value) => {
     setShowConfirmationModal(value);
     if (!value) {

@@ -81,10 +81,10 @@ const SendReportNotification = async (parent) => {
     data: parent,
   });
 };
-const GetAllReports = async () => {
+const GetReports = async ({ page, limit }) => {
   return FetchData({
     method: "GET",
-    route: Endpoints.GetReports,
+    route: `${Endpoints.GetReports}?page=${page ?? ""}&limit=${limit ?? ""}`,
   });
 };
 
@@ -139,7 +139,7 @@ const PerformRequest = {
   UpdateParent,
   CreatePairing,
   CreateReport,
-  GetAllReports,
+  GetReports,
   AddReportFile,
   SendReportNotification,
   CreateMessageReference,

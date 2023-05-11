@@ -25,7 +25,7 @@ const initialContext = {
     surrogate: undefined,
     pairing: undefined,
   },
-  Reports: [],
+
   refetchData: () => {},
 };
 const DefaultContext = createContext(initialContext);
@@ -33,7 +33,7 @@ export default function Dashboard() {
   const [countries, setCountries] = useState([]);
   const [parents, setParents] = useState([]);
   const [surrogates, setSurrogates] = useState([]);
-  const [reports, setReports] = useState([]);
+
   const [metrics, setMetrics] = useState({
     ...initialContext.Metrics,
     set: false,
@@ -46,14 +46,12 @@ export default function Dashboard() {
   };
   const getSurrogates = async () => {
     const r = await PerformRequest.GetAllSurrogates(false);
-    console.log(r);
     if (r.data.response_code === 200) {
       setSurrogates(r.data.data);
     }
   };
   const getParents = async () => {
     const r = await PerformRequest.GetAllParents(false);
-    console.log(r);
     if (r.data.response_code === 200) {
       setParents(r.data.data);
     }
@@ -64,27 +62,19 @@ export default function Dashboard() {
       setMetrics({ ...r.data.data, set: true });
     }
   };
-  const getReports = async () => {
-    const r = await PerformRequest.GetAllReports();
-    console.log("Reports", r);
-    if (r.data.response_code === 200) {
-      setReports(r.data.data);
-    }
-  };
 
   const FetchAllData = async () => {
     getCountries();
     getSurrogates();
     getParents();
     getMetrics();
-    getReports();
   };
   useEffect(() => {
     FetchAllData();
   }, []);
-  useEffect(() => {
-    console.log({ metrics, parents, surrogates });
-  }, [metrics]);
+  // useEffect(() => {
+  //   console.log({ metrics, parents, surrogates });
+  // }, [metrics]);
   return (
     <>
       <SideNav />
@@ -99,7 +89,6 @@ export default function Dashboard() {
               Metrics: metrics,
               Surrogates: surrogates,
               refetchData: FetchAllData,
-              Reports: reports,
             }}
           >
             <Container maxWidth="xl">

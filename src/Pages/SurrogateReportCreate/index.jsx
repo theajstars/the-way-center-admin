@@ -34,6 +34,10 @@ export default function SurrogateReportCreate({
   const [isModalOpen, setModalOpen] = useState(true);
   const ContextConsumer = useContext(DefaultContext);
 
+  const [currentSurrogate, setCurrentSurrogate] = useState({
+    id: "",
+    primary: { firstname: "", lastname: "" },
+  });
   const { addToast, removeAllToasts } = useToasts();
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
@@ -114,6 +118,7 @@ export default function SurrogateReportCreate({
 
   const [formErrors, setFormErrors] = useState({
     parentID: false,
+    surrogateID: false,
     reportCategory: false,
     healthPractitioner: false,
     details: false,
@@ -123,6 +128,7 @@ export default function SurrogateReportCreate({
     setFormErrors({
       ...formErrors,
       parentID: surrogateReport.parentID.length === 0,
+      surrogateID: !surrogate && currentSurrogate.id.length === 0,
       reportCategory: surrogateReport.reportCategory.length === 0,
       healthPractitioner: surrogateReport.healthPractitioner.length === 0,
       details: surrogateReport.details.length === 0,
@@ -143,7 +149,7 @@ export default function SurrogateReportCreate({
       } else {
         const data = {
           parentID: surrogateReport.parentID,
-          surrogateID: surrogate.id,
+          surrogateID: surrogate ? surrogate.id : currentSurrogate.id,
           reportCategory: surrogateReport.reportCategory,
           healthPractitioner: surrogateReport.healthPractitioner,
           details: surrogateReport.details,
@@ -288,18 +294,40 @@ export default function SurrogateReportCreate({
                     <InputLabel id="demo-simple-select-standard-label">
                       Surrogate-NB
                     </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogate.id}
-                      label="Surrogate-NB (Auto Select)"
-                      {...disabledInputProps}
-                    >
-                      <MenuItem value={surrogate.id} key={surrogate.id}>
-                        {surrogate.primary.firstname} &nbsp;
-                        {surrogate.primary.lastname}
-                      </MenuItem>
-                    </Select>
+                    {surrogate ? (
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={surrogate.id}
+                        label="Surrogate-NB"
+                        {...disabledInputProps}
+                      >
+                        <MenuItem value={surrogate.id} key={surrogate.id}>
+                          {surrogate.primary.firstname} &nbsp;
+                          {surrogate.primary.lastname}
+                        </MenuItem>
+                      </Select>
+                    ) : (
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={currentSurrogate}
+                        error={formErrors.surrogateID}
+                        label="Surrogate-NB"
+                        onChange={(e) => {
+                          setCurrentSurrogate(e.target.value);
+                        }}
+                      >
+                        {ContextConsumer.Surrogates.map((surrogate) => {
+                          return (
+                            <MenuItem value={surrogate} key={surrogate.id}>
+                              {surrogate.primary.firstname} &nbsp;
+                              {surrogate.primary.lastname}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    )}
                   </FormControl>
                 </div>
                 <div className="flex-row space-between modal-input-row">

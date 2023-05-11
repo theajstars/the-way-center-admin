@@ -1,5 +1,15 @@
 import { useRef, useState, useEffect, useContext } from "react";
-import { Grid, Modal, Pagination, Typography } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Pagination,
+  Select,
+  Typography,
+} from "@mui/material";
 import {
   ReportCategories,
   SurrogateRecords,
@@ -7,19 +17,39 @@ import {
 } from "../../Assets/Data";
 import { DefaultContext } from "../Dashboard";
 import AishaAvatar from "../../Assets/IMG/AishaAvatar.svg";
+import { PerformRequest } from "../../API/PerformRequests";
+import SurrogateReportCreate from "../SurrogateReportCreate";
 
 export default function Reports() {
-  const ContextConsumer = useContext(DefaultContext);
-  const [SurrogateRecordsToDisplay, setSurrogateRecordsToDisplay] = useState(
-    SurrogateRecords.slice(0, 4)
-  );
-  const { Reports: reports } = ContextConsumer;
+  const ConsumerContext = useContext(DefaultContext);
+  const [reports, setReports] = useState([]);
+  const [isReportsLoading, setReportsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(4);
+  const [totalPages, setTotalPages] = useState(1);
 
+  const [parentID, setParentID] = useState("");
+  const [surrogateID, setSurrogateID] = useState("");
+
+  const getReports = async () => {
+    setReportsLoading(true);
+    const r = await PerformRequest.GetReports({
+      page: currentPage,
+      limit: pageSize,
+    }).catch(() => {
+      setReportsLoading(false);
+    });
+    setReportsLoading(false);
+    console.log("Reports", r);
+    if (r.data.status === "success") {
+      setReports(r.data.data);
+      setTotalPages(r.data.totalPages);
+    }
+  };
   const [surrogateReportModalDetails, setSurrogateReportModalDetails] =
     useState({ state: false, content: null });
 
   const screenWidth = window.innerWidth;
-  console.log(ContextConsumer);
   const getReportCategory = (category) => {
     const f = ReportCategories.filter((c) => c.value === category);
     if (f.length === 0) {
@@ -27,6 +57,26 @@ export default function Reports() {
     } else {
       return f[0].name;
     }
+  };
+
+  useEffect(() => {
+    getReports();
+  }, [currentPage]);
+  const defaultFullInputProps = {
+    variant: "standard",
+    spellCheck: false,
+    className: "modal-input-full px-14",
+  };
+  const defaultHalfInputProps = {
+    variant: "outlined",
+    className: "filter-input px-14",
+    spellCheck: false,
+    size: "small",
+  };
+  const [showCreateReport, setShowCreateReport] = useState(false);
+
+  const showSurrogateReportModal = (value) => {
+    setShowCreateReport(value);
   };
   return (
     <div className="home-page">
@@ -111,13 +161,93 @@ export default function Reports() {
         </div>
       </Modal>
       <br />
+      {showCreateReport && (
+        <SurrogateReportCreate
+          showSurrogateReportModal={showSurrogateReportModal}
+          surrogate={undefined}
+        />
+      )}
       <div className="flex-row space-between align-center">
         <span className="poppins fw-500 px-18 surrogate-reports-head">
           Surrogate Reports
         </span>
+        <div className="flex-row align-center">
+          <Button
+            variant="outlined"
+            onClick={() => {
+              showSurrogateReportModal(true);
+            }}
+          >
+            Create Report
+          </Button>
+          &nbsp; &nbsp;
+          <Button
+            variant="contained"
+            onClick={getReports}
+            disabled={isReportsLoading}
+          >
+            {isReportsLoading ? (
+              <>
+                Refreshing <i className="far fa-spinner-third fa-spin" />
+              </>
+            ) : (
+              <>Refresh</>
+            )}
+          </Button>
+        </div>
+      </div>
+      <div className="flex-row align-center space-between filter-container">
+        <div className="flex-row filter-inputs align-center">
+          <FormControl variant="standard" {...defaultHalfInputProps}>
+            <InputLabel id="demo-simple-select-standard-label">
+              Parents Name
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              value={parentID}
+              onChange={(e) => {
+                setParentID(e.target.value);
+              }}
+              label="Parents Name"
+            >
+              {ConsumerContext.Parents.map((parent, index) => {
+                return (
+                  <MenuItem value={parent.id} key={parent.id}>
+                    {parent.primary.firstname} {parent.primary.lastname}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" {...defaultHalfInputProps}>
+            <InputLabel id="demo-simple-select-standard-label">
+              Surrogates Name
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              value={surrogateID}
+              onChange={(e) => {
+                setSurrogateID(e.target.value);
+              }}
+              label="Surrogates Name"
+            >
+              {ConsumerContext.Surrogates.map((surrogate, index) => {
+                return (
+                  <MenuItem value={surrogate.id} key={surrogate.id}>
+                    {surrogate.primary.firstname} {surrogate.primary.lastname}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </div>
+        <Button variant="contained">
+          Filter &nbsp; <i className="far fa-search" />
+        </Button>
       </div>
       <div className="surrogate-reports flex-row space-between">
-        {/* {SurrogateReports.slice(0, getSurrogateOverviewCount()).map( */}
         <Grid container spacing={2}>
           {reports.map((report, index) => {
             return (
@@ -175,7 +305,16 @@ export default function Reports() {
           })}
         </Grid>
       </div>
-      <Pagination />
+      <br />
+      <div className="flex-row width-100 align-center justify-center">
+        <Pagination
+          disabled={isReportsLoading}
+          count={totalPages}
+          onChange={(e, value) => {
+            setCurrentPage(value);
+          }}
+        />
+      </div>
     </div>
   );
 }
