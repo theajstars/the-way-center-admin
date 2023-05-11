@@ -81,10 +81,12 @@ const SendReportNotification = async (parent) => {
     data: parent,
   });
 };
-const GetReports = async ({ page, limit }) => {
+const GetReports = async ({ page, limit, parentID, surrogateID }) => {
   return FetchData({
     method: "GET",
-    route: `${Endpoints.GetReports}?page=${page ?? ""}&limit=${limit ?? ""}`,
+    route: `${Endpoints.GetReports}?page=${page ?? ""}&limit=${
+      limit ?? ""
+    }&parentID=${parentID ?? ""}&surrogateID=${surrogateID ?? ""}`,
   });
 };
 

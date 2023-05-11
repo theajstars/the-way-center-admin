@@ -16,3 +16,6 @@ PARENT PORTAL -`My Surrogate` should be clickable to show full surrogate details
 Replace `hair color` and `skin color` with ethnicity and religion
 Nationality is Nigerian only
 `News` will be sending notification to all parents
+`Surrogate Health Update` should auto select parent as well
+All reports ever should be visible from the parent dashboard
+Admin needs a page for uploading `Surrogate Media`

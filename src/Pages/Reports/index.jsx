@@ -8,6 +8,7 @@ import {
   Modal,
   Pagination,
   Select,
+  Alert,
   Typography,
 } from "@mui/material";
 import {
@@ -42,10 +43,28 @@ export default function Reports() {
     setReportsLoading(false);
     console.log("Reports", r);
     if (r.data.status === "success") {
-      setReports(r.data.data);
+      setReports(r.data.data ?? []);
       setTotalPages(r.data.totalPages);
     }
   };
+  const FilterReports = async () => {
+    setReportsLoading(true);
+    const r = await PerformRequest.GetReports({
+      page: currentPage,
+      limit: pageSize,
+      parentID: parentID,
+      surrogateID: surrogateID,
+    }).catch(() => {
+      setReportsLoading(false);
+    });
+    setReportsLoading(false);
+    console.log("Reports", r);
+    if (r.data.status === "success") {
+      setReports(r.data.data ?? []);
+      setTotalPages(r.data.totalPages);
+    }
+  };
+
   const [surrogateReportModalDetails, setSurrogateReportModalDetails] =
     useState({ state: false, content: null });
 
@@ -60,7 +79,7 @@ export default function Reports() {
   };
 
   useEffect(() => {
-    getReports();
+    FilterReports();
   }, [currentPage]);
   const defaultFullInputProps = {
     variant: "standard",
@@ -167,7 +186,7 @@ export default function Reports() {
           surrogate={undefined}
         />
       )}
-      <div className="flex-row space-between align-center">
+      <div className="flex-row space-between align-center reports-top">
         <span className="poppins fw-500 px-18 surrogate-reports-head">
           Surrogate Reports
         </span>
@@ -243,9 +262,27 @@ export default function Reports() {
             </Select>
           </FormControl>
         </div>
-        <Button variant="contained">
-          Filter &nbsp; <i className="far fa-search" />
-        </Button>
+        <div className="flex-row filter-buttons align-center">
+          <Button variant="contained" onClick={FilterReports}>
+            Filter &nbsp; <i className="far fa-search" />
+          </Button>
+          &nbsp;&nbsp;&nbsp;
+          <Button
+            variant="contained"
+            disabled={parentID.length === 0 && surrogateID.length === 0}
+            onClick={() => {
+              setSurrogateID("");
+              setParentID("");
+            }}
+          >
+            Clear &nbsp; <i className="far fa-times" />
+          </Button>
+        </div>
+      </div>
+      <div className="flex-row align-center justify-center width-100">
+        {reports.length === 0 && (
+          <Alert severity="info">No reports found!</Alert>
+        )}
       </div>
       <div className="surrogate-reports flex-row space-between">
         <Grid container spacing={2}>

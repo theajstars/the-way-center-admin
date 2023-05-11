@@ -292,14 +292,15 @@ export default function SurrogateReportCreate({
                   </FormControl>
                   <FormControl variant="standard" {...defaultHalfInputProps}>
                     <InputLabel id="demo-simple-select-standard-label">
-                      Surrogate-NB
+                      Select Surrogate
                     </InputLabel>
                     {surrogate ? (
                       <Select
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
                         value={surrogate.id}
-                        label="Surrogate-NB"
+                        label="Select Surrogate"
+                        placeholder="Select Surrogate"
                         {...disabledInputProps}
                       >
                         <MenuItem value={surrogate.id} key={surrogate.id}>
@@ -313,7 +314,8 @@ export default function SurrogateReportCreate({
                         id="demo-simple-select-standard"
                         value={currentSurrogate}
                         error={formErrors.surrogateID}
-                        label="Surrogate-NB"
+                        label="Select Surrogate"
+                        placeholder="Select Surrogate"
                         onChange={(e) => {
                           setCurrentSurrogate(e.target.value);
                         }}
