@@ -27,6 +27,7 @@ import SurrogateProfileView from "./Pages/SurrogateProfileView";
 import SurrogateUpdate from "./Pages/SurrogateUpdate";
 import ParentProfileView from "./Pages/ParentProfileView";
 import ParentUpdate from "./Pages/ParentUpdate";
+import Pairings from "./Pages/Pairings";
 function validateEmail(email) {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -110,6 +111,7 @@ function App() {
             <Route path="/dashboard/application" element={<Application />} />
             <Route path="/dashboard/messages" element={<Messages />} />
             <Route path="/dashboard/reports" element={<Reports />} />
+            <Route path="/dashboard/pairings" element={<Pairings />} />
           </Route>
           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>

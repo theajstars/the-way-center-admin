@@ -53,6 +53,14 @@ const UpdateParent = async (parent) => {
   });
 };
 
+const UpdatePairing = async ({ pairingID, status }) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.UpdatePairing,
+    data: { pairID: pairingID, status },
+  });
+};
+
 const CreatePairing = async (pairingForm) => {
   return FetchData({
     method: "POST",
@@ -65,7 +73,7 @@ const GetPairing = async ({ surrogateID, parentID, limit, page }) => {
     method: "GET",
     route: `${Endpoints.GetPairingDetails}?surrogateID=${
       surrogateID ?? ""
-    }&parentID=${parentID ?? ""}`,
+    }&parentID=${parentID ?? ""}&limit=${limit}&page=${page}`,
   });
 };
 const CreateReport = async (report) => {
@@ -178,6 +186,7 @@ const PerformRequest = {
   GetRelationships,
   GetTribes,
   GetReligions,
+  UpdatePairing,
 };
 
 export { PerformRequest };

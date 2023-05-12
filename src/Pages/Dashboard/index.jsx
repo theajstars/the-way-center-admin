@@ -10,6 +10,7 @@ import Footer from "../Footer";
 import Home from "../Home";
 import MegaLoader from "../Megaloader";
 import Messages from "../Messages";
+import Pairings from "../Pairings";
 import ParentProfileView from "../ParentProfileView";
 import Parents from "../Parents";
 import ParentUpdate from "../ParentUpdate";
@@ -153,6 +154,7 @@ export default function Dashboard() {
                     element={<SurrogateUpdate />}
                   />
                   <Route path="/messages" index element={<Messages />} />
+                  <Route path="/pairings" index element={<Pairings />} />
                   <Route path="/reports" index element={<Reports />} />
                   {/* <Route path="/application" index element={<Application />} /> */}
                 </Routes>

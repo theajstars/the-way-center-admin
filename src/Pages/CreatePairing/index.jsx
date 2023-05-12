@@ -6,6 +6,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Chip,
 } from "@mui/material";
 import { useToasts } from "react-toast-notifications";
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
@@ -13,9 +14,14 @@ import Confirmation from "../Confirmation";
 import { RecentParents } from "../../Assets/Data";
 import { DefaultContext } from "../Dashboard";
 import { PerformRequest } from "../../API/PerformRequests";
+import { useEffect } from "react";
 const initialPairingForm = {
   parentID: "",
   surrogateID: "",
+  parentImage: "",
+  surrogateImage: "",
+  parentName: "",
+  surrogateName: "",
 };
 
 export default function CreatePairing({ showCreatePairingModal }) {
@@ -23,35 +29,10 @@ export default function CreatePairing({ showCreatePairingModal }) {
   const ConsumerContext = useContext(DefaultContext);
   const [isModalOpen, setModalOpen] = useState(true);
   const [pairingForm, setPairingForm] = useState(initialPairingForm);
-  const getParentImage = () => {
-    return ConsumerContext.Parents.filter(
-      (p) => p.id === pairingForm.parentID
-    )[0].primary.image;
-  };
-  const getSurrogateImage = () => {
-    return ConsumerContext.Surrogates.filter(
-      (s) => s.id === pairingForm.surrogateID
-    )[0].primary.mainImage;
-  };
-  const getParentName = () => {
-    const filter = ConsumerContext.Parents.filter(
-      (p) => p.id === pairingForm.parentID
-    )[0].primary;
-    return `${filter.firstname} ${filter.lastname}`;
-  };
-  const getSurrogateName = () => {
-    const filter = ConsumerContext.Surrogates.filter(
-      (s) => s.id === pairingForm.surrogateID
-    )[0].primary;
 
-    return `${filter.firstname} ${filter.lastname}`;
-  };
-  const imageUploadRef = useRef();
-  const defaultFullInputProps = {
-    variant: "standard",
-    spellCheck: false,
-    className: "modal-input-full px-14",
-  };
+  const [surrogates, setSurrogates] = useState([]);
+  const [parents, setParents] = useState([]);
+
   const defaultHalfInputProps = {
     variant: "standard",
     className: "modal-input-half px-14",
@@ -65,6 +46,18 @@ export default function CreatePairing({ showCreatePairingModal }) {
       showCreatePairingModal(false);
     }
   };
+  const getUnpairedSurrogates = async () => {
+    const r = await PerformRequest.GetAllSurrogates({ isPaired: "No" });
+    setSurrogates(r.data.data ?? []);
+  };
+  const getUnpairedParents = async () => {
+    const r = await PerformRequest.GetAllParents({ isPaired: "No" });
+    setParents(r.data.data ?? []);
+  };
+  useEffect(() => {
+    getUnpairedParents();
+    getUnpairedSurrogates();
+  }, []);
   const Pair = async () => {
     if (pairingForm.parentID.length > 0 && pairingForm.parentID.length > 0) {
       const pairingRequest = await PerformRequest.CreatePairing(pairingForm);
@@ -82,8 +75,8 @@ export default function CreatePairing({ showCreatePairingModal }) {
         <Confirmation
           modalHeaderText={`PARENT <> SURROGATE PAIRING SUCCESSFUL`}
           isPairing={true}
-          parentName={getParentName()}
-          surrogateName={getSurrogateName()}
+          parentName={pairingForm.parentName}
+          surrogateName={pairingForm.surrogateName}
           modalBodyText=""
           modalAction={{
             method: () => {
@@ -100,17 +93,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
           getConfirmationModalStatus={getConfirmationModalStatus}
         />
       )}
-      {/* <input
-        type="file"
-        accept=".pdf, .jpg,  .png"
-        ref={imageUploadRef}
-        className="modal-image-hide"
-        onChange={(e) => {
-          console.log(e.target.files);
-          const image = e.target.files[0];
-          setPairingForm({ ...pairingForm, image: URL.createObjectURL(image) });
-        }}
-      /> */}
+
       <Modal
         open={isModalOpen}
         onClose={(e, reason) => {
@@ -141,55 +124,76 @@ export default function CreatePairing({ showCreatePairingModal }) {
               <br />
               <div className="flex-row space-between modal-input-row">
                 <FormControl variant="standard" {...defaultHalfInputProps}>
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Parents Name
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    value={pairingForm.parentName}
-                    onChange={(e) => {
-                      setPairingForm({
-                        ...pairingForm,
-                        parentID: e.target.value,
-                      });
-                    }}
-                    label="Parents Name"
-                  >
-                    {ConsumerContext.Parents.map((parent, index) => {
-                      return (
-                        <MenuItem value={parent.id} key={parent.id}>
-                          {parent.primary.firstname} {parent.primary.lastname}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
+                  {parents.length === 0 ? (
+                    <Chip
+                      label="No Unpaired Parents"
+                      color="primary"
+                      variant="outlined"
+                    />
+                  ) : (
+                    <>
+                      <InputLabel id="demo-simple-select-standard-label">
+                        Parent
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={pairingForm.parentName}
+                        onChange={(e) => {
+                          setPairingForm({
+                            ...pairingForm,
+                            parentID: e.target.value,
+                          });
+                        }}
+                        label="Parent"
+                      >
+                        {parents.map((parent, index) => {
+                          return (
+                            <MenuItem value={parent.id} key={parent.id}>
+                              {parent.primary.firstname}{" "}
+                              {parent.primary.lastname}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </>
+                  )}
                 </FormControl>
                 <FormControl variant="standard" {...defaultHalfInputProps}>
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Surrogates Name
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    value={pairingForm.surrogateName}
-                    onChange={(e) => {
-                      setPairingForm({
-                        ...pairingForm,
-                        surrogateID: e.target.value,
-                      });
-                    }}
-                    label="Surrogates Name"
-                  >
-                    {ConsumerContext.Surrogates.map((surrogate, index) => {
-                      return (
-                        <MenuItem value={surrogate.id} key={surrogate.id}>
-                          {surrogate.primary.firstname}{" "}
-                          {surrogate.primary.lastname}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
+                  {surrogates.length === 0 ? (
+                    <Chip
+                      label="No Unpaired Surrogates"
+                      color="primary"
+                      variant="outlined"
+                    />
+                  ) : (
+                    <>
+                      <InputLabel id="demo-simple-select-standard-label">
+                        Surrogate
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={pairingForm.surrogateName}
+                        onChange={(e) => {
+                          setPairingForm({
+                            ...pairingForm,
+                            surrogateID: e.target.value,
+                          });
+                        }}
+                        label="Surrogate"
+                      >
+                        {surrogates.map((surrogate, index) => {
+                          return (
+                            <MenuItem value={surrogate.id} key={surrogate.id}>
+                              {surrogate.primary.firstname}{" "}
+                              {surrogate.primary.lastname}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </>
+                  )}
                 </FormControl>
               </div>
             </div>
@@ -199,11 +203,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
                   <div className="pairing-item-container flex-column align-center">
                     <div className="modal-form-image-container flex-row">
                       <img
-                        src={
-                          pairingForm.parentID.length > 0
-                            ? getParentImage()
-                            : ""
-                        }
+                        src={pairingForm.parentImage}
                         alt=""
                         className="modal-form-image"
                       />
@@ -215,11 +215,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
                   <div className="pairing-item-container flex-column align-center">
                     <div className="modal-form-image-container flex-row">
                       <img
-                        src={
-                          pairingForm.surrogateID.length > 0
-                            ? getSurrogateImage()
-                            : ""
-                        }
+                        src={pairingForm.surrogateImage}
                         alt=""
                         className="modal-form-image"
                       />
