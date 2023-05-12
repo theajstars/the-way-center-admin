@@ -145,8 +145,9 @@ export default function Surrogates() {
                           <span
                             className="flex-row recent-table-action align-center"
                             onClick={() => {
-                              showViewSurrogateModal(true);
-                              setCurrentSurrogate(surrogate);
+                              // showViewSurrogateModal(true);
+                              // setCurrentSurrogate(surrogate);
+                              navigate(`/dashboard/surrogate/${surrogate.id}`);
                             }}
                           >
                             <i className="far fa-eye" /> &nbsp; View

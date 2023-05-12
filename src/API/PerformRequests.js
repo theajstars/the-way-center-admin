@@ -96,6 +96,24 @@ const GetCountries = async () => {
     route: Endpoints.GetCountries,
   });
 };
+const GetRelationships = async () => {
+  return FetchData({
+    method: "GET",
+    route: Endpoints.GetRelationships,
+  });
+};
+const GetTribes = async () => {
+  return FetchData({
+    method: "GET",
+    route: Endpoints.GetTribes,
+  });
+};
+const GetReligions = async () => {
+  return FetchData({
+    method: "GET",
+    route: Endpoints.GetReligions,
+  });
+};
 const GetMetrics = async () => {
   return FetchData({
     method: "GET",
@@ -148,6 +166,9 @@ const PerformRequest = {
   SendMessage,
   GetMessageList,
   GetCurrentMessages,
+  GetRelationships,
+  GetTribes,
+  GetReligions,
 };
 
 export { PerformRequest };

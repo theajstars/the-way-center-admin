@@ -16,7 +16,6 @@ import {
   CovidVaccinationDosage,
   Diseases,
   initialSurrogateReport,
-  NextOfKinRelationships,
   RecentParents,
   ReportCategories,
 } from "../../Assets/Data";

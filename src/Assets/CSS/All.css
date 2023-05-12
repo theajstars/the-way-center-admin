@@ -83,6 +83,7 @@ body {
 }
 .css-nvf14r-ToastContainer {
   z-index: 9999999 !important;
+  font-family: "poppins";
 }
 .filter-container {
   border: 1px solid var(--gray-tertiary);

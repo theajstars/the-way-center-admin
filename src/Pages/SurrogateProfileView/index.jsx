@@ -1,4 +1,6 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+
+import { useParams, useNavigate } from "react-router-dom";
 
 import {
   InputLabel,
@@ -10,37 +12,39 @@ import {
   Button,
   MenuItem,
   FormControl,
+  Divider,
 } from "@mui/material";
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
 import { DateField, DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import { useToasts } from "react-toast-notifications";
+import { PerformRequest } from "../../API/PerformRequests";
 import {
   CountriesList,
   CovidVaccinationDosage,
   Diseases,
   initialSurrogate,
-  NextOfKinRelationships,
   SampleSurrogate,
 } from "../../Assets/Data";
-import dayjs from "dayjs";
 
 import Confirmation from "../Confirmation";
 import SurrogateUpdate from "../SurrogateUpdate";
 import SurrogateReportCreate from "../SurrogateReportCreate";
+import { DefaultContext } from "../Dashboard";
+import MegaLoader from "../Megaloader";
 
 export default function SurrogateProfileView({
-  showViewSurrogateModal,
+  // showViewSurrogateModal,
   isUpdate,
-  surrogate,
+  // surrogate,
 }) {
+  const ConsumerContext = useContext(DefaultContext);
+  const params = useParams();
+  const navigate = useNavigate();
+  const { removeAllToasts, addToast } = useToasts();
   const [isModalOpen, setModalOpen] = useState(true);
-
-  const [currentFormSection, setCurrentFormSection] = useState(1);
-  const [surrogateForm, setSurrogateForm] = useState(surrogate);
-  const primaryImageUploadRef = useRef();
-  const secondaryImageUploadRef = useRef();
-
-  const govtIdentificationUploadRef = useRef();
-  const covidVaccinationUploadRef = useRef();
+  const [surrogateLoading, setSurrogateLoading] = useState(false);
+  const [surrogate, setSurrogate] = useState(initialSurrogate);
   const defaultFullInputProps = {
     disabled: true,
     className: "black-text",
@@ -53,34 +57,34 @@ export default function SurrogateProfileView({
   };
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const CreateSurrogateProfile = () => {
-    setModalOpen(false);
-    setShowConfirmationModal(true);
-  };
-  const getConfirmationModalStatus = (value) => {
-    setShowConfirmationModal(value);
-    if (!value) {
-      showViewSurrogateModal(false);
-    }
-  };
-
-  const [isUpdateProfile, setUpdateProfile] = useState(isUpdate ?? false);
-
-  const showUpdateSurrogateModal = (value) => {
-    setUpdateProfile(value);
-  };
 
   const [showCreateReport, setShowCreateReport] = useState(false);
-  const showSurrogateReportModal = (value) => {
-    setShowCreateReport(value);
-    // setModalOpen(false);
-    // showUpdateSurrogateModal(false);
-    showViewSurrogateModal(false);
-  };
+
   const CreateSurrogateReport = () => {
     setModalOpen(false);
     setShowCreateReport(true);
   };
+  const fetchSurrogate = async () => {
+    setSurrogateLoading(true);
+    const { surrogateID } = params;
+    const r = await PerformRequest.GetAllSurrogates({ surrogateID }).catch(
+      () => {
+        setSurrogateLoading(false);
+      }
+    );
+    if (r.data.status === "success" && r.data.data) {
+      setSurrogate(r.data.data[0]);
+    } else {
+      addToast("Surrogate Not Found... Redirecting", { appearance: "error" });
+      setTimeout(() => navigate("/dashboard/surrogates"), 1500);
+    }
+    setSurrogateLoading(false);
+    console.log(r);
+  };
+
+  useEffect(() => {
+    fetchSurrogate();
+  }, []);
   return (
     <>
       {showConfirmationModal && (
@@ -91,8 +95,6 @@ export default function SurrogateProfileView({
             method: () => {
               setShowConfirmationModal(false);
               setModalOpen(true);
-              setSurrogateForm(initialSurrogate);
-              setCurrentFormSection(1);
             },
             text: "Create Another Profile",
           }}
@@ -100,80 +102,17 @@ export default function SurrogateProfileView({
             text: "Back to Dashboard",
             route: "/dashboard",
           }}
-          getConfirmationModalStatus={getConfirmationModalStatus}
+          getConfirmationModalStatus={(value) => console.log(value)}
         />
       )}
       {showCreateReport && (
         <SurrogateReportCreate
-          showSurrogateReportModal={showSurrogateReportModal}
+          showSurrogateReportModal={(value) => setShowCreateReport(value)}
           surrogate={surrogate}
         />
       )}
-      {isUpdateProfile && (
-        <SurrogateUpdate
-          showUpdateSurrogateModal={showUpdateSurrogateModal}
-          surrogate={surrogate}
-        />
-      )}
-      <>
-        <input
-          type="file"
-          accept=".pdf, .jpg,  .png"
-          ref={primaryImageUploadRef}
-          className="modal-image-hide"
-          onChange={(e) => {
-            console.log(e.target.files);
-            const image = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
-              primaryImage: URL.createObjectURL(image),
-            });
-          }}
-        />
-        <input
-          type="file"
-          accept=".pdf, .jpg,  .png"
-          ref={secondaryImageUploadRef}
-          className="modal-image-hide"
-          onChange={(e) => {
-            console.log(e.target.files);
-            const image = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
-              secondaryImage: URL.createObjectURL(image),
-            });
-          }}
-        />
-        <input
-          type="file"
-          accept=".pdf, .jpg,  .png"
-          ref={govtIdentificationUploadRef}
-          className="modal-image-hide"
-          onChange={(e) => {
-            console.log(e.target.files);
-            const file = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
-              govtIdentificationFile: file,
-            });
-          }}
-        />
-        <input
-          type="file"
-          accept=".pdf, .jpg,  .png"
-          ref={covidVaccinationUploadRef}
-          className="modal-image-hide"
-          onChange={(e) => {
-            console.log(e.target.files);
-            const file = e.target.files[0];
-            setSurrogateForm({
-              ...surrogateForm,
-              covidVaccinationFile: file,
-            });
-          }}
-        />
-      </>
-      <Modal
+
+      {/* <Modal
         open={isModalOpen}
         onClose={(e, reason) => {
           if (reason === "backdropClick") {
@@ -182,8 +121,12 @@ export default function SurrogateProfileView({
           }
         }}
         className="default-modal-container flex-row"
-      >
-        <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column">
+      > */}
+      {/* <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column"> */}
+      {surrogateLoading ? (
+        <MegaLoader />
+      ) : (
+        <div className="surrogate-content flex-column">
           <span className="cinzel px-30 uppercase">VIEW SURROGATE PROFILE</span>
           <br />
           <span className="modal-about poppins px-15">
@@ -205,23 +148,7 @@ export default function SurrogateProfileView({
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
-                          Surrogate
-                        </span>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div>
-              <div className="flex-row space-between modal-input-row">
-                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                  <Input
-                    id="standard-adornment-amount"
-                    {...defaultFullInputProps}
-                    value={`${"true"}`}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
-                          Parent Name
+                          Full Name
                         </span>
                       </InputAdornment>
                     }
@@ -298,6 +225,80 @@ export default function SurrogateProfileView({
                 </FormControl>
               </div>
               <div className="flex-row space-between modal-input-row">
+                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                  <Input
+                    id="standard-adornment-amount"
+                    {...defaultFullInputProps}
+                    value={surrogate.primary.nin}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <span className="fw-500 poppins px-15 black-text">
+                          NIN
+                        </span>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </div>
+              {surrogate.extendedInfo.map((info) => {
+                return (
+                  <div
+                    className="flex-row space-between modal-input-row"
+                    key={info.kyc}
+                  >
+                    {info.field === "covidVaccinationCertificate" ? (
+                      <div className="flex-row align-center">
+                        &nbsp;&nbsp;
+                        <span className="poppins fw-500">{info.kyc}</span>
+                        &nbsp;&nbsp;
+                        <a className="poppins fw-300" href={info.value}>
+                          Download
+                        </a>
+                      </div>
+                    ) : (
+                      <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                        <Input
+                          id="standard-adornment-amount"
+                          {...defaultFullInputProps}
+                          value={info.value}
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <span className="fw-500 poppins px-15 black-text">
+                                {info.kyc}
+                              </span>
+                            </InputAdornment>
+                          }
+                        />
+                      </FormControl>
+                    )}
+                  </div>
+                );
+              })}
+              <div className="flex-row space-between modal-input-row">
+                <Divider style={{ width: "100%" }} />
+              </div>
+              <div className="flex-row space-between modal-input-row">
+                <span className="poppins px-16">
+                  &nbsp;&nbsp;<u>Next of Kin Details</u>
+                </span>
+              </div>
+              <div className="flex-row space-between modal-input-row">
+                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                  <Input
+                    id="standard-adornment-amount"
+                    {...defaultFullInputProps}
+                    value={surrogate.primary.nok.fullname}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <span className="fw-500 poppins px-15 black-text">
+                          Fullname
+                        </span>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </div>
+              <div className="flex-row space-between modal-input-row">
                 <FormControl
                   fullWidth
                   sx={{ m: 1 }}
@@ -306,11 +307,11 @@ export default function SurrogateProfileView({
                 >
                   <Input
                     id="standard-adornment-amount"
-                    value={`${surrogate.primary.hairColor}`}
+                    value={`${surrogate.primary.nok.nin}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
-                          Hair Color
+                          NIN
                         </span>
                       </InputAdornment>
                     }
@@ -324,11 +325,43 @@ export default function SurrogateProfileView({
                 >
                   <Input
                     id="standard-adornment-amount"
-                    value={`${surrogate.primary.skinColor}`}
+                    value={`${surrogate.primary.nok.phone}`}
                     startAdornment={
                       <InputAdornment position="start">
                         <span className="fw-500 poppins px-15 black-text">
-                          Skin Color
+                          Phone
+                        </span>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </div>
+              <div className="flex-row space-between modal-input-row">
+                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                  <Input
+                    id="standard-adornment-amount"
+                    {...defaultFullInputProps}
+                    value={surrogate.primary.nok.address}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <span className="fw-500 poppins px-15 black-text">
+                          Address
+                        </span>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </div>
+              <div className="flex-row space-between modal-input-row">
+                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                  <Input
+                    id="standard-adornment-amount"
+                    {...defaultFullInputProps}
+                    value={surrogate.primary.nok.relationship}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <span className="fw-500 poppins px-15 black-text">
+                          Relationship
                         </span>
                       </InputAdornment>
                     }
@@ -368,14 +401,14 @@ export default function SurrogateProfileView({
                 </Button>
 
                 <br />
-                <span
-                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                  onClick={() => {
-                    showViewSurrogateModal(false);
-                  }}
-                >
-                  Exit Profile
-                </span>
+                {/* <span
+                className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                onClick={() => {
+                  showViewSurrogateModal(false);
+                }}
+              >
+                Exit Profile
+              </span> */}
               </div>
             </div>
           </div>
@@ -392,7 +425,8 @@ export default function SurrogateProfileView({
             </Button>
             <Button
               onClick={() => {
-                setUpdateProfile(true);
+                // setUpdateProfile(true);
+                navigate(`/dashboard/surrogate/update/${surrogate.id}`);
               }}
               style={{
                 borderWidth: "2px",
@@ -403,7 +437,10 @@ export default function SurrogateProfileView({
             </Button>
           </div>
         </div>
-      </Modal>
+      )}
+      {/* </Modal> */}
+      <br />
+      <br />
     </>
   );
 }

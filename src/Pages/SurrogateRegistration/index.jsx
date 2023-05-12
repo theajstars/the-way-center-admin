@@ -15,7 +15,6 @@ import {
   CovidVaccinationDosage,
   Diseases,
   HairColours,
-  NextOfKinRelationships,
   SkinColours,
 } from "../../Assets/Data";
 import dayjs from "dayjs";
@@ -908,7 +907,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                       }
                       label="Relationship to Kin"
                     >
-                      {NextOfKinRelationships.map((rel, index) => {
+                      {consumeContext.Relationships.map((rel, index) => {
                         return (
                           <MenuItem value={rel.relationship} key={index}>
                             {rel.relationship}

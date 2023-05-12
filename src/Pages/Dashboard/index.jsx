@@ -13,13 +13,18 @@ import Messages from "../Messages";
 import Parents from "../Parents";
 import Reports from "../Reports";
 import SideNav from "../SideNav";
+import SurrogateProfileView from "../SurrogateProfileView";
 import Surrogates from "../Surrogates";
+import SurrogateUpdate from "../SurrogateUpdate";
 import TopNav from "../TopNav";
 
 const initialContext = {
   CountriesList: [],
   Surrogates: [],
   Parents: [],
+  Relationships: [],
+  Tribes: [],
+  Religions: [],
   Metrics: {
     parent: undefined,
     surrogate: undefined,
@@ -33,6 +38,10 @@ export default function Dashboard() {
   const [countries, setCountries] = useState([]);
   const [parents, setParents] = useState([]);
   const [surrogates, setSurrogates] = useState([]);
+
+  const [relationships, setRelationships] = useState([]);
+  const [religions, setReligions] = useState([]);
+  const [tribes, setTribes] = useState([]);
 
   const [metrics, setMetrics] = useState({
     ...initialContext.Metrics,
@@ -56,6 +65,24 @@ export default function Dashboard() {
       setParents(r.data.data);
     }
   };
+  const getRelationships = async () => {
+    const r = await PerformRequest.GetRelationships();
+    if (r.data.response_code === 200) {
+      setRelationships(r.data.data);
+    }
+  };
+  const getTribes = async () => {
+    const r = await PerformRequest.GetTribes();
+    if (r.data.response_code === 200) {
+      setTribes(r.data.data);
+    }
+  };
+  const getReligions = async () => {
+    const r = await PerformRequest.GetReligions();
+    if (r.data.response_code === 200) {
+      setReligions(r.data.data);
+    }
+  };
   const getMetrics = async () => {
     const r = await PerformRequest.GetMetrics();
     if (r.data.response_code === 200) {
@@ -68,6 +95,9 @@ export default function Dashboard() {
     getSurrogates();
     getParents();
     getMetrics();
+    getRelationships();
+    getTribes();
+    getReligions();
   };
   useEffect(() => {
     FetchAllData();
@@ -88,7 +118,10 @@ export default function Dashboard() {
               Parents: parents,
               Metrics: metrics,
               Surrogates: surrogates,
+              Relationships: relationships,
               refetchData: FetchAllData,
+              Tribes: tribes,
+              Religions: religions,
             }}
           >
             <Container maxWidth="xl">
@@ -97,6 +130,16 @@ export default function Dashboard() {
                   <Route path="/" index element={<Home />} />
                   <Route path="/parents" index element={<Parents />} />
                   <Route path="/surrogates" index element={<Surrogates />} />
+                  <Route
+                    path="/surrogate/:surrogateID"
+                    index
+                    element={<SurrogateProfileView />}
+                  />
+                  <Route
+                    path="/surrogate/update/:surrogateID"
+                    index
+                    element={<SurrogateUpdate />}
+                  />
                   <Route path="/messages" index element={<Messages />} />
                   <Route path="/reports" index element={<Reports />} />
                   {/* <Route path="/application" index element={<Application />} /> */}

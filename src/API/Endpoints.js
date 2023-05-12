@@ -6,6 +6,9 @@ const Endpoints = {
   UploadFile: "/misc/file-upload",
   GetCountries: "/misc/country",
   GetMetrics: "/console/metrics",
+  GetRelationships: "/misc/relationship",
+  GetTribes: "/misc/tribe",
+  GetReligions: "/misc/religion",
 
   AddTeamMember: "/console/team/add",
 

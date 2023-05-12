@@ -22,7 +22,8 @@ const initialParent = {
   createdOn: "",
 };
 const initialSurrogate = {
-  id: "5",
+  id: "",
+  dateOfBirth: "",
   primary: {
     lastname: "",
     firstname: "",
@@ -35,6 +36,9 @@ const initialSurrogate = {
     skinColor: "",
     hairColor: "",
     governmentID: "",
+    tribe: "",
+    religion: "",
+    experience: "",
     nok: {
       fullname: " ",
       address: "",

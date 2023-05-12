@@ -18,7 +18,6 @@ import {
   CovidVaccinationDosage,
   Diseases,
   initialParent,
-  NextOfKinRelationships,
   SampleSurrogate,
 } from "../../Assets/Data";
 import dayjs from "dayjs";

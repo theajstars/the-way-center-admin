@@ -148,8 +148,9 @@ export default function Home() {
                       <span
                         key={surrogate.primary.email}
                         onClick={() => {
-                          setCurrentSurrogate(surrogate);
-                          showViewSurrogateModal(true);
+                          // setCurrentSurrogate(surrogate);
+                          // showViewSurrogateModal(true);
+                          navigate(`/dashboard/surrogate/${surrogate.id}`);
                         }}
                         className="poppins fw-500 px-18 capitalize underline pointer recent-block-text"
                       >
