@@ -110,8 +110,7 @@ export default function Home() {
                       <span
                         key={parent.primary.email}
                         onClick={() => {
-                          setCurrentParent(parent);
-                          showViewParentModal(true);
+                          navigate(`/dashboard/parent/${parent.id}`);
                         }}
                         className="poppins fw-500 px-18 capitalize underline pointer recent-block-text"
                       >

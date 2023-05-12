@@ -60,6 +60,7 @@ export default function SurrogateProfileView({
 
   const [showCreateReport, setShowCreateReport] = useState(false);
 
+  const AttachMedia = () => {};
   const CreateSurrogateReport = () => {
     setModalOpen(false);
     setShowCreateReport(true);
@@ -399,16 +400,11 @@ export default function SurrogateProfileView({
                 >
                   Create Report
                 </Button>
+                <Button variant="outlined" onClick={AttachMedia} fullWidth>
+                  Create Surrogate Media
+                </Button>
 
                 <br />
-                {/* <span
-                className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                onClick={() => {
-                  showViewSurrogateModal(false);
-                }}
-              >
-                Exit Profile
-              </span> */}
               </div>
             </div>
           </div>

@@ -120,6 +120,7 @@ export default function SurrogateReportCreate({
     surrogateID: false,
     reportCategory: false,
     healthPractitioner: false,
+    healthCareCenter: false,
     details: false,
   });
 
@@ -130,13 +131,31 @@ export default function SurrogateReportCreate({
       surrogateID: !surrogate && currentSurrogate.id.length === 0,
       reportCategory: surrogateReport.reportCategory.length === 0,
       healthPractitioner: surrogateReport.healthPractitioner.length === 0,
+      healthCareCenter: surrogateReport.healthCareCenter.length === 0,
       details: surrogateReport.details.length === 0,
     });
   };
-  const [reportID, setReportID] = useState("");
+
   useEffect(() => {
     CreateReport();
   }, [formErrors]);
+  const getPairingDetails = async () => {
+    const r = await PerformRequest.GetPairing({
+      surrogateID: surrogate.id,
+    }).catch(() => {
+      addToast("Could not get pairing details!", { appearance: "error" });
+    });
+    console.log("Pairing details: ", r.data.data);
+    if (r.data.status === "success" && r.data.data) {
+      setSurrogateReport({
+        ...surrogateReport,
+        parentID: r.data.data[0].parent.parentID,
+      });
+    }
+  };
+  useEffect(() => {
+    getPairingDetails();
+  }, [surrogate]);
   const CreateReport = async () => {
     console.log(formErrors);
     if (formSubmitting) {
@@ -151,6 +170,7 @@ export default function SurrogateReportCreate({
           surrogateID: surrogate ? surrogate.id : currentSurrogate.id,
           reportCategory: surrogateReport.reportCategory,
           healthPractitioner: surrogateReport.healthPractitioner,
+          healthCareCenter: surrogateReport.healthCareCenter,
           details: surrogateReport.details,
           appointmentDate: surrogateReport.appointmentDate,
         };
@@ -271,6 +291,7 @@ export default function SurrogateReportCreate({
                       id="demo-simple-select-standard"
                       value={surrogateReport.parentID}
                       error={formErrors.parentID}
+                      disabled
                       onChange={(e) => {
                         setSurrogateReport({
                           ...surrogateReport,
@@ -376,33 +397,8 @@ export default function SurrogateReportCreate({
                   />
                 </div>
                 <div className="flex-row space-between modal-input-row">
-                  {/* <FormControl variant="standard" {...defaultFullInputProps}>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      Name of Doctor
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateReport.healthPractitioner}
-                      onChange={(e) => {
-                        setSurrogateReport({
-                          ...surrogateReport,
-                          healthPractitioner: e.target.value,
-                        });
-                      }}
-                      label="Name of Doctor"
-                    >
-                      {RecentParents.map((doctor, index) => {
-                        return (
-                          <MenuItem value={doctor.name} key={doctor.name}>
-                            {doctor.name}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl> */}
                   <TextField
-                    {...defaultFullInputProps}
+                    {...defaultHalfInputProps}
                     id="standard-multiline-static"
                     label="Health Practitioner"
                     placeholder="Health Practitioner"
@@ -413,6 +409,21 @@ export default function SurrogateReportCreate({
                       setSurrogateReport({
                         ...surrogateReport,
                         healthPractitioner: e.target.value,
+                      })
+                    }
+                  />
+                  <TextField
+                    {...defaultHalfInputProps}
+                    id="standard-multiline-static"
+                    label="Health Care Center"
+                    placeholder="Health Care Center"
+                    variant="standard"
+                    value={surrogateReport.healthCareCenter}
+                    error={formErrors.healthCareCenter}
+                    onChange={(e) =>
+                      setSurrogateReport({
+                        ...surrogateReport,
+                        healthCareCenter: e.target.value,
                       })
                     }
                   />

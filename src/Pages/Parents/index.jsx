@@ -156,8 +156,7 @@ export default function Parents() {
                           <span
                             className="flex-row recent-table-action align-center"
                             onClick={() => {
-                              showViewParentModal(true);
-                              setCurrentParent(parent);
+                              navigate(`/dashboard/parent/update/${parent.id}`);
                             }}
                           >
                             <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -165,8 +164,7 @@ export default function Parents() {
                           <span
                             className="flex-row recent-table-action align-center"
                             onClick={() => {
-                              showViewParentModal(true);
-                              setCurrentParent(parent);
+                              navigate(`/dashboard/parent/${parent.id}`);
                             }}
                           >
                             <i className="far fa-eye" /> &nbsp; View
@@ -232,8 +230,9 @@ export default function Parents() {
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
-                                showViewParentModal(true);
-                                setCurrentParent(parent);
+                                navigate(
+                                  `/dashboard/parent/update/${parent.id}`
+                                );
                               }}
                             >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -241,8 +240,7 @@ export default function Parents() {
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
-                                showViewParentModal(true);
-                                setCurrentParent(parent);
+                                navigate(`/dashboard/parent/${parent.id}`);
                               }}
                             >
                               <i className="far fa-eye" /> &nbsp; View
@@ -284,8 +282,9 @@ export default function Parents() {
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
-                                showViewParentModal(true);
-                                setCurrentParent(parent);
+                                navigate(
+                                  `/dashboard/parent/update/${parent.id}`
+                                );
                               }}
                             >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -294,8 +293,7 @@ export default function Parents() {
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
-                                showViewParentModal(true);
-                                setCurrentParent(parent);
+                                navigate(`/dashboard/parent/${parent.id}`);
                               }}
                             >
                               <i className="far fa-eye" /> &nbsp; View

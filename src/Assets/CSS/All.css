@@ -70,6 +70,9 @@ body {
 .uppercase {
   text-transform: uppercase;
 }
+.capitalize {
+  text-transform: capitalize;
+}
 
 .purple-btn-default {
   background-color: var(--purple-secondary);

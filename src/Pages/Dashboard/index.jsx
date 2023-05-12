@@ -10,7 +10,9 @@ import Footer from "../Footer";
 import Home from "../Home";
 import MegaLoader from "../Megaloader";
 import Messages from "../Messages";
+import ParentProfileView from "../ParentProfileView";
 import Parents from "../Parents";
+import ParentUpdate from "../ParentUpdate";
 import Reports from "../Reports";
 import SideNav from "../SideNav";
 import SurrogateProfileView from "../SurrogateProfileView";
@@ -129,6 +131,16 @@ export default function Dashboard() {
                 <Routes>
                   <Route path="/" index element={<Home />} />
                   <Route path="/parents" index element={<Parents />} />
+                  <Route
+                    path="/parent/:parentID"
+                    index
+                    element={<ParentProfileView />}
+                  />
+                  <Route
+                    path="/parent/update/:parentID"
+                    index
+                    element={<ParentUpdate />}
+                  />
                   <Route path="/surrogates" index element={<Surrogates />} />
                   <Route
                     path="/surrogate/:surrogateID"

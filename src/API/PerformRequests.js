@@ -60,6 +60,14 @@ const CreatePairing = async (pairingForm) => {
     data: pairingForm,
   });
 };
+const GetPairing = async ({ surrogateID, parentID, limit, page }) => {
+  return FetchData({
+    method: "GET",
+    route: `${Endpoints.GetPairingDetails}?surrogateID=${
+      surrogateID ?? ""
+    }&parentID=${parentID ?? ""}`,
+  });
+};
 const CreateReport = async (report) => {
   return FetchData({
     method: "POST",
@@ -158,6 +166,7 @@ const PerformRequest = {
   UpdateSurrogate,
   UpdateParent,
   CreatePairing,
+  GetPairing,
   CreateReport,
   GetReports,
   AddReportFile,

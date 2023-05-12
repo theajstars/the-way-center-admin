@@ -22,6 +22,7 @@ const Endpoints = {
   UpdateSurrogate: "/surrogate/update",
 
   CreatePairing: "/pair/create",
+  GetPairingDetails: "/pair/details",
 
   AddReportFile: "/report/files/add",
   CreateReport: "/report/create",

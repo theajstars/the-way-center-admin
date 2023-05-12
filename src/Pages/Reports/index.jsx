@@ -146,7 +146,7 @@ export default function Reports() {
           <br />
           <div className="flex-row align-center">
             <span className="fw-400 poppins px-16">Surrogate: &nbsp;</span>
-            <span className="fw-700 poppins px-16">
+            <span className="fw-700 poppins px-16 capitalize">
               {surrogateReportModalDetails.content?.surrogate.firstname}&nbsp;
               {surrogateReportModalDetails.content?.surrogate.lastname}
             </span>

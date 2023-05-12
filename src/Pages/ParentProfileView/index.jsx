@@ -1,4 +1,5 @@
-import { useState, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 import {
   InputLabel,
@@ -27,14 +28,19 @@ import SurrogateUpdate from "../SurrogateUpdate";
 import ParentUpdate from "../ParentUpdate";
 import { PerformRequest } from "../../API/PerformRequests";
 import { DefaultContext } from "../Dashboard";
+import MegaLoader from "../Megaloader";
 
 export default function ParentProfileView({
   showViewParentModal,
   isUpdate,
-  parent = initialParent,
+  // parent = initialParent,
 }) {
   const ConsumerContext = useContext(DefaultContext);
+  const navigate = useNavigate();
+  const params = useParams();
   const [isModalOpen, setModalOpen] = useState(true);
+  const [isParentLoading, setParentLoading] = useState(false);
+  const [parent, setParent] = useState(initialParent);
   const { addToast, removeAllToasts } = useToasts();
   const [currentFormSection, setCurrentFormSection] = useState(1);
   const [parentForm, setParentForm] = useState(parent);
@@ -55,6 +61,26 @@ export default function ParentProfileView({
     spellCheck: false,
   };
 
+  const getParent = async () => {
+    setParentLoading(true);
+    const r = await PerformRequest.GetAllParents({
+      parentID: params.parentID,
+    }).catch(() => {
+      setParentLoading(false);
+    });
+    setParentLoading(false);
+
+    if (r.data.status === "success" && r.data.data) {
+      console.log("Parent Obtained!");
+      setParent(r.data.data[0]);
+    } else {
+      addToast("No parent found... redirecting", { appearance: "error" });
+    }
+  };
+
+  useEffect(() => {
+    getParent();
+  }, []);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const getConfirmationModalStatus = (value) => {
@@ -198,7 +224,7 @@ export default function ParentProfileView({
           }}
         />
       </>
-      <Modal
+      {/* <Modal
         open={isModalOpen}
         onClose={(e, reason) => {
           if (reason === "backdropClick") {
@@ -207,8 +233,11 @@ export default function ParentProfileView({
           }
         }}
         className="default-modal-container flex-row"
-      >
-        <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column">
+      > */}
+      {isParentLoading ? (
+        <MegaLoader />
+      ) : (
+        <div className="surrogate-content flex-column">
           <span className="cinzel px-30 uppercase">VIEW PARENT PROFILE</span>
           <br />
 
@@ -395,10 +424,10 @@ export default function ParentProfileView({
               <span
                 className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                 onClick={() => {
-                  showViewParentModal(false);
+                  navigate("/dashboard/parents");
                 }}
               >
-                Exit Profile
+                Back to Parents
               </span>
             </div>
           </div>
@@ -432,7 +461,7 @@ export default function ParentProfileView({
             </Button>
             <Button
               onClick={() => {
-                setUpdateProfile(true);
+                navigate(`/dashboard/parent/update/${parent.id}`);
               }}
               style={{
                 borderWidth: "2px",
@@ -442,8 +471,10 @@ export default function ParentProfileView({
               Edit Profile &nbsp; <i className="far fa-pencil" />
             </Button>
           </div>
+          <br />
         </div>
-      </Modal>
+      )}
+      {/* </Modal> */}
     </>
   );
 }

@@ -95,6 +95,7 @@ const initialSurrogateReport = {
   surrogateID: "",
   reportCategory: "",
   healthPractitioner: "",
+  healthCareCenter: "",
   appointmentDate: dayjs("2023-01-01"),
   details: "",
 };
