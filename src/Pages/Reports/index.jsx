@@ -11,6 +11,7 @@ import {
   Alert,
   Typography,
 } from "@mui/material";
+import { useToasts } from "react-toast-notifications";
 import {
   ReportCategories,
   SurrogateRecords,
@@ -20,8 +21,10 @@ import { DefaultContext } from "../Dashboard";
 import AishaAvatar from "../../Assets/IMG/AishaAvatar.svg";
 import { PerformRequest } from "../../API/PerformRequests";
 import SurrogateReportCreate from "../SurrogateReportCreate";
+import { UploadFile } from "../../API/FetchData";
 
 export default function Reports() {
+  const { addToast } = useToasts();
   const ConsumerContext = useContext(DefaultContext);
   const [reports, setReports] = useState([]);
   const [isReportsLoading, setReportsLoading] = useState(false);
@@ -64,7 +67,9 @@ export default function Reports() {
       setTotalPages(r.data.totalPages);
     }
   };
-
+  const fileIsLarge = () => {
+    addToast("Max File Size: 1.5MB", { appearance: "error" });
+  };
   const [surrogateReportModalDetails, setSurrogateReportModalDetails] =
     useState({ state: false, content: null });
 
@@ -97,12 +102,87 @@ export default function Reports() {
   const showSurrogateReportModal = (value) => {
     setShowCreateReport(value);
   };
+
+  const [showAttachMedia, setShowAttachMedia] = useState(false);
+
+  const [isUploadFile, setUploadFile] = useState(false);
+
+  const reportFileUploadRef = useRef();
+  const [reportFile, setReportFile] = useState(undefined);
+  const [reportFileType, setReportFileType] = useState("");
+  const [reportErrors, setReportErrors] = useState({
+    reportFile: false,
+    reportType: false,
+  });
+  const UpdateFileErrors = async () => {
+    setReportErrors({
+      reportFile: reportFile === undefined,
+      reportType: reportFileType.length === 0,
+    });
+  };
+  useEffect(() => {
+    AttachMedia();
+  }, [reportErrors]);
+  const AttachMedia = async () => {
+    if (isUploadFile) {
+      const errors = Object.values(reportErrors).filter((e) => e === true);
+      if (errors.length > 0) {
+        setUploadFile(false);
+
+        addToast("Please fill the form correctly", { appearance: "error" });
+      } else {
+        let reportFileFormData = new FormData();
+        reportFileFormData.append(
+          "file",
+          reportFile,
+          reportFile.name.toLowerCase().split(" ").join().replaceAll(",", "")
+        );
+        const fileUpload = await UploadFile({ formData: reportFileFormData });
+        console.log(fileUpload.data.fileUrl);
+        console.log(surrogateReportModalDetails);
+        const data = {
+          reportID: surrogateReportModalDetails.content.id,
+          reportType: reportFileType,
+          file: fileUpload.data.fileUrl,
+        };
+        const createMedia = await PerformRequest.AddReportFile(data).catch(
+          () => {
+            setUploadFile(false);
+          }
+        );
+        console.log(createMedia);
+
+        setUploadFile(false);
+        const { message: responseMessage } = createMedia.data;
+        if (createMedia.data.status === "failed") {
+          addToast(responseMessage, { appearance: "error" });
+        } else {
+          addToast(responseMessage, { appearance: "success" });
+          window.location.reload();
+        }
+      }
+    }
+  };
   return (
     <div className="home-page">
       <Typography className="poppins fw-500" variant="h5">
         ADMIN DASHBOARD
       </Typography>
-
+      <input
+        type="file"
+        accept=".pdf, .jpg,  .png"
+        ref={reportFileUploadRef}
+        className="modal-image-hide"
+        onChange={(e) => {
+          console.log(e.target.files);
+          const image = e.target.files[0];
+          if (image.size > 1547220) {
+            fileIsLarge();
+          } else {
+            setReportFile(image);
+          }
+        }}
+      />
       <Modal
         open={surrogateReportModalDetails.state}
         onClose={(e, reason) => {
@@ -183,6 +263,15 @@ export default function Reports() {
             >
               Exit
             </span>
+            &nbsp; &nbsp; &nbsp;
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setShowAttachMedia(true);
+              }}
+            >
+              Create Media
+            </Button>
           </div>
         </div>
       </Modal>
@@ -350,6 +439,119 @@ export default function Reports() {
         </Grid>
       </div>
       <br />
+      {showAttachMedia && (
+        <Modal
+          open={showAttachMedia}
+          onClose={(e, reason) => {
+            if (reason === "backdropClick") {
+              setShowAttachMedia(false);
+            }
+          }}
+          className="default-modal-container flex-row"
+        >
+          {/* <div className="modal-form-container flex-column align-center width-100"> */}
+          <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column align-center">
+            <br />
+            <div className="modal-form flex-column align-center width-100">
+              <br />
+              <span className="fw-600 poppins px-24">Report File</span>
+              <br />
+              <div className="flex-row space-between modal-input-row width-100">
+                <FormControl
+                  variant="standard"
+                  {...defaultFullInputProps}
+                  disabled={false}
+                  // style={{ width: "100%" }}
+                >
+                  <InputLabel id="demo-simple-select-standard-label">
+                    Select Report Type
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={reportFileType}
+                    error={reportErrors.reportType}
+                    onChange={(e) => {
+                      setReportFileType(e.target.value);
+                    }}
+                    label="Select Report Type"
+                  >
+                    {ReportCategories.map((report, index) => {
+                      return (
+                        <MenuItem value={report.name} key={report.name}>
+                          {report.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </div>
+              <br />
+              <span className="flex-column align-center width-100">
+                <div className="flex-column modal-form-file-container">
+                  <span className="px-13 poppins fw-500">
+                    &nbsp; &nbsp; Upload Document
+                  </span>
+                  <div
+                    className="flex-row modal-form-file width-100"
+                    style={{
+                      borderColor: reportErrors.reportFile ? "red" : "#9a9ab0",
+                    }}
+                  >
+                    <div className="px-13 poppins fw-500">
+                      {reportFile ? (
+                        reportFile.name
+                      ) : (
+                        <span>No File Selected</span>
+                      )}
+                    </div>
+                    <span
+                      className="px-13 poppins fw-500 modal-form-file-btn flex-row pointer"
+                      onClick={() => {
+                        reportFileUploadRef.current.click();
+                      }}
+                    >
+                      Upload File
+                    </span>
+                  </div>
+                  <span className="px-13 poppins fw-500 modal-form-file-about">
+                    &nbsp; &nbsp; Acceptable format :PDF/JPG/PNG
+                  </span>
+                </div>
+              </span>
+            </div>
+            <div className="flex-column modal-form-right space-between align-center">
+              <br />
+              <div className="width-100 flex-column align-center">
+                <span
+                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                  onClick={() => {
+                    setShowAttachMedia(false);
+                  }}
+                >
+                  Cancel &nbsp; <i className="far fa-long-arrow-alt-left" />
+                </span>
+                <br />
+                <Button
+                  disabled={isUploadFile}
+                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                  onClick={() => {
+                    UpdateFileErrors();
+                    setUploadFile(true);
+                  }}
+                >
+                  Upload Report &nbsp;{" "}
+                  {isUploadFile ? (
+                    <i className="far fa-spinner-third fa-spin" />
+                  ) : (
+                    <i className="far fa-long-arrow-alt-right" />
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
       <div className="flex-row width-100 align-center justify-center">
         <Pagination
           disabled={isReportsLoading}

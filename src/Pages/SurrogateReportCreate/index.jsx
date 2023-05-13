@@ -201,12 +201,7 @@ export default function SurrogateReportCreate({
     }
   };
   const [isUploadFile, setUploadFile] = useState(false);
-  const UpdateFileErrors = async () => {
-    setReportErrors({
-      reportFile: reportFile === undefined,
-      reportType: reportFileType.length === 0,
-    });
-  };
+
   useEffect(() => {
     attachReportFile();
   }, [reportErrors]);
@@ -276,7 +271,7 @@ export default function SurrogateReportCreate({
             couple of minutes
           </span>
 
-          {currentFormSection === 1 ? (
+          {currentFormSection === 1 && (
             <div className="modal-form-container flex-row">
               <div className="modal-form flex-column">
                 <br />
@@ -465,96 +460,6 @@ export default function SurrogateReportCreate({
                   CREATE REPORT &nbsp;{" "}
                   <i className="far fa-long-arrow-alt-right" />
                 </span>
-              </div>
-            </div>
-          ) : (
-            <div className="modal-form-container flex-column align-center width-100">
-              <div className="modal-form flex-column align-center">
-                <br />
-                <span className="fw-600 poppins px-24">Report File</span>
-                <br />
-                <FormControl variant="standard" {...defaultFullInputProps}>
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Select Report Type
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    value={reportFileType}
-                    error={reportErrors.reportType}
-                    onChange={(e) => {
-                      setReportFileType(e.target.value);
-                    }}
-                    label="Select Report Type"
-                  >
-                    {ReportCategories.map((report, index) => {
-                      return (
-                        <MenuItem value={report.name} key={report.name}>
-                          {report.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-                <br />
-                <span className="flex-column align-center width-100">
-                  <div className="flex-column modal-form-file-container">
-                    <span className="px-13 poppins fw-500">
-                      &nbsp; &nbsp; Upload Document
-                    </span>
-                    <div
-                      className="flex-row modal-form-file width-100"
-                      style={{
-                        borderColor: reportErrors.reportFile
-                          ? "red"
-                          : "#9a9ab0",
-                      }}
-                    >
-                      <div className="px-13 poppins fw-500">
-                        {surrogateReport.reportFile ? (
-                          surrogateReport.reportFile.name
-                        ) : (
-                          <span>No File Selected</span>
-                        )}
-                      </div>
-                      <span
-                        className="px-13 poppins fw-500 modal-form-file-btn flex-row pointer"
-                        onClick={() => {
-                          reportFileUploadRef.current.click();
-                        }}
-                      >
-                        Upload File
-                      </span>
-                    </div>
-                    <span className="px-13 poppins fw-500 modal-form-file-about">
-                      &nbsp; &nbsp; Acceptable format :PDF/JPG/PNG
-                    </span>
-                  </div>
-                </span>
-              </div>
-              <div className="flex-column modal-form-right space-between align-center">
-                <br />
-                <div className="width-100 flex-column align-center">
-                  <span
-                    className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                    onClick={() => {
-                      setCurrentFormSection(1);
-                    }}
-                  >
-                    Back &nbsp; <i className="far fa-long-arrow-alt-left" />
-                  </span>
-                  <br />
-                  <span
-                    className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                    onClick={() => {
-                      UpdateFileErrors();
-                      setUploadFile(true);
-                    }}
-                  >
-                    Upload Report &nbsp;{" "}
-                    <i className="far fa-long-arrow-alt-right" />
-                  </span>
-                </div>
               </div>
             </div>
           )}
