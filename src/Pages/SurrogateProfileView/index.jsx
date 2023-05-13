@@ -60,45 +60,7 @@ export default function SurrogateProfileView({
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const [showCreateReport, setShowCreateReport] = useState(false);
-  const [showAttachMedia, setShowAttachMedia] = useState(false);
 
-  const [isUploadFile, setUploadFile] = useState(false);
-
-  const reportFileUploadRef = useRef();
-  const [reportFile, setReportFile] = useState(undefined);
-  const [reportFileType, setReportFileType] = useState("");
-  const [reportErrors, setReportErrors] = useState({
-    reportFile: false,
-    reportType: false,
-  });
-  const UpdateFileErrors = async () => {
-    setReportErrors({
-      reportFile: reportFile === undefined,
-      reportType: reportFileType.length === 0,
-    });
-  };
-  useEffect(() => {
-    AttachMedia();
-  }, [reportErrors]);
-  const AttachMedia = async () => {
-    if (isUploadFile) {
-      const errors = Object.values(reportErrors).filter((e) => e === true);
-      if (errors.length > 0) {
-        setUploadFile(false);
-
-        addToast("Please fill the form correctly", { appearance: "error" });
-      } else {
-        let reportFileFormData = new FormData();
-        reportFileFormData.append(
-          "file",
-          reportFile,
-          reportFile.name.toLowerCase().split(" ").join().replaceAll(",", "")
-        );
-        const fileUpload = await UploadFile({ formData: reportFileFormData });
-        console.log(fileUpload.data.fileUrl);
-      }
-    }
-  };
   const CreateSurrogateReport = () => {
     setShowCreateReport(true);
   };
@@ -120,31 +82,11 @@ export default function SurrogateProfileView({
     console.log(r);
   };
 
-  const fileIsLarge = () => {
-    addToast("Max File Size: 1.5MB", { appearance: "error" });
-  };
-
   useEffect(() => {
     fetchSurrogate();
   }, []);
   return (
     <>
-      <input
-        type="file"
-        accept=".pdf, .jpg,  .png"
-        ref={reportFileUploadRef}
-        className="modal-image-hide"
-        onChange={(e) => {
-          console.log(e.target.files);
-          const image = e.target.files[0];
-          if (image.size > 1547220) {
-            fileIsLarge();
-          } else {
-            setReportFile(image);
-          }
-        }}
-      />
-
       {showConfirmationModal && (
         <Confirmation
           modalHeaderText=""
@@ -487,147 +429,6 @@ export default function SurrogateProfileView({
       {/* </Modal> */}
       <br />
       <br />
-      {showAttachMedia && (
-        <Modal
-          open={showAttachMedia}
-          onClose={(e, reason) => {
-            if (reason === "backdropClick") {
-              setShowAttachMedia(false);
-            }
-          }}
-          className="default-modal-container flex-row"
-        >
-          {/* <div className="modal-form-container flex-column align-center width-100"> */}
-          <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column align-center">
-            <br />
-            <div className="modal-form flex-column align-center width-100">
-              <br />
-              <span className="fw-600 poppins px-24">Report File</span>
-              <br />
-              <div className="flex-row space-between modal-input-row width-100">
-                <FormControl
-                  variant="standard"
-                  {...defaultHalfInputProps}
-                  disabled={false}
-                  // style={{ width: "100%" }}
-                >
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Select Report Type
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    value={reportFileType}
-                    error={reportErrors.reportType}
-                    onChange={(e) => {
-                      setReportFileType(e.target.value);
-                    }}
-                    label="Select Report Type"
-                  >
-                    {ReportCategories.map((report, index) => {
-                      return (
-                        <MenuItem value={report.name} key={report.name}>
-                          {report.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-                <FormControl
-                  variant="standard"
-                  {...defaultHalfInputProps}
-                  disabled={false}
-                  // style={{ width: "100%" }}
-                >
-                  <InputLabel id="demo-simple-select-standard-label">
-                    Select Report
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    value={reportFileType}
-                    error={reportErrors.reportType}
-                    onChange={(e) => {
-                      setReportFileType(e.target.value);
-                    }}
-                    label="Select Report Type"
-                  >
-                    {ReportCategories.map((report, index) => {
-                      return (
-                        <MenuItem value={report.name} key={report.name}>
-                          {report.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </div>
-              <br />
-              <span className="flex-column align-center width-100">
-                <div className="flex-column modal-form-file-container">
-                  <span className="px-13 poppins fw-500">
-                    &nbsp; &nbsp; Upload Document
-                  </span>
-                  <div
-                    className="flex-row modal-form-file width-100"
-                    style={{
-                      borderColor: reportErrors.reportFile ? "red" : "#9a9ab0",
-                    }}
-                  >
-                    <div className="px-13 poppins fw-500">
-                      {reportFile ? (
-                        reportFile.name
-                      ) : (
-                        <span>No File Selected</span>
-                      )}
-                    </div>
-                    <span
-                      className="px-13 poppins fw-500 modal-form-file-btn flex-row pointer"
-                      onClick={() => {
-                        reportFileUploadRef.current.click();
-                      }}
-                    >
-                      Upload File
-                    </span>
-                  </div>
-                  <span className="px-13 poppins fw-500 modal-form-file-about">
-                    &nbsp; &nbsp; Acceptable format :PDF/JPG/PNG
-                  </span>
-                </div>
-              </span>
-            </div>
-            <div className="flex-column modal-form-right space-between align-center">
-              <br />
-              <div className="width-100 flex-column align-center">
-                <span
-                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                  onClick={() => {
-                    setShowAttachMedia(false);
-                  }}
-                >
-                  Cancel &nbsp; <i className="far fa-long-arrow-alt-left" />
-                </span>
-                <br />
-                <Button
-                  disabled={isUploadFile}
-                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
-                  onClick={() => {
-                    UpdateFileErrors();
-                    setUploadFile(true);
-                  }}
-                >
-                  Upload Report &nbsp;{" "}
-                  {isUploadFile ? (
-                    <i className="far fa-spinner-third fa-spin" />
-                  ) : (
-                    <i className="far fa-long-arrow-alt-right" />
-                  )}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </Modal>
-      )}
     </>
   );
 }
