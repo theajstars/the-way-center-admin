@@ -16,6 +16,8 @@ import {
   Button,
   ChakraProvider,
   Text,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useToasts } from "react-toast-notifications";
 
@@ -139,6 +141,14 @@ export default function Parents() {
                   </Tr>
                 </Thead>
                 <Tbody>
+                  {ConsumerContext.Parents.length === 0 && (
+                    <center>
+                      <Alert status="info" width={"90%"}>
+                        <AlertIcon />
+                        There are no Parents
+                      </Alert>
+                    </center>
+                  )}
                   {ConsumerContext.Parents.map((parent, index) => {
                     return (
                       <Tr
@@ -207,9 +217,10 @@ export default function Parents() {
                   <Tbody>
                     {pairedParents.length === 0 && (
                       <center>
-                        <Text className="poppins fw-500">
-                          No paired parents
-                        </Text>
+                        <Alert status="info" width={"90%"}>
+                          <AlertIcon />
+                          There are no paired parents
+                        </Alert>
                       </center>
                     )}
                     {pairedParents.map((parent, index) => {
@@ -312,25 +323,14 @@ export default function Parents() {
                     })}
                     {unPairedParents.length === 0 && (
                       <center>
-                        <Text className="poppins fw-500">
-                          No unpaired parents
-                        </Text>
+                        <Alert status="info" width={"90%"}>
+                          <AlertIcon />
+                          There are no unpaired parents
+                        </Alert>
                       </center>
                     )}
                   </Tbody>
                 </Table>
-                <br />
-                <br />
-                {/* <div className="flex-row width-100 align-center justify-end">
-                  <Text
-                    className="poppins underline px-14 fw-500 pointer"
-                    onClick={() => {
-                      navigate("/dashboard/surrogates");
-                    }}
-                  >
-                    View All Surrogates
-                  </Text>
-                </div> */}
               </TableContainer>
             </div>
           </ChakraProvider>

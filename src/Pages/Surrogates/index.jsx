@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { Typography } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import {
   Table,
   Thead,
@@ -16,6 +16,8 @@ import {
   Button,
   ChakraProvider,
   Text,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import DashboardOverview from "../DashboardOverview";
 import {
@@ -26,6 +28,7 @@ import SurrogateProfileView from "../SurrogateProfileView";
 import CreatePairing from "../CreatePairing";
 import { DefaultContext } from "../Dashboard";
 import { PerformRequest } from "../../API/PerformRequests";
+import { useEffect } from "react";
 
 export default function Surrogates() {
   const navigate = useNavigate();
@@ -45,15 +48,9 @@ export default function Surrogates() {
   const showCreatePairingModal = (value) => {
     setAddNewPairing(value);
   };
-  const [recentSurrogates, setRecentSurrogates] = useState(
-    ContextConsumer.Surrogates ?? []
-  );
-  const [recentPairedSurrogates, setRecentPairedSurrogates] = useState(
-    ContextConsumer.Surrogates ?? []
-  );
-  const [recentUnPairedSurrogates, setRecentUnPairedSurrogates] = useState(
-    ContextConsumer.Surrogates ?? []
-  );
+  const [recentSurrogates, setRecentSurrogates] = useState([]);
+  const [recentPairedSurrogates, setRecentPairedSurrogates] = useState([]);
+  const [recentUnPairedSurrogates, setRecentUnPairedSurrogates] = useState([]);
 
   const getRecentSurrogates = async () => {
     const r = await PerformRequest.GetAllSurrogates({
@@ -85,6 +82,11 @@ export default function Surrogates() {
     }
   };
 
+  useEffect(() => {
+    getRecentPairedSurrogates();
+    getRecentUnPairedSurrogates();
+    getRecentSurrogates();
+  }, []);
   return (
     <div className="home-page">
       {isAddNewPairing && (
@@ -118,7 +120,15 @@ export default function Surrogates() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {ContextConsumer.Surrogates.map((surrogate, index) => {
+                  {recentSurrogates.length === 0 && (
+                    <center>
+                      <Alert status="info" width={"90%"}>
+                        <AlertIcon />
+                        There are no surrogates
+                      </Alert>
+                    </center>
+                  )}
+                  {recentSurrogates.map((surrogate, index) => {
                     return (
                       <Tr
                         className="fw-600 poppins recent-table-row table-purple-row "
@@ -136,8 +146,9 @@ export default function Surrogates() {
                           <span
                             className="flex-row recent-table-action align-center"
                             onClick={() => {
-                              showViewSurrogateModal(true);
-                              setCurrentSurrogate(surrogate);
+                              navigate(
+                                `/dashboard/surrogate/update/${surrogate.id}`
+                              );
                             }}
                           >
                             <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -161,18 +172,6 @@ export default function Surrogates() {
                   })}
                 </Tbody>
               </Table>
-              <br />
-              <br />
-              <div className="flex-row width-100 align-center justify-end">
-                <Text
-                  className="poppins underline px-14 fw-500 pointer"
-                  onClick={() => {
-                    navigate("/dashboard/surrogates");
-                  }}
-                >
-                  View All Surrogates
-                </Text>
-              </div>
             </TableContainer>
             <br />
 
@@ -184,6 +183,14 @@ export default function Surrogates() {
                 <br />
                 <Table variant="simple" colorScheme="whiteAlpha">
                   <Tbody>
+                    {recentPairedSurrogates.length === 0 && (
+                      <center>
+                        <Alert status="info" width={"90%"}>
+                          <AlertIcon />
+                          No Paired Surrogates
+                        </Alert>
+                      </center>
+                    )}
                     {recentPairedSurrogates.map((surrogate, index) => {
                       return (
                         <Tr
@@ -200,8 +207,9 @@ export default function Surrogates() {
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
-                                showViewSurrogateModal(true);
-                                setCurrentSurrogate(surrogate);
+                                navigate(
+                                  `/dashboard/surrogate/update/${surrogate.id}`
+                                );
                               }}
                             >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -209,8 +217,9 @@ export default function Surrogates() {
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
-                                showViewSurrogateModal(true);
-                                setCurrentSurrogate(surrogate);
+                                navigate(
+                                  `/dashboard/surrogate/${surrogate.id}`
+                                );
                               }}
                             >
                               <i className="far fa-eye" /> &nbsp; View
@@ -221,13 +230,6 @@ export default function Surrogates() {
                     })}
                   </Tbody>
                 </Table>
-                <br />
-                <br />
-                <div className="flex-row width-100 align-center justify-end">
-                  <Text className="poppins underline px-14 fw-500 pointer">
-                    View All Paired Surrogates
-                  </Text>
-                </div>
               </TableContainer>
               <TableContainer className="recent-table-container-small table-white">
                 <Text className="cinzel px-15 uppercase">
@@ -236,6 +238,14 @@ export default function Surrogates() {
                 <br />
                 <Table variant="simple" colorScheme="whiteAlpha">
                   <Tbody>
+                    {recentUnPairedSurrogates.length === 0 && (
+                      <center>
+                        <Alert status="info" width={"90%"}>
+                          <AlertIcon />
+                          No Unpaired Surrogates
+                        </Alert>
+                      </center>
+                    )}
                     {recentUnPairedSurrogates.map((surrogate, index) => {
                       return (
                         <Tr
@@ -252,8 +262,9 @@ export default function Surrogates() {
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
-                                showViewSurrogateModal(true);
-                                setCurrentSurrogate(surrogate);
+                                navigate(
+                                  `/dashboard/surrogate/update/${surrogate.id}`
+                                );
                               }}
                             >
                               <i className="far fa-pencil-alt" /> &nbsp; Edit
@@ -262,8 +273,9 @@ export default function Surrogates() {
                             <span
                               className="flex-row recent-table-action table-small-action align-center"
                               onClick={() => {
-                                showViewSurrogateModal(true);
-                                setCurrentSurrogate(surrogate);
+                                navigate(
+                                  `/dashboard/surrogate/${surrogate.id}`
+                                );
                               }}
                             >
                               <i className="far fa-eye" /> &nbsp; View
@@ -282,18 +294,6 @@ export default function Surrogates() {
                     })}
                   </Tbody>
                 </Table>
-                <br />
-                <br />
-                <div className="flex-row width-100 align-center justify-end">
-                  <Text
-                    className="poppins underline px-14 fw-500 pointer"
-                    onClick={() => {
-                      navigate("/dashboard/surrogates");
-                    }}
-                  >
-                    View All Surrogates
-                  </Text>
-                </div>
               </TableContainer>
             </div>
           </ChakraProvider>

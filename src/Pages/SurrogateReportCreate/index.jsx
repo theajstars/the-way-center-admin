@@ -141,7 +141,7 @@ export default function SurrogateReportCreate({
   }, [formErrors]);
   const getPairingDetails = async () => {
     const r = await PerformRequest.GetPairing({
-      surrogateID: surrogate.id,
+      surrogateID: surrogate ? surrogate.id : currentSurrogate.id,
     }).catch(() => {
       addToast("Could not get pairing details!", { appearance: "error" });
     });
@@ -154,8 +154,12 @@ export default function SurrogateReportCreate({
     }
   };
   useEffect(() => {
-    getPairingDetails();
-  }, [surrogate]);
+    if (!surrogate && currentSurrogate.id.length === 0) {
+      // No Surrogate is Set, so do nothing
+    } else {
+      getPairingDetails();
+    }
+  }, [surrogate, currentSurrogate]);
   const CreateReport = async () => {
     console.log(formErrors);
     if (formSubmitting) {

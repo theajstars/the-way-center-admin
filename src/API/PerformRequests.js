@@ -1,6 +1,12 @@
 import { Endpoints } from "./Endpoints";
 import { FetchData } from "./FetchData";
 
+const GetProfile = async () => {
+  return FetchData({
+    method: "GET",
+    route: Endpoints.Profile,
+  });
+};
 const CreateNewSurrogate = async (surrogate) => {
   return FetchData({
     method: "POST",
@@ -73,7 +79,7 @@ const GetPairing = async ({ surrogateID, parentID, limit, page }) => {
     method: "GET",
     route: `${Endpoints.GetPairingDetails}?surrogateID=${
       surrogateID ?? ""
-    }&parentID=${parentID ?? ""}&limit=${limit}&page=${page}`,
+    }&parentID=${parentID ?? ""}&limit=${limit ?? ""}&page=${page ?? ""}`,
   });
 };
 const CreateReport = async (report) => {
@@ -187,6 +193,7 @@ const PerformRequest = {
   GetTribes,
   GetReligions,
   UpdatePairing,
+  GetProfile,
 };
 
 export { PerformRequest };

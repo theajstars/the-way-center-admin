@@ -161,6 +161,13 @@ export default function Reports() {
             </span>
           </div>
           <br />
+          <div className="flex-row align-center">
+            <span className="fw-400 poppins px-16">Health Center: &nbsp;</span>
+            <span className="fw-700 poppins px-16">
+              {surrogateReportModalDetails.content?.healthCenter}
+            </span>
+          </div>
+          <br />
           <span className="px-15 gray-secondary-text poppins full-surrogate-report-body modal-scrollbar">
             {surrogateReportModalDetails.content?.details}
           </span>

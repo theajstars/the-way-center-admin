@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 
 import { motion } from "framer-motion";
 import ChatIcon from "../../Assets/IMG/ChatIcon.svg";
 import BellIcon from "../../Assets/IMG/BellIcon.svg";
 import ClaudiaAvatar from "../../Assets/IMG/ClaudiaAvatar.png";
+import { DefaultContext } from "../Dashboard";
+
 export default function TopNav() {
+  const ContextConsumer = useContext(DefaultContext);
+  console.log(ContextConsumer);
   const [isTopNavOpen, setTopNavOpen] = useState(true);
+  const [profile, setProfile] = useState(ContextConsumer.Profile ?? {});
+  useEffect(() => {
+    setProfile(ContextConsumer.Profile ?? {});
+  }, [ContextConsumer]);
   return (
     <>
       <span
@@ -35,11 +43,12 @@ export default function TopNav() {
           <img src={ClaudiaAvatar} alt="" className="top-nav-avatar" />
           <div className="top-nav-col flex-column">
             <span className="cinzel top-nav-name">
-              claudia akinsanjo thomas
+              {profile.firstname}&nbsp;
+              {profile.lastname}
             </span>
             <div className="flex-row top-nav-links">
               <span className="top-nav-link">Edit Profile</span>
-              <span className="top-nav-tag">Parent Account</span>
+              <span className="top-nav-tag">Admin Account</span>
             </div>
           </div>
         </motion.div>

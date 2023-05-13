@@ -28,6 +28,16 @@ const initialContext = {
   Relationships: [],
   Tribes: [],
   Religions: [],
+  Profile: {
+    token: "",
+    lastname: "",
+    firstname: "",
+    middlename: "",
+    email: "",
+    phone: "",
+    accountCode: "",
+    accountConnected: "",
+  },
   Metrics: {
     parent: undefined,
     surrogate: undefined,
@@ -41,6 +51,7 @@ export default function Dashboard() {
   const [countries, setCountries] = useState([]);
   const [parents, setParents] = useState([]);
   const [surrogates, setSurrogates] = useState([]);
+  const [profile, setProfile] = useState();
 
   const [relationships, setRelationships] = useState([]);
   const [religions, setReligions] = useState([]);
@@ -92,6 +103,11 @@ export default function Dashboard() {
       setMetrics({ ...r.data.data, set: true });
     }
   };
+  const getProfile = async () => {
+    const r = await PerformRequest.GetProfile();
+    console.log(r);
+    setProfile(r.data.data ?? initialContext.Profile);
+  };
 
   const FetchAllData = async () => {
     getCountries();
@@ -101,6 +117,7 @@ export default function Dashboard() {
     getRelationships();
     getTribes();
     getReligions();
+    getProfile();
   };
   useEffect(() => {
     FetchAllData();
@@ -113,7 +130,6 @@ export default function Dashboard() {
       <SideNav />
       {metrics.set ? (
         <>
-          <TopNav />
           <DefaultContext.Provider
             value={{
               ...initialContext,
@@ -125,8 +141,10 @@ export default function Dashboard() {
               refetchData: FetchAllData,
               Tribes: tribes,
               Religions: religions,
+              Profile: profile,
             }}
           >
+            <TopNav />
             <Container maxWidth="xl">
               <div className="dashboard-component">
                 <Routes>
