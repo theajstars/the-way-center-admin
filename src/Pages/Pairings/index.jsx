@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   FormControl,
@@ -32,6 +33,7 @@ import {
 } from "@chakra-ui/react";
 
 export default function Pairings() {
+  const navigate = useNavigate();
   const ConsumerContext = useContext(DefaultContext);
   const [pairings, setPairings] = useState([]);
   const [isPairingsLoading, setPairingsLoading] = useState(false);
@@ -117,7 +119,7 @@ export default function Pairings() {
   const ActivatePairing = async (pairingID) => {
     const r = await PerformRequest.UpdatePairing({
       pairingID,
-      status: "inactive",
+      status: "active",
     }).catch(() => {
       setPairingsLoading(false);
     });
@@ -253,10 +255,24 @@ export default function Pairings() {
                         key={index}
                       >
                         <Td className="capitalize">{pairing.id}</Td>
-                        <Td className="capitalize">
+                        <Td
+                          className="capitalize pointer"
+                          onClick={() => {
+                            navigate(
+                              `/dashboard/parent/${pairing.parent.parentID}`
+                            );
+                          }}
+                        >
                           {pairing.parent.firstname} {pairing.parent.lastname}
                         </Td>
-                        <Td className="capitalize">
+                        <Td
+                          className="capitalize pointer"
+                          onClick={() => {
+                            navigate(
+                              `/dashboard/surrogate/${pairing.surrogate.surrogateID}`
+                            );
+                          }}
+                        >
                           {pairing.surrogate.firstname}{" "}
                           {pairing.surrogate.lastname}
                         </Td>

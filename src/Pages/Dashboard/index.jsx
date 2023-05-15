@@ -1,6 +1,8 @@
-import { Container } from "@mui/material";
 import { createContext, useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+
+import { Route, Routes, useNavigate } from "react-router-dom";
+
+import { Container } from "@mui/material";
 import { Endpoints } from "../../API/Endpoints";
 import { FetchData } from "../../API/FetchData";
 import { PerformRequest } from "../../API/PerformRequests";
@@ -47,7 +49,9 @@ const initialContext = {
   refetchData: () => {},
 };
 const DefaultContext = createContext(initialContext);
+
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [countries, setCountries] = useState([]);
   const [parents, setParents] = useState([]);
   const [surrogates, setSurrogates] = useState([]);
@@ -106,6 +110,9 @@ export default function Dashboard() {
   const getProfile = async () => {
     const r = await PerformRequest.GetProfile();
     console.log(r);
+    if (r.data.status !== "success") {
+      navigate("/login");
+    }
     setProfile(r.data.data ?? initialContext.Profile);
   };
 

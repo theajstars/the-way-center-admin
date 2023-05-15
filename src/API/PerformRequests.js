@@ -1,6 +1,19 @@
 import { Endpoints } from "./Endpoints";
 import { FetchData } from "./FetchData";
-
+const RequestOTP = async ({ email }) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.RequestOTP,
+    data: { email },
+  });
+};
+const Login = async ({ email, password }) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.Login,
+    data: { email, password, account: "Console" },
+  });
+};
 const GetProfile = async () => {
   return FetchData({
     method: "GET",
@@ -171,6 +184,8 @@ const GetCurrentMessages = async (reference) => {
 };
 
 const PerformRequest = {
+  RequestOTP,
+  Login,
   CreateNewSurrogate,
   CreateNewParent,
   GetAllParents,

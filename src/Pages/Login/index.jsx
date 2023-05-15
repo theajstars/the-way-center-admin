@@ -5,6 +5,7 @@ import Logo from "../../Assets/IMG/Logo.png";
 import { validateEmail } from "../../App";
 import { useToasts } from "react-toast-notifications";
 import Cookies from "js-cookie";
+import { PerformRequest } from "../../API/PerformRequests";
 
 export default function Login() {
   const { addToast } = useToasts();
@@ -13,19 +14,42 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const LoginUser = () => {
+  const RequestOTP = async () => {
     const isEmailValid = validateEmail(email);
     if (!isEmailValid) {
       addToast("Please enter a valid email", { appearance: "error" });
     } else {
-      if (password.length < 6) {
-        addToast("Password must be at least 6 characters", {
+      const r = await PerformRequest.RequestOTP({ email }).catch(() => {
+        addToast("An Error Occured", { appearance: "error" });
+      });
+      console.log(r);
+      if (r.data.status === "failed") {
+        addToast(r.data.message, { appearance: "error" });
+      } else {
+        addToast("OTP has been sent to your email", { appearance: "success" });
+      }
+    }
+  };
+  const LoginUser = async () => {
+    const isEmailValid = validateEmail(email);
+    if (!isEmailValid) {
+      addToast("Please enter a valid email", { appearance: "error" });
+    } else {
+      if (password.length !== 6) {
+        addToast("OTP must be 6 characters", {
           appearance: "error",
         });
       } else {
-        addToast("Login successful", { appearance: "success" });
-        Cookies.set("token", "some_token_string");
-        navigate("/dashboard");
+        const r = await PerformRequest.Login({ email, password }).catch(() => {
+          addToast("An Error Occured", { appearance: "error" });
+        });
+        console.log(r);
+        if (r.data.status === "failed") {
+          addToast(r.data.message, { appearance: "error" });
+        } else {
+          navigate("/dashboard");
+          Cookies.set("token", r.data.data.token);
+        }
       }
     }
   };
@@ -97,9 +121,18 @@ export default function Login() {
                 Forgot Password?
               </Link>
             </div>
-            <button type="submit" className="auth-btn">
-              SIGN IN
-            </button>
+            <div className="flex-row space-between">
+              <button
+                type="button"
+                onClick={RequestOTP}
+                className="auth-btn auth-btn-half"
+              >
+                Request OTP
+              </button>
+              <button type="submit" className="auth-btn auth-btn-half">
+                SIGN IN
+              </button>
+            </div>
           </form>
         </div>
       </div>

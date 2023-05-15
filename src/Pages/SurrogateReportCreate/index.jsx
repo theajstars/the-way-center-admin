@@ -96,7 +96,7 @@ export default function SurrogateReportCreate({
         text: "Back to Dashboard",
         route: "/dashboard",
       },
-      getConfirmationModalStatus: { getConfirmationModalStatus },
+      getConfirmationModalStatus: getConfirmationModalStatus,
     });
   };
   const [confirmationModalParams, setConfirmationModalParams] = useState({
@@ -110,7 +110,7 @@ export default function SurrogateReportCreate({
       text: "Back to Dashboard",
       route: "/dashboard",
     },
-    getConfirmationModalStatus: { getConfirmationModalStatus },
+    getConfirmationModalStatus: getConfirmationModalStatus,
   });
 
   const [formSubmitting, setFormSubmitting] = useState(false);

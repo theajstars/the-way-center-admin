@@ -41,3 +41,6 @@
   cursor: pointer;
   font-family: "Cinzel", serif;
 }
+.auth-btn-half {
+  width: 48% !important;
+}
