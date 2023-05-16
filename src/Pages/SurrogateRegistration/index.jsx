@@ -167,6 +167,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
 
   useEffect(() => {
     CreateSurrogateProfile();
+    console.log(formErrors);
   }, [formErrors]);
 
   const CreateSurrogateProfile = async () => {
@@ -652,58 +653,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   Surrogate Health Information
                 </span>
                 <br />
-                <div className="flex-row space-between modal-input-row">
-                  <FormControl variant="standard" {...defaultHalfInputProps}>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      Skin Color
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateForm.skinColor}
-                      onChange={(e) => {
-                        setSurrogateForm({
-                          ...surrogateForm,
-                          skinColor: e.target.value,
-                        });
-                      }}
-                      label="Skin Color"
-                    >
-                      {SkinColours.map((color, index) => {
-                        return (
-                          <MenuItem value={color.color} key={color.color}>
-                            {color.color}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                  <FormControl variant="standard" {...defaultHalfInputProps}>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      Hair Color
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateForm.hairColor}
-                      onChange={(e) => {
-                        setSurrogateForm({
-                          ...surrogateForm,
-                          hairColor: e.target.value,
-                        });
-                      }}
-                      label="Hair Color"
-                    >
-                      {HairColours.map((color, index) => {
-                        return (
-                          <MenuItem value={color.color} key={color.color}>
-                            {color.color}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                </div>
+
                 <div className="flex-row space-between modal-input-row">
                   <FormControl variant="standard" {...defaultHalfInputProps}>
                     <InputLabel id="demo-simple-select-standard-label">

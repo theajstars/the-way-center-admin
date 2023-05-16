@@ -14,15 +14,22 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [OTPRequesting, setOTPRequesting] = useState(false);
+  const [FormSubmitting, setFormSubmitting] = useState(false);
+
   const RequestOTP = async () => {
     const isEmailValid = validateEmail(email);
     if (!isEmailValid) {
       addToast("Please enter a valid email", { appearance: "error" });
     } else {
+      setOTPRequesting(true);
       const r = await PerformRequest.RequestOTP({ email }).catch(() => {
         addToast("An Error Occured", { appearance: "error" });
+        setOTPRequesting(false);
       });
       console.log(r);
+      setOTPRequesting(false);
+
       if (r.data.status === "failed") {
         addToast(r.data.message, { appearance: "error" });
       } else {
@@ -40,10 +47,14 @@ export default function Login() {
           appearance: "error",
         });
       } else {
+        setFormSubmitting(true);
         const r = await PerformRequest.Login({ email, password }).catch(() => {
           addToast("An Error Occured", { appearance: "error" });
+          setFormSubmitting(false);
         });
         console.log(r);
+        setFormSubmitting(false);
+
         if (r.data.status === "failed") {
           addToast(r.data.message, { appearance: "error" });
         } else {
@@ -116,13 +127,20 @@ export default function Login() {
             <div className="flex-row space-between">
               <button
                 type="button"
+                disabled={OTPRequesting}
                 onClick={RequestOTP}
                 className="auth-btn auth-btn-half auth-btn-request-otp"
               >
-                Request OTP
+                Request OTP &nbsp;
+                {OTPRequesting && <i className="far fa-spinner-third" />}
               </button>
-              <button type="submit" className="auth-btn auth-btn-half">
-                SIGN IN
+              <button
+                type="submit"
+                className="auth-btn auth-btn-half"
+                disabled={FormSubmitting}
+              >
+                SIGN IN &nbsp;
+                {FormSubmitting && <i className="far fa-spinner-third" />}
               </button>
             </div>
           </form>
