@@ -18,7 +18,14 @@
     justify-content: center;
     border-radius: 50%;
   }
-  div.messages-sidebar,
+  div.messages-sidebar {
+    position: absolute;
+    left: 0px;
+    padding: 20px;
+    top: 0px;
+    z-index: 9999;
+    width: 330px;
+  }
   div.chat-section {
     position: absolute;
     width: 90vw;
@@ -31,10 +38,7 @@
     height: -webkit-fill-available;
     /* height: 100%; */
   }
-  div.large-messages-sidebar,
-  div.large-chat-section {
-    display: none;
-  }
+
   div.sidebar-section {
     max-height: 400px;
     overflow: auto;

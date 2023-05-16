@@ -177,17 +177,24 @@ const CreateMessageReference = async (parent) => {
     data: parent,
   });
 };
-const SendMessage = async (message) => {
+const SendMessage = async ({ post, reference }) => {
   return FetchData({
     method: "POST",
     route: Endpoints.SendMessage,
-    data: message,
+    data: { post, reference },
+  });
+};
+const SendMessageFile = async ({ reference, media }) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.SendMessage,
+    data: { media, reference },
   });
 };
 const GetCurrentMessages = async (reference) => {
   return FetchData({
     method: "GET",
-    route: `${Endpoints.GetCurrentMessages}?reference=${reference}`,
+    route: `${Endpoints.GetCurrentMessages}?reference=${reference}&orderBy=old`,
   });
 };
 
@@ -212,6 +219,7 @@ const PerformRequest = {
   SendMessage,
   GetMessageList,
   GetCurrentMessages,
+  SendMessageFile,
   GetRelationships,
   GetTribes,
   GetReligions,

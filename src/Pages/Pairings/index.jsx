@@ -152,8 +152,10 @@ export default function Pairings() {
 
   useEffect(() => {
     FilterPairings();
-    getPairingRequests();
   }, [currentPage]);
+  useEffect(() => {
+    getPairingRequests();
+  }, [currentRequestPage]);
   return (
     <div className="home-page">
       <Typography className="poppins fw-500" variant="h5">
