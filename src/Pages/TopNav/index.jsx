@@ -47,7 +47,7 @@ export default function TopNav() {
               {profile.lastname}
             </span>
             <div className="flex-row top-nav-links">
-              <span className="top-nav-link">Edit Profile</span>
+              {/* <span className="top-nav-link">Edit Profile</span> */}
               <span className="top-nav-tag">Admin Account</span>
             </div>
           </div>

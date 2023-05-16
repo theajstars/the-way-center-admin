@@ -78,14 +78,13 @@ export default function SurrogateReportCreate({
       showSurrogateReportModal(false);
     }
   };
-  const SendReportCreatedNotification = () => {
+  const SendReportCreatedNotification = async () => {
     setConfirmationModalParams({
       modalHeaderText: "great job. message sent",
       modalAction: {
         method: () => {
           setShowConfirmationModal(false);
           showSurrogateReportModal(false);
-          setSurrogateReport(initialSurrogateReport);
           setCurrentFormSection(1);
         },
         text: "submit another report",

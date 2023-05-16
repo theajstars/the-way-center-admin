@@ -117,11 +117,11 @@ const AddReportFile = async (report) => {
     data: report,
   });
 };
-const SendReportNotification = async (parent) => {
+const SendReportNotification = async ({ parentID }) => {
   return FetchData({
     method: "POST",
     route: Endpoints.SendReportNotification,
-    data: parent,
+    data: { parentID },
   });
 };
 const GetReports = async ({ page, limit, parentID, surrogateID }) => {
