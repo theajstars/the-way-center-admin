@@ -132,7 +132,9 @@ export default function Login() {
                 className="auth-btn auth-btn-half auth-btn-request-otp"
               >
                 Request OTP &nbsp;
-                {OTPRequesting && <i className="far fa-spinner-third" />}
+                {OTPRequesting && (
+                  <i className="far fa-spinner-third fa-spin" />
+                )}
               </button>
               <button
                 type="submit"
@@ -140,7 +142,9 @@ export default function Login() {
                 disabled={FormSubmitting}
               >
                 SIGN IN &nbsp;
-                {FormSubmitting && <i className="far fa-spinner-third" />}
+                {FormSubmitting && (
+                  <i className="far fa-spinner-third fa-spin" />
+                )}
               </button>
             </div>
           </form>
