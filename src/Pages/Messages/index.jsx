@@ -64,9 +64,7 @@ export default function Messages() {
     }
     console.log(r);
   };
-  useEffect(() => {
-    console.log(messages);
-  }, [messages]);
+  useEffect(() => {}, [searchString]);
   useEffect(() => {
     if (currentParent) {
       getParentMessages();
@@ -184,7 +182,7 @@ export default function Messages() {
                 left: isSidebarOpen ? "0px" : "-500px",
               }}
             >
-              <div className="messages-search-container align-center flex-row">
+              {/* <div className="messages-search-container align-center flex-row">
                 <span className="messages-search-icon px-15">
                   <i className="far fa-search" />
                 </span>
@@ -196,7 +194,7 @@ export default function Messages() {
                   onChange={(e) => setSearchString(e.target.value)}
                   className="messages-search poppins px-15"
                 />
-              </div>
+              </div> */}
 
               <div className="sidebar-section flex-column width-100">
                 <span className="px-20 poppins fw-600">Parents</span>

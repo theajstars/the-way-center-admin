@@ -112,15 +112,7 @@ export default function Login() {
                 </span>
               </div>
             </div>
-            <div
-              style={{
-                textAlign: "right",
-              }}
-            >
-              <Link to="/forgot-password" className="mulish gray-text">
-                Forgot Password?
-              </Link>
-            </div>
+
             <div className="flex-row space-between">
               <button
                 type="button"
