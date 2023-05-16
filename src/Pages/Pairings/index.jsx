@@ -12,6 +12,7 @@ import {
   Alert,
   Typography,
   Chip,
+  Divider,
 } from "@mui/material";
 import { DefaultContext } from "../Dashboard";
 import AishaAvatar from "../../Assets/IMG/AishaAvatar.svg";
@@ -126,6 +127,33 @@ export default function Pairings() {
     setPairingsLoading(false);
     getPairings();
   };
+
+  const [pairingRequests, setPairingRequests] = useState([]);
+  const [isRequestsLoading, setRequestsLoading] = useState(false);
+  const [currentRequestPage, setCurrentRequestPage] = useState(1);
+  const [requestPageSize, setRequestPageSize] = useState(10);
+  const [totalRequestPages, setTotalRequestPages] = useState(1);
+
+  const getPairingRequests = async () => {
+    setRequestsLoading(true);
+    const r = await PerformRequest.GetPairingRequests({
+      page: currentRequestPage,
+      limit: requestPageSize,
+    }).catch(() => {
+      setRequestsLoading(false);
+    });
+    setRequestsLoading(false);
+    console.log("Requests", r);
+    if (r.data.status === "success") {
+      setPairingRequests(r.data.data ?? []);
+      setTotalRequestPages(r.data.totalPages);
+    }
+  };
+
+  useEffect(() => {
+    FilterPairings();
+    getPairingRequests();
+  }, [currentPage]);
   return (
     <div className="home-page">
       <Typography className="poppins fw-500" variant="h5">
@@ -313,6 +341,67 @@ export default function Pairings() {
           count={totalPages}
           onChange={(e, value) => {
             setCurrentPage(value);
+          }}
+        />
+      </div>
+      <br />
+      <Divider />
+      <br />
+      <div className="flex-row align-center justify-center width-100">
+        {pairingRequests.length === 0 ? (
+          <Alert severity="info">No Request for pairing!</Alert>
+        ) : (
+          <ChakraProvider>
+            <TableContainer>
+              <center>
+                <Text className="fw-500 px-18">Pairing Requests</Text>
+              </center>
+              <br />
+              <Table variant="simple" colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th className="px-17 capitalize">Parent name</Th>
+                    <Th className="px-17 capitalize">Religion</Th>
+                    <Th className="px-17 capitalize">Tribe</Th>
+                    <Th className="px-17 capitalize">Age Range</Th>
+                    <Th className="px-17 capitalize">Education Level</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {pairingRequests.map((request, index) => {
+                    const parentID = "";
+                    return (
+                      <Tr
+                        className="fw-600 poppins recent-table-row table-purple-row "
+                        key={index}
+                      >
+                        <Td
+                          className="capitalize"
+                          onClick={() => {
+                            navigate(`/dashboard/parent/${parentID}`);
+                          }}
+                        >
+                          {request.parent.firstname} {request.parent.lastname}
+                        </Td>
+                        <Td className="capitalize">{request.religion}</Td>
+                        <Td className="capitalize">{request.tribe}</Td>
+                        <Td className="capitalize">{request.ageRange}</Td>
+                        <Td className="capitalize">{request.educationLevel}</Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </ChakraProvider>
+        )}
+      </div>
+      <div className="flex-row width-100 align-center justify-center">
+        <Pagination
+          disabled={isRequestsLoading}
+          count={totalRequestPages}
+          onChange={(e, value) => {
+            setCurrentRequestPage(value);
           }}
         />
       </div>

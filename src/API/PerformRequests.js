@@ -95,6 +95,14 @@ const GetPairing = async ({ surrogateID, parentID, limit, page }) => {
     }&parentID=${parentID ?? ""}&limit=${limit ?? ""}&page=${page ?? ""}`,
   });
 };
+const GetPairingRequests = async ({ limit, page }) => {
+  return FetchData({
+    method: "GET",
+    route: `${Endpoints.GetPairingRequests}?limit=${limit ?? ""}&page=${
+      page ?? ""
+    }`,
+  });
+};
 const CreateReport = async (report) => {
   return FetchData({
     method: "POST",
@@ -208,6 +216,7 @@ const PerformRequest = {
   GetTribes,
   GetReligions,
   UpdatePairing,
+  GetPairingRequests,
   GetProfile,
 };
 

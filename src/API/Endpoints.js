@@ -24,6 +24,7 @@ const Endpoints = {
   CreatePairing: "/pair/create",
   GetPairingDetails: "/pair/details",
   UpdatePairing: "/pair/update",
+  GetPairingRequests: "/pair/requests",
 
   AddReportFile: "/report/files/add",
   CreateReport: "/report/create",

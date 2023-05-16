@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { RouteList } from "../../Lib/Routes";
+import Cookies from "js-cookie";
 export default function SideNav() {
   const [currentActiveLink, setCurrentActiveLink] = useState(null);
   const [isSideNavOpen, setSideNavOpen] = useState(false);
@@ -74,6 +75,8 @@ export default function SideNav() {
                 }`}
                 onClick={() => {
                   setCurrentActiveLink("Logout");
+                  Cookies.remove("token");
+                  navigate("/login");
                 }}
               >
                 Logout

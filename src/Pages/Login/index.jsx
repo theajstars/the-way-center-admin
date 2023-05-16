@@ -125,7 +125,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={RequestOTP}
-                className="auth-btn auth-btn-half"
+                className="auth-btn auth-btn-half auth-btn-request-otp"
               >
                 Request OTP
               </button>

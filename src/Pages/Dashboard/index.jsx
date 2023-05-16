@@ -117,6 +117,7 @@ export default function Dashboard() {
   };
 
   const FetchAllData = async () => {
+    await getProfile();
     getCountries();
     getSurrogates();
     getParents();
@@ -124,7 +125,6 @@ export default function Dashboard() {
     getRelationships();
     getTribes();
     getReligions();
-    getProfile();
   };
   useEffect(() => {
     FetchAllData();
@@ -135,7 +135,7 @@ export default function Dashboard() {
   return (
     <>
       <SideNav />
-      {metrics.set ? (
+      {profile ? (
         <>
           <DefaultContext.Provider
             value={{
