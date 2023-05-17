@@ -117,9 +117,13 @@ export default function ParentUpdate({
   });
   const UpdateFormErrors = () => {
     const isPrimaryPhoneValid = validatePhone(parentForm.primary.phone);
-    const isSpousePhoneValid = validatePhone(parentForm.spouse.phone ?? "");
+    const isSpousePhoneValid =
+      validatePhone(parentForm.spouse.phone) &&
+      parentForm.spouse.phone !== parentForm.primary.phone;
     const isPrimaryEmailValid = validateEmail(parentForm.primary.email);
-    const isSpouseEmailValid = validateEmail(parentForm.spouse.email);
+    const isSpouseEmailValid =
+      validateEmail(parentForm.spouse.email) &&
+      parentForm.spouse.email !== parentForm.primary.email;
 
     const isLengthError = (param) => {
       if (!param) {

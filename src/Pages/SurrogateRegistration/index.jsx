@@ -41,8 +41,8 @@ const initialSurrogateForm = {
   primaryImage: undefined,
   secondaryImage: undefined,
 
-  skinColor: "White",
-  hairColor: "Black",
+  tribe: "",
+  religion: "",
   spouseFirstName: "",
   spouseLastName: "",
   secondaryEmailAddress: "",
@@ -71,6 +71,8 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
   const [isModalOpen, setModalOpen] = useState(true);
   const consumeContext = useContext(DefaultContext);
 
+  const { Tribes, Religions } = consumeContext;
+  console.log({ Tribes, Religions });
   const [countriesList, setCountriesList] = useState(CountriesList);
 
   const [currentFormSection, setCurrentFormSection] = useState(1);
@@ -82,6 +84,8 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     dateOfBirth: false,
     placeOfBirth: false,
     address: false,
+    tribe: false,
+    religion: false,
     primaryPhone: false,
     primaryEmailAddress: false,
     bankVerificationNumber: false,
@@ -133,9 +137,9 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       surrogateForm.nationalIdentificationNumber
     );
 
-    const isNexfOfKinPrimaryPhoneValid = validatePhone(
-      surrogateForm.nextOfKin.phone
-    );
+    const isNexfOfKinPrimaryPhoneValid =
+      validatePhone(surrogateForm.nextOfKin.phone) &&
+      surrogateForm.primaryPhone !== surrogateForm.nextOfKin.phone;
     const isNexfOfKinNINValid = validateNIN(
       surrogateForm.nextOfKin.nationalIdentificationNumber
     );
@@ -148,6 +152,9 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       primaryEmailAddress: !isEmailValid,
       bankVerificationNumber: !is_BVN_Valid,
       nationalIdentificationNumber: !is_NIN_Valid,
+
+      tribe: surrogateForm.tribe.length === 0,
+      religion: surrogateForm.religion.length === 0,
 
       nextOfKin_name: surrogateForm.nextOfKin.name.length === 0,
       nextOfKin_address: surrogateForm.nextOfKin.address.length === 0,
@@ -248,8 +255,8 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         phone: surrogateForm.primaryPhone,
         address: surrogateForm.address,
         dateOfBirth: dayjs(surrogateForm.dateOfBirth).format("YYYY-MM-DD"),
-        skinColor: surrogateForm.skinColor,
-        hairColor: surrogateForm.hairColor,
+        tribe: surrogateForm.tribe,
+        religion: surrogateForm.religion,
         placeOfBirth: surrogateForm.placeOfBirth,
         mainImage: uploadPrimaryImage.data.fileUrl,
         secondImage: uploadSecondaryImage.data.fileUrl,
@@ -773,6 +780,60 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                       <MenuItem value={"Yes"} key="first-time-parent-true">
                         Yes
                       </MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                    <InputLabel id="demo-simple-select-standard-label">
+                      Tribe
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateForm.tribe}
+                      error={formErrors.tribe}
+                      onChange={(e) => {
+                        setSurrogateForm({
+                          ...surrogateForm,
+                          tribe: e.target.value,
+                        });
+                      }}
+                      label="Tribe"
+                    >
+                      {Tribes.map((tribe) => {
+                        return (
+                          <MenuItem value={tribe.tribe} key="hiv-status-false">
+                            {tribe.tribe}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                    <InputLabel id="demo-simple-select-standard-label">
+                      Religion
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateForm.religion}
+                      error={formErrors.religion}
+                      onChange={(e) => {
+                        setSurrogateForm({
+                          ...surrogateForm,
+                          religion: e.target.value,
+                        });
+                      }}
+                      label="Religion"
+                    >
+                      {Religions.map((rel) => {
+                        return (
+                          <MenuItem value={rel.tribe} key="hiv-status-false">
+                            {rel.tribe}
+                          </MenuItem>
+                        );
+                      })}
                     </Select>
                   </FormControl>
                 </div>

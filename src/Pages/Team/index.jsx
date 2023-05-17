@@ -199,7 +199,7 @@ export default function Team() {
           <ChakraProvider>
             <TableContainer>
               <center>
-                <Text className="fw-500 px-18">Current Pairings</Text>
+                <Text className="fw-500 px-18">Members</Text>
               </center>
               <br />
               <Table variant="simple" colorScheme="whiteAlpha">
