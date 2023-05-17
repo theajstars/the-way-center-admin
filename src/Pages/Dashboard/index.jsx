@@ -22,6 +22,7 @@ import SurrogateProfileView from "../SurrogateProfileView";
 import Surrogates from "../Surrogates";
 import SurrogateUpdate from "../SurrogateUpdate";
 import TopNav from "../TopNav";
+import Team from "../Team";
 
 const initialContext = {
   CountriesList: [],
@@ -181,6 +182,7 @@ export default function Dashboard() {
                   <Route path="/messages" index element={<Messages />} />
                   <Route path="/pairings" index element={<Pairings />} />
                   <Route path="/reports" index element={<Reports />} />
+                  <Route path="/team" index element={<Team />} />
                   {/* <Route path="/application" index element={<Application />} /> */}
                 </Routes>
 

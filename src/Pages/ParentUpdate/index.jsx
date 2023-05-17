@@ -67,6 +67,7 @@ export default function ParentUpdate({
           image: undefined,
         },
       });
+      // setParentForm(r.data.data[0]);
       setInitialPrimaryImage(r.data.data[0].primary.image);
       setInitialSpouseImage(r.data.data[0].spouse.image);
     } else {
@@ -116,17 +117,24 @@ export default function ParentUpdate({
   });
   const UpdateFormErrors = () => {
     const isPrimaryPhoneValid = validatePhone(parentForm.primary.phone);
-    const isSpousePhoneValid = validatePhone(parentForm.spouse.phone);
+    const isSpousePhoneValid = validatePhone(parentForm.spouse.phone ?? "");
     const isPrimaryEmailValid = validateEmail(parentForm.primary.email);
     const isSpouseEmailValid = validateEmail(parentForm.spouse.email);
 
+    const isLengthError = (param) => {
+      if (!param) {
+        return true;
+      } else {
+        return param.length === 0;
+      }
+    };
     setFormErrors({
       ...formErrors,
-      firstName: parentForm.primary.firstname.length === 0,
-      lastName: parentForm.primary.lastname.length === 0,
-      spouseFirstName: parentForm.spouse.firstname.length === 0,
-      spouseLastName: parentForm.spouse.lastname.length === 0,
-      address: parentForm.address.length === 0,
+      firstName: isLengthError(parentForm.primary.firstname),
+      lastName: isLengthError(parentForm.primary.lastname),
+      spouseFirstName: isLengthError(parentForm.spouse.firstname),
+      spouseLastName: isLengthError(parentForm.spouse.lastname),
+      address: isLengthError(parentForm.address),
       primaryEmailAddress: !isPrimaryEmailValid,
       spouseEmail: !isSpouseEmailValid,
       primaryPhone: !isPrimaryPhoneValid,
@@ -299,7 +307,7 @@ export default function ParentUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="First Name"
-                    value={parentForm.primary.firstname}
+                    value={parentForm.primary.firstname ?? ""}
                     error={formErrors.firstName}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
@@ -314,7 +322,7 @@ export default function ParentUpdate({
                   />
                   <TextField
                     label="Last Name"
-                    value={parentForm.primary.lastname}
+                    value={parentForm.primary.lastname ?? ""}
                     error={formErrors.lastName}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
@@ -331,7 +339,7 @@ export default function ParentUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Email"
-                    value={parentForm.primary.email}
+                    value={parentForm.primary.email ?? ""}
                     error={formErrors.primaryEmail}
                     {...defaultFullInputProps}
                     onChange={(e) =>
@@ -348,7 +356,7 @@ export default function ParentUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Address"
-                    value={parentForm.address}
+                    value={parentForm.address ?? ""}
                     error={formErrors.address}
                     {...defaultFullInputProps}
                     onChange={(e) =>
@@ -362,7 +370,7 @@ export default function ParentUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Phone Number"
-                    value={parentForm.primary.phone}
+                    value={parentForm.primary.phone ?? ""}
                     error={formErrors.primaryPhone}
                     {...defaultFullInputProps}
                     onChange={(e) =>
@@ -471,7 +479,7 @@ export default function ParentUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Spouse First Name"
-                    value={parentForm.spouse.firstname}
+                    value={parentForm.spouse.firstname ?? ""}
                     error={formErrors.spouseFirstName}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
@@ -486,7 +494,7 @@ export default function ParentUpdate({
                   />
                   <TextField
                     label="Spouse Last Name"
-                    value={parentForm.spouse.lastname}
+                    value={parentForm.spouse.lastname ?? ""}
                     error={formErrors.spouseLastName}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
@@ -503,7 +511,7 @@ export default function ParentUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Spouse Email"
-                    value={parentForm.spouse.email}
+                    value={parentForm.spouse.email ?? ""}
                     error={formErrors.spouseEmail}
                     {...defaultFullInputProps}
                     onChange={(e) =>
@@ -520,7 +528,7 @@ export default function ParentUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Address"
-                    value={parentForm.address}
+                    value={parentForm.address ?? ""}
                     error={formErrors.address}
                     {...defaultFullInputProps}
                     onChange={(e) =>
@@ -534,7 +542,7 @@ export default function ParentUpdate({
                 <div className="flex-row space-between modal-input-row">
                   <TextField
                     label="Spouse Phone Number"
-                    value={parentForm.spouse.phone}
+                    value={parentForm.spouse.phone ?? ""}
                     error={formErrors.spousePhone}
                     {...defaultFullInputProps}
                     onChange={(e) =>

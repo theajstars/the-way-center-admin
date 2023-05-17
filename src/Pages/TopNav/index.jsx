@@ -8,7 +8,6 @@ import { DefaultContext } from "../Dashboard";
 
 export default function TopNav() {
   const ContextConsumer = useContext(DefaultContext);
-  console.log(ContextConsumer);
   const [isTopNavOpen, setTopNavOpen] = useState(true);
   const [profile, setProfile] = useState(ContextConsumer.Profile ?? {});
   useEffect(() => {

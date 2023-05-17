@@ -35,6 +35,10 @@ const Endpoints = {
   SendMessage: "/message/send",
   CreateMessageReference: "/message/create",
   GetCurrentMessages: "/message/logs",
+
+  CreateTeamMember: "/console/team/add",
+  GetTeamDetails: "/console/team/details",
+  UpdateTeamMember: "/console/team/update",
 };
 
 export { Endpoints };

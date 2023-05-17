@@ -28,10 +28,15 @@ import SurrogateUpdate from "./Pages/SurrogateUpdate";
 import ParentProfileView from "./Pages/ParentProfileView";
 import ParentUpdate from "./Pages/ParentUpdate";
 import Pairings from "./Pages/Pairings";
+import Team from "./Pages/Team";
 function validateEmail(email) {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
+  if (!email) {
+    return false;
+  } else {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
 }
 function validateBVN(bvn) {
   if (isNaN(parseInt(bvn[0])) || parseInt(bvn[0]) === 0) {
@@ -112,6 +117,7 @@ function App() {
             <Route path="/dashboard/messages" element={<Messages />} />
             <Route path="/dashboard/reports" element={<Reports />} />
             <Route path="/dashboard/pairings" element={<Pairings />} />
+            <Route path="/dashboard/team" element={<Team />} />
           </Route>
           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>

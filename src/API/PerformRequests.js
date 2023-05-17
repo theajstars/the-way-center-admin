@@ -197,6 +197,26 @@ const GetCurrentMessages = async (reference) => {
     route: `${Endpoints.GetCurrentMessages}?reference=${reference}&orderBy=old`,
   });
 };
+const GetTeamDetails = async ({ teamID }) => {
+  return FetchData({
+    method: "GET",
+    route: `${Endpoints.GetTeamDetails}?teamID=${teamID ?? ""}&orderBy=old`,
+  });
+};
+const CreateTeamMember = async (data) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.CreateTeamMember,
+    data: data,
+  });
+};
+const UpdateTeamMember = async (data) => {
+  return FetchData({
+    method: "POST",
+    route: Endpoints.UpdateTeamMember,
+    data: data,
+  });
+};
 
 const PerformRequest = {
   RequestOTP,
@@ -226,6 +246,10 @@ const PerformRequest = {
   UpdatePairing,
   GetPairingRequests,
   GetProfile,
+
+  GetTeamDetails,
+  CreateTeamMember,
+  UpdateTeamMember,
 };
 
 export { PerformRequest };
