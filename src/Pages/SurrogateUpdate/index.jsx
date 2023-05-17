@@ -35,6 +35,7 @@ export default function SurrogateUpdate({
   // surrogate,
 }) {
   const ContextConsumer = useContext(DefaultContext);
+  const { Tribes, Religions } = ContextConsumer;
   const navigate = useNavigate();
   const params = useParams();
   const { addToast, removeAllToasts } = useToasts();
@@ -192,6 +193,9 @@ export default function SurrogateUpdate({
       ...formErrors,
       firstname: surrogateForm.primary.firstname.length === 0,
       lastname: surrogateForm.primary.lastname.length === 0,
+
+      religion: surrogateForm.primary.religion.length === 0,
+      tribe: surrogateForm.primary.tribe.length === 0,
       // dateOfBirth: surrogateForm.dateOfBirth.length === 0,
 
       address: surrogateForm.address.length === 0,
@@ -560,6 +564,66 @@ export default function SurrogateUpdate({
                   })
                 }
               />
+            </div>
+            <div className="flex-row space-between modal-input-row">
+              <FormControl variant="standard" {...defaultHalfInputProps}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Tribe
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  value={surrogateForm.primary.tribe}
+                  error={formErrors.tribe}
+                  onChange={(e) =>
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      primary: {
+                        ...surrogateForm.primary,
+                        tribe: e.target.value,
+                      },
+                    })
+                  }
+                  label="Tribe"
+                >
+                  {Tribes.map((tribe) => {
+                    return (
+                      <MenuItem value={tribe.tribe} key="hiv-status-false">
+                        {tribe.tribe}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              <FormControl variant="standard" {...defaultHalfInputProps}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Religion
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  value={surrogateForm.primary.religion}
+                  error={formErrors.religion}
+                  onChange={(e) =>
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      primary: {
+                        ...surrogateForm.primary,
+                        religion: e.target.value,
+                      },
+                    })
+                  }
+                  label="Religion"
+                >
+                  {Religions.map((rel) => {
+                    return (
+                      <MenuItem value={rel.tribe} key="hiv-status-false">
+                        {rel.tribe}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
             </div>
             <div className="flex-row space-between modal-input-row">
               <TextField
