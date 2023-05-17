@@ -26,11 +26,15 @@ export default function TopNav() {
       <div className="top-nav-container flex-row">
         <span className="top-nav-button flex-row">
           <img src={ChatIcon} alt="" className="top-nav-icon" />
-          <span className="top-nav-count flex-row">18</span>
+          <span className="top-nav-count flex-row">
+            {ContextConsumer.Notifications.unread}
+          </span>
         </span>
         <span className="top-nav-button flex-row">
           <img src={BellIcon} alt="" className="top-nav-icon" />
-          <span className="top-nav-count flex-row">52</span>
+          <span className="top-nav-count flex-row">
+            {ContextConsumer.Notifications.requests}
+          </span>
         </span>
         <motion.div
           initial={false}

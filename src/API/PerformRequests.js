@@ -218,6 +218,13 @@ const UpdateTeamMember = async (data) => {
   });
 };
 
+const GetNotificationCount = async () => {
+  return FetchData({
+    method: "GET",
+    route: Endpoints.GetNotificationCount,
+  });
+};
+
 const PerformRequest = {
   RequestOTP,
   Login,
@@ -250,6 +257,8 @@ const PerformRequest = {
   GetTeamDetails,
   CreateTeamMember,
   UpdateTeamMember,
+
+  GetNotificationCount,
 };
 
 export { PerformRequest };

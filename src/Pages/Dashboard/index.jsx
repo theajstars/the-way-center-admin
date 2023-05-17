@@ -25,6 +25,10 @@ import TopNav from "../TopNav";
 import Team from "../Team";
 
 const initialContext = {
+  Notifications: {
+    unread: 0,
+    requests: 0,
+  },
   CountriesList: [],
   Surrogates: [],
   Parents: [],
@@ -57,6 +61,10 @@ export default function Dashboard() {
   const [parents, setParents] = useState([]);
   const [surrogates, setSurrogates] = useState([]);
   const [profile, setProfile] = useState();
+
+  const [notifications, setNotifications] = useState(
+    initialContext.Notifications
+  );
 
   const [relationships, setRelationships] = useState([]);
   const [religions, setReligions] = useState([]);
@@ -102,6 +110,12 @@ export default function Dashboard() {
       setReligions(r.data.data);
     }
   };
+  const getNotifications = async () => {
+    const r = await PerformRequest.GetNotificationCount();
+    if (r.data.response_code === 200) {
+      setNotifications(r.data.data ?? initialContext.Notifications);
+    }
+  };
   const getMetrics = async () => {
     const r = await PerformRequest.GetMetrics();
     if (r.data.response_code === 200) {
@@ -126,6 +140,7 @@ export default function Dashboard() {
     getRelationships();
     getTribes();
     getReligions();
+    getNotifications();
   };
   useEffect(() => {
     FetchAllData();
@@ -150,6 +165,7 @@ export default function Dashboard() {
               Tribes: tribes,
               Religions: religions,
               Profile: profile,
+              Notifications: notifications,
             }}
           >
             <TopNav />

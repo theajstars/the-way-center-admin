@@ -39,6 +39,8 @@ const Endpoints = {
   CreateTeamMember: "/console/team/add",
   GetTeamDetails: "/console/team/details",
   UpdateTeamMember: "/console/team/update",
+
+  GetNotificationCount: "/notification/console",
 };
 
 export { Endpoints };
