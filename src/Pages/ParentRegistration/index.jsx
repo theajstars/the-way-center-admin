@@ -60,11 +60,13 @@ export default function ParentRegistration({ showAddParentModal }) {
 
   const UpdateFormErrors = () => {
     const isPrimaryPhoneValid = validatePhone(parentForm.primaryPhone);
-    const isSecondaryPhoneValid = validatePhone(parentForm.secondaryPhone);
+    const isSecondaryPhoneValid =
+      validatePhone(parentForm.secondaryPhone) &&
+      parentForm.secondaryPhone !== parentForm.primaryPhone;
     const isPrimaryEmailValid = validateEmail(parentForm.primaryEmailAddress);
-    const isSecondaryEmailValid = validateEmail(
-      parentForm.secondaryEmailAddress
-    );
+    const isSecondaryEmailValid =
+      validateEmail(parentForm.secondaryEmailAddress) &&
+      parentForm.primaryEmailAddress !== parentForm.secondaryEmailAddress;
 
     setFormErrors({
       ...formErrors,

@@ -171,6 +171,10 @@ export default function ParentUpdate({
               setFormSubmitting(false);
             }
           );
+          setFormSubmitting(false);
+          if (updateParent.data.status === "failed") {
+            addToast("An error occured", { appearance: "error" });
+          }
           console.log(updateParent);
           if (updateParent.data.response_code === 200) {
             ContextConsumer.refetchData();
