@@ -174,7 +174,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
                       <Select
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
-                        value={pairingForm.surrogateName}
+                        value={pairingForm.surrogateID}
                         onChange={(e) => {
                           setPairingForm({
                             ...pairingForm,

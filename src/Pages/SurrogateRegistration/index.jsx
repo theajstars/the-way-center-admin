@@ -43,11 +43,16 @@ const initialSurrogateForm = {
 
   tribe: "",
   religion: "",
+  experience: "",
   spouseFirstName: "",
   spouseLastName: "",
   secondaryEmailAddress: "",
   secondaryPhone: "",
-
+  sibling: {
+    fullname: "",
+    relationship: "Brother",
+    phone: "",
+  },
   // Form Section B
   knownDisease: "None",
   covidVaccination: "0",
@@ -86,6 +91,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     address: false,
     tribe: false,
     religion: false,
+    experience: false,
     primaryPhone: false,
     primaryEmailAddress: false,
     bankVerificationNumber: false,
@@ -107,9 +113,12 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     govtIdentificationFile: false,
     covidVaccinationFile: false,
     nextOfKin_name: false,
-    nextOfKin_address: false,
     nextOfKin_phone: false,
+    nextOfKin_address: false,
     nextOfKin_nationalIdentificationNumber: false,
+
+    sibling_name: false,
+    sibling_phone: false,
   });
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
@@ -139,7 +148,12 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
 
     const isNexfOfKinPrimaryPhoneValid =
       validatePhone(surrogateForm.nextOfKin.phone) &&
-      surrogateForm.primaryPhone !== surrogateForm.nextOfKin.phone;
+      surrogateForm.primaryPhone !== surrogateForm.nextOfKin.phone &&
+      surrogateForm.sibling.phone !== surrogateForm.nextOfKin.phone;
+    const isSiblingPhoneValid =
+      validatePhone(surrogateForm.sibling.phone) &&
+      surrogateForm.primaryPhone !== surrogateForm.sibling.phone &&
+      surrogateForm.sibling.phone !== surrogateForm.nextOfKin.phone;
     const isNexfOfKinNINValid = validateNIN(
       surrogateForm.nextOfKin.nationalIdentificationNumber
     );
@@ -155,6 +169,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
 
       tribe: surrogateForm.tribe.length === 0,
       religion: surrogateForm.religion.length === 0,
+      experience: surrogateForm.experience.length === 0,
+
+      sibling_phone: !isSiblingPhoneValid,
+      sibling_name: surrogateForm.sibling.fullname.length === 0,
 
       nextOfKin_name: surrogateForm.nextOfKin.name.length === 0,
       nextOfKin_address: surrogateForm.nextOfKin.address.length === 0,
@@ -257,6 +275,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         dateOfBirth: dayjs(surrogateForm.dateOfBirth).format("YYYY-MM-DD"),
         tribe: surrogateForm.tribe,
         religion: surrogateForm.religion,
+        experience: surrogateForm.experience,
         placeOfBirth: surrogateForm.placeOfBirth,
         mainImage: uploadPrimaryImage.data.fileUrl,
         secondImage: uploadSecondaryImage.data.fileUrl,
@@ -270,6 +289,11 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
           address: nextOfKin_address,
           phone: nextOfKin_phone,
           nin: nextOfKin_nationalIdentificationNumber,
+        },
+        sibling: {
+          fullname: surrogateForm.sibling.fullname,
+          relationship: surrogateForm.sibling.relationship,
+          phone: surrogateForm.sibling.phone,
         },
 
         extendedInfo: {
@@ -515,6 +539,20 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
+                    label="Experience"
+                    value={surrogateForm.experience}
+                    error={formErrors.experience}
+                    {...defaultFullInputProps}
+                    onChange={(e) =>
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        experience: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <TextField
                     label="Primary Phone Number"
                     placeholder="0802-345-6789"
                     value={surrogateForm.primaryPhone}
@@ -526,15 +564,15 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         primaryPhone: e.target.value,
                       })
                     }
-                    onBlur={() => {
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        primaryPhone: surrogateForm.primaryPhone.replace(
-                          "+",
-                          ""
-                        ),
-                      });
-                    }}
+                    // onBlur={() => {
+                    //   setSurrogateForm({
+                    //     ...surrogateForm,
+                    //     primaryPhone: surrogateForm.primaryPhone.replace(
+                    //       "+",
+                    //       ""
+                    //     ),
+                    //   });
+                    // }}
                   />
                 </div>
                 <div className="flex-row space-between modal-input-row">
@@ -839,6 +877,68 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
+                    label="Sibling Full Name"
+                    {...defaultFullInputProps}
+                    value={surrogateForm.sibling.fullname}
+                    error={formErrors.sibling_name}
+                    onChange={(e) =>
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        sibling: {
+                          ...surrogateForm.sibling,
+                          fullname: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <FormControl variant="standard" {...defaultHalfInputProps}>
+                    <InputLabel id="demo-simple-select-standard-label">
+                      Relationship to Sibling
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateForm.sibling.relationship}
+                      {...defaultFullInputProps}
+                      onChange={(e) =>
+                        setSurrogateForm({
+                          ...surrogateForm,
+                          sibling: {
+                            ...surrogateForm.sibling,
+                            relationship: e.target.value,
+                          },
+                        })
+                      }
+                      label="Relationship to Sibling"
+                    >
+                      <MenuItem value={"Brother"} key="hiv-status-false">
+                        Brother
+                      </MenuItem>
+                      <MenuItem value={"Sister"} key="hiv-status-false">
+                        Sister
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    label="Sibling Phone"
+                    {...defaultHalfInputProps}
+                    value={surrogateForm.sibling.phone}
+                    error={formErrors.sibling_phone}
+                    onChange={(e) =>
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        sibling: {
+                          ...surrogateForm.sibling,
+                          phone: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <TextField
                     label="Next of Kin Full Name"
                     value={surrogateForm.nextOfKin.name}
                     error={formErrors.nextOfKin_name}
@@ -887,15 +987,15 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         },
                       })
                     }
-                    onBlur={() => {
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        nextOfKin: {
-                          ...surrogateForm.nextOfKin,
-                          phone: surrogateForm.nextOfKin.phone.replace("+", ""),
-                        },
-                      });
-                    }}
+                    // onBlur={() => {
+                    //   setSurrogateForm({
+                    //     ...surrogateForm,
+                    //     nextOfKin: {
+                    //       ...surrogateForm.nextOfKin,
+                    //       phone: surrogateForm.nextOfKin.phone.replace("+", ""),
+                    //     },
+                    //   });
+                    // }}
                   />
                 </div>
                 <div className="flex-row space-between modal-input-row">
