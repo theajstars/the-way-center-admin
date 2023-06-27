@@ -23,6 +23,7 @@ import Surrogates from "../Surrogates";
 import SurrogateUpdate from "../SurrogateUpdate";
 import TopNav from "../TopNav";
 import Team from "../Team";
+import Cookies from "js-cookie";
 
 const initialContext = {
   Notifications: {
@@ -126,7 +127,13 @@ export default function Dashboard() {
     const r = await PerformRequest.GetProfile();
     console.log(r);
     if (r.data.status !== "success") {
+      Cookies.remove("token");
       navigate("/login");
+    } else {
+      if (r.data.data.accountConnected === "Parent") {
+        navigate("/login");
+        Cookies.remove("token");
+      }
     }
     setProfile(r.data.data ?? initialContext.Profile);
   };

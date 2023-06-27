@@ -176,7 +176,7 @@ export default function Pairings() {
               setAddNewPairing(true);
             }}
           >
-            Create New Pairing
+            New Pairing
           </Button>
           &nbsp; &nbsp;
           <Button

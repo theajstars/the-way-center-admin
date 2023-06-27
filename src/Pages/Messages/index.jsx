@@ -159,12 +159,12 @@ export default function Messages() {
         }}
       />
 
+      <br />
+      <br />
+      <Typography className="poppins fw-500" variant="h5">
+        Messages
+      </Typography>
       <div className="home-page">
-        <Typography className="poppins fw-500" variant="h5">
-          ADMIN DASHBOARD
-        </Typography>
-        <br />
-        <br />
         <span
           className="toggle-messages px-18 pointer"
           onClick={() => {
@@ -289,7 +289,7 @@ export default function Messages() {
                   <div className="send-message-container flex-row align-center">
                     <input
                       type="text"
-                      placeholder="Type your message here..."
+                      placeholder="Input message ..."
                       spellCheck={false}
                       value={messageText}
                       onChange={(e) => setMessageText(e.target.value)}
@@ -321,7 +321,7 @@ export default function Messages() {
                     {messageSending ? (
                       <i className="far fa-spinner-third fa-spin" />
                     ) : (
-                      <>Send Message</>
+                      <>Send</>
                     )}
                   </button>
                 </div>

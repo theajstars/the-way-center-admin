@@ -161,7 +161,6 @@ export default function Team() {
 
       <br />
       <br />
-      <br />
       <div className="flex-row space-between align-center reports-top">
         <span className="poppins fw-500 px-18 surrogate-reports-head">
           Team
@@ -173,7 +172,7 @@ export default function Team() {
               setTeamCreateVisible(true);
             }}
           >
-            Create New Member
+            New Member
           </Button>
           &nbsp; &nbsp;
           <Button
@@ -198,9 +197,6 @@ export default function Team() {
         ) : (
           <ChakraProvider>
             <TableContainer>
-              <center>
-                <Text className="fw-500 px-18">Members</Text>
-              </center>
               <br />
               <Table variant="simple" colorScheme="whiteAlpha">
                 <Thead>

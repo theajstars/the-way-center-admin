@@ -2,11 +2,12 @@
   display: none;
 }
 .top-nav-container {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   box-sizing: border-box;
   padding: 30px 20px;
+  align-items: center;
 }
 .top-nav-button {
   justify-content: space-between;
