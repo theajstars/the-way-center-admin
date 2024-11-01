@@ -24,7 +24,7 @@ export default function TopNav() {
         <i className={`fal fa-angle-${isTopNavOpen ? "up" : "down"}`}></i>
       </span>
       <div className="top-nav-container flex-row">
-        <span className="top-nav-button flex-row">
+        {/* <span className="top-nav-button flex-row">
           <img src={ChatIcon} alt="" className="top-nav-icon" />
           <span className="top-nav-count flex-row">
             {ContextConsumer.Notifications.unread}
@@ -35,7 +35,7 @@ export default function TopNav() {
           <span className="top-nav-count flex-row">
             {ContextConsumer.Notifications.requests}
           </span>
-        </span>
+        </span> */}
         <motion.div
           initial={false}
           animate={{
