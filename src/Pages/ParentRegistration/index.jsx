@@ -1,4 +1,11 @@
-import { Modal, TextField } from "@mui/material";
+import {
+  Modal,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import { useState, useRef, useEffect } from "react";
 import { useToasts } from "react-toast-notifications";
 import { UploadFile } from "../../API/FetchData";
@@ -7,6 +14,7 @@ import { validateEmail } from "../../App";
 import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.svg";
 import { validatePhone } from "../../Lib/Validate";
 import Confirmation from "../Confirmation";
+import { CountriesList } from "../../Assets/Data";
 
 const initialParentForm = {
   firstName: "",
@@ -14,6 +22,10 @@ const initialParentForm = {
   spouseFirstName: "",
   spouseLastName: "",
   address: "",
+  city: "",
+  state: "",
+  country: "",
+  area: "",
   primaryEmailAddress: "",
   secondaryEmailAddress: "",
   primaryPhone: "",
@@ -53,6 +65,10 @@ export default function ParentRegistration({ showAddParentModal }) {
     secondaryEmailAddress: false,
     primaryPhone: false,
     secondaryPhone: false,
+    city: false,
+    state: false,
+    country: false,
+    area: false,
 
     primaryImage: false,
     secondaryImage: false,
@@ -75,6 +91,10 @@ export default function ParentRegistration({ showAddParentModal }) {
       spouseFirstName: parentForm.spouseFirstName.length === 0,
       spouseLastName: parentForm.lastName.length === 0,
       address: parentForm.address.length === 0,
+      city: parentForm.city.length === 0,
+      state: parentForm.state.length === 0,
+      country: parentForm.country.length === 0,
+      area: parentForm.area.length === 0,
       primaryEmailAddress: !isPrimaryEmailValid,
       secondaryEmailAddress: !isSecondaryEmailValid,
       primaryPhone: !isPrimaryPhoneValid,
@@ -131,6 +151,10 @@ export default function ParentRegistration({ showAddParentModal }) {
       });
       const data = {
         address: parentForm.address,
+        city: parentForm.city,
+        state: parentForm.state,
+        country: parentForm.country,
+        area: parentForm.area,
         primary: {
           firstname: parentForm.firstName,
           lastname: parentForm.lastName,
@@ -281,6 +305,74 @@ export default function ParentRegistration({ showAddParentModal }) {
                     setParentForm({
                       ...parentForm,
                       spouseLastName: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="flex-row space-between modal-input-row">
+                <TextField
+                  label="City"
+                  value={parentForm.city}
+                  error={formErrors.city}
+                  {...defaultHalfInputProps}
+                  onChange={(e) =>
+                    setParentForm({
+                      ...parentForm,
+                      city: e.target.value,
+                    })
+                  }
+                />
+                <TextField
+                  label="State"
+                  value={parentForm.state}
+                  error={formErrors.state}
+                  {...defaultHalfInputProps}
+                  onChange={(e) =>
+                    setParentForm({
+                      ...parentForm,
+                      state: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="flex-row space-between modal-input-row">
+                <FormControl {...defaultHalfInputProps}>
+                  <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                    Country
+                  </InputLabel>
+                  <Select
+                    label="Country"
+                    placeholder="Select country"
+                    value={parentForm.country}
+                    error={formErrors.country}
+                    onChange={(e) =>
+                      setParentForm({
+                        ...parentForm,
+                        country: e.target.value,
+                      })
+                    }
+                  >
+                    {CountriesList.map((country, index) => {
+                      return (
+                        <MenuItem
+                          value={country.name}
+                          key={`${country.iso_alpha2}-${country.iso_alpha3}`}
+                        >
+                          {country.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+                <TextField
+                  label="Area"
+                  value={parentForm.area}
+                  error={formErrors.area}
+                  {...defaultHalfInputProps}
+                  onChange={(e) =>
+                    setParentForm({
+                      ...parentForm,
+                      area: e.target.value,
                     })
                   }
                 />
