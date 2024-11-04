@@ -52,11 +52,11 @@ export default function SurrogateUpdate({
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
-    className: "modal-input-full px-14",
+    className: "modal-input-full px-12",
   };
   const defaultHalfInputProps = {
     variant: "standard",
-    className: "modal-input-half px-14",
+    className: "modal-input-half px-12",
     spellCheck: false,
   };
 
@@ -431,7 +431,7 @@ export default function SurrogateUpdate({
       <div className="surrogate-content flex-column">
         <span className="cinzel px-30 uppercase">update surrogate profile</span>
         <br />
-        <span className="modal-about poppins px-15">
+        <span className="modal-about poppins px-13">
           Fill in the data for surrogate profile correctly. It will take a
           couple of minutes
         </span>
@@ -439,7 +439,7 @@ export default function SurrogateUpdate({
         <div className="modal-form-container flex-row">
           <div className="modal-form flex-column">
             <br />
-            <span className="fw-600 poppins px-24">Surrogate Bio-Data</span>
+            <span className="fw-600 poppins px-21">Surrogate Bio-Data</span>
             <br />
             <div className="flex-row space-between modal-input-row">
               <TextField
@@ -669,7 +669,7 @@ export default function SurrogateUpdate({
               </div>
               <br />
               <span
-                className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
+                className="purple-btn-default px-14 poppins pointer width-100 surrogate-form-btn"
                 onClick={() => {
                   primaryImageUploadRef.current.click();
                 }}
@@ -686,7 +686,7 @@ export default function SurrogateUpdate({
               </div>
               <br />
               <span
-                className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
+                className="purple-btn-default px-14 poppins pointer width-100 surrogate-form-btn"
                 onClick={() => {
                   secondaryImageUploadRef.current.click();
                 }}
@@ -701,7 +701,7 @@ export default function SurrogateUpdate({
         <div className="modal-form-container flex-row">
           <div className="modal-form flex-column">
             <br />
-            <span className="fw-600 poppins px-24">
+            <span className="fw-600 poppins px-21">
               Surrogate Health Information
             </span>
             <br />
@@ -1039,7 +1039,7 @@ export default function SurrogateUpdate({
                 style={{
                   opacity: formSubmitting || imageUploading ? "0.5" : "1",
                 }}
-                className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                 onClick={() => {
                   // setCurrentFormSection(2);
                   setFormSubmitting(true);

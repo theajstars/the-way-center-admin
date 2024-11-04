@@ -53,11 +53,11 @@ export default function ParentProfileView({
   const defaultFullInputProps = {
     disabled: true,
     className: "black-text",
-    // className: "modal-input-full px-14",
+    // className: "modal-input-full px-12",
   };
   const defaultHalfInputProps = {
     variant: "standard",
-    className: "modal-input-half px-14",
+    className: "modal-input-half px-12",
     spellCheck: false,
   };
 
@@ -251,7 +251,7 @@ export default function ParentProfileView({
                     value={`${parent.primary.firstname} ${parent.primary.lastname}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Parent
                         </span>
                       </InputAdornment>
@@ -267,7 +267,7 @@ export default function ParentProfileView({
                     value={`${parent.spouse.firstname} ${parent.spouse.lastname}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Parent's Spouse Name
                         </span>
                       </InputAdornment>
@@ -283,7 +283,7 @@ export default function ParentProfileView({
                     value={`${parent.address}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Parent's Address
                         </span>
                       </InputAdornment>
@@ -299,7 +299,7 @@ export default function ParentProfileView({
                     value={`${parent.primary.email}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Primary Email Address
                         </span>
                       </InputAdornment>
@@ -315,7 +315,7 @@ export default function ParentProfileView({
                     value={`${parent.spouse.email}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Secondary Email Address
                         </span>
                       </InputAdornment>
@@ -331,7 +331,7 @@ export default function ParentProfileView({
                     value={`${parent.primary.phone}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Primary Phone Number
                         </span>
                       </InputAdornment>
@@ -347,7 +347,7 @@ export default function ParentProfileView({
                     value={`${parent.spouse.phone}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Secondary Phone Number
                         </span>
                       </InputAdornment>
@@ -366,7 +366,7 @@ export default function ParentProfileView({
                     }`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Pairing Status
                         </span>
                       </InputAdornment>
@@ -382,7 +382,7 @@ export default function ParentProfileView({
                     value={getParentSurrogate()}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Surrogate
                         </span>
                       </InputAdornment>
@@ -412,7 +412,7 @@ export default function ParentProfileView({
                 </div>
                 <br />
                 {/* <span
-                  className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
+                  className="purple-btn-default px-14 poppins pointer width-100 surrogate-form-btn"
                   onClick={() => {
                     secondaryImageUploadRef.current.click();
                   }}
@@ -422,7 +422,7 @@ export default function ParentProfileView({
               </span>
               <br />
               <span
-                className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                 onClick={() => {
                   navigate("/dashboard/parents");
                 }}

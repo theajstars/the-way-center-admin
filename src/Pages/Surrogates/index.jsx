@@ -106,7 +106,7 @@ export default function Surrogates() {
       <div className="home-container flex-row">
         <div className="home-container-right flex-column">
           <DashboardOverview />
-          <span className="px-20 fw-600 poppins uppercase">
+          <span className="px-18 fw-600 poppins uppercase">
             Recent Surrogate(s)
           </span>
           <ChakraProvider>
@@ -177,7 +177,7 @@ export default function Surrogates() {
 
             <div className="flex-row space-between small-tables-row">
               <TableContainer className="recent-table-container-small table-white">
-                <Text className="cinzel px-15 uppercase">
+                <Text className="cinzel px-13 uppercase">
                   recent paired surrogates
                 </Text>
                 <br />
@@ -232,7 +232,7 @@ export default function Surrogates() {
                 </Table>
               </TableContainer>
               <TableContainer className="recent-table-container-small table-white">
-                <Text className="cinzel px-15 uppercase">
+                <Text className="cinzel px-13 uppercase">
                   unpaired surrogates
                 </Text>
                 <br />

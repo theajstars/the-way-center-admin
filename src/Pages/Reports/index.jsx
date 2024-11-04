@@ -89,11 +89,11 @@ export default function Reports() {
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
-    className: "modal-input-full px-14",
+    className: "modal-input-full px-12",
   };
   const defaultHalfInputProps = {
     variant: "outlined",
-    className: "filter-input px-14",
+    className: "filter-input px-12",
     spellCheck: false,
     size: "small",
   };
@@ -198,11 +198,11 @@ export default function Reports() {
         <div className="default-modal-content surrogate-report-modal flex-column">
           <div className="flex-row align-center">
             <div className="flex-column">
-              <span className="cinzel px-19 capitalize">
+              <span className="cinzel px-17 capitalize">
                 {surrogateReportModalDetails.content?.parent.firstname}&nbsp;
                 {surrogateReportModalDetails.content?.parent.lastname}
               </span>
-              <span className="cinzel px-19 surrogate-report-title">
+              <span className="cinzel px-17 surrogate-report-title">
                 {surrogateReportModalDetails.content?.title}
               </span>
             </div>
@@ -214,10 +214,10 @@ export default function Reports() {
             />
           </div>
           <br />
-          <span className="fw-700 cinzel px-19">FULL REPORT</span>
+          <span className="fw-700 cinzel px-17">FULL REPORT</span>
 
           <br />
-          <span className="fw-600 poppins px-19 underline">
+          <span className="fw-600 poppins px-17 underline">
             {getReportCategory(
               surrogateReportModalDetails.content?.reportCategory
             )}{" "}
@@ -225,30 +225,30 @@ export default function Reports() {
           </span>
           <br />
           <div className="flex-row align-center">
-            <span className="fw-400 poppins px-16">Surrogate: &nbsp;</span>
-            <span className="fw-700 poppins px-16 capitalize">
+            <span className="fw-400 poppins px-14">Surrogate: &nbsp;</span>
+            <span className="fw-700 poppins px-14 capitalize">
               {surrogateReportModalDetails.content?.surrogate.firstname}&nbsp;
               {surrogateReportModalDetails.content?.surrogate.lastname}
             </span>
           </div>
           <br />
           <div className="flex-row align-center">
-            <span className="fw-400 poppins px-16">
+            <span className="fw-400 poppins px-14">
               Health Practitioner: &nbsp;
             </span>
-            <span className="fw-700 poppins px-16">
+            <span className="fw-700 poppins px-14">
               {surrogateReportModalDetails.content?.healthPractitioner}
             </span>
           </div>
           <br />
           <div className="flex-row align-center">
-            <span className="fw-400 poppins px-16">Health Center: &nbsp;</span>
-            <span className="fw-700 poppins px-16">
+            <span className="fw-400 poppins px-14">Health Center: &nbsp;</span>
+            <span className="fw-700 poppins px-14">
               {surrogateReportModalDetails.content?.healthCenter}
             </span>
           </div>
           <br />
-          <span className="px-15 gray-secondary-text poppins full-surrogate-report-body modal-scrollbar">
+          <span className="px-13 gray-secondary-text poppins full-surrogate-report-body modal-scrollbar">
             {surrogateReportModalDetails.content?.details}
           </span>
           <div className="flex-row surrogate-report-modal-footer">
@@ -283,7 +283,7 @@ export default function Reports() {
         />
       )}
       <div className="flex-row space-between align-center reports-top">
-        <span className="poppins fw-500 px-18 surrogate-reports-head">
+        <span className="poppins fw-500 px-16 surrogate-reports-head">
           Surrogate Reports
         </span>
         <div className="flex-row align-center">
@@ -388,10 +388,10 @@ export default function Reports() {
                 <div className="surrogate-report flex-column">
                   <div className="flex-row surrogate-report-top space-between">
                     <div className="flex-column">
-                      <span className="cinzel px-14 gray-secondary-text surrogate-report-type">
+                      <span className="cinzel px-12 gray-secondary-text surrogate-report-type">
                         {report.parent.firstname} {report.parent.lastname}
                       </span>
-                      <span className="cinzel px-16 surrogate-report-title">
+                      <span className="cinzel px-14 surrogate-report-title">
                         {getReportCategory(report.reportCategory)} Report
                       </span>
                     </div>
@@ -401,7 +401,7 @@ export default function Reports() {
                       className="surrogate-report-avatar"
                     />
                   </div>
-                  <span className="surrogate-report-body poppins px-14 fw-300">
+                  <span className="surrogate-report-body poppins px-12 fw-300">
                     {report.details.length > 120
                       ? `${report.details.substring(0, 120)}...`
                       : report.details}
@@ -421,7 +421,7 @@ export default function Reports() {
                     </span>
 
                     <span
-                      className="px-14 poppins fw-500 pointer"
+                      className="px-12 poppins fw-500 pointer"
                       onClick={() => {
                         setSurrogateReportModalDetails({
                           state: true,
@@ -454,7 +454,7 @@ export default function Reports() {
             <br />
             <div className="modal-form flex-column align-center width-100">
               <br />
-              <span className="fw-600 poppins px-24">Report File</span>
+              <span className="fw-600 poppins px-21">Report File</span>
               <br />
               <div className="flex-row space-between modal-input-row width-100">
                 <FormControl
@@ -524,7 +524,7 @@ export default function Reports() {
               <br />
               <div className="width-100 flex-column align-center">
                 <span
-                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                  className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                   onClick={() => {
                     setShowAttachMedia(false);
                   }}
@@ -534,7 +534,7 @@ export default function Reports() {
                 <br />
                 <Button
                   disabled={isUploadFile}
-                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                  className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                   onClick={() => {
                     UpdateFileErrors();
                     setUploadFile(true);

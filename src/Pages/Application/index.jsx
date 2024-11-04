@@ -45,16 +45,16 @@ export default function Application() {
         ADMIN DASHBOARD
       </Typography>
       <br />
-      <span className="px-24 fw-600 poppins">Request A Surrogate</span>
-      <small className="px-14 fw-300 poppins">
+      <span className="px-21 fw-600 poppins">Request A Surrogate</span>
+      <small className="px-12 fw-300 poppins">
         Fill in the data for your preferred fit for a surrogate. It will take a
         couple of minutes
       </small>
 
       <div className="flex-row surrogate-form-container">
         <div className="surrogate-form-left flex-column">
-          <span className="fw-600 px-19 poppins">Data Bank</span>
-          <span className="px-14 poppins fw-300 surrogate-form-about">
+          <span className="fw-600 px-17 poppins">Data Bank</span>
+          <span className="px-12 poppins fw-300 surrogate-form-about">
             Kindly be as specific as possible with your request. Our admin will
             be in touch as soon as possible
           </span>
@@ -283,7 +283,7 @@ export default function Application() {
               />
             </div>
           </div>
-          <span className="submit-application-form flex-row px-15 fw-500 poppins pointer">
+          <span className="submit-application-form flex-row px-13 fw-500 poppins pointer">
             Submit Request
           </span>
         </div>

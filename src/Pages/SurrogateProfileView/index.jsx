@@ -49,11 +49,11 @@ export default function SurrogateProfileView({
   const defaultFullInputProps = {
     disabled: true,
     className: "black-text",
-    // className: "modal-input-full px-14",
+    // className: "modal-input-full px-12",
   };
   const defaultHalfInputProps = {
     disabled: true,
-    className: "modal-input-half px-14 black-text",
+    className: "modal-input-half px-12 black-text",
     spellCheck: false,
   };
 
@@ -127,7 +127,7 @@ export default function SurrogateProfileView({
         <div className="surrogate-content flex-column">
           <span className="cinzel px-30 uppercase">VIEW SURROGATE PROFILE</span>
           <br />
-          <span className="modal-about poppins px-15">
+          <span className="modal-about poppins px-13">
             Fill in the data for surrogate profile correctly. It will take a
             couple of minutes
           </span>
@@ -135,7 +135,7 @@ export default function SurrogateProfileView({
           <div className="modal-form-container flex-row">
             <div className="modal-form flex-column">
               <br />
-              <span className="fw-600 poppins px-24">Surrogate Bio-Data</span>
+              <span className="fw-600 poppins px-21">Surrogate Bio-Data</span>
               <br />
               <div className="flex-row space-between modal-input-row">
                 <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -145,7 +145,7 @@ export default function SurrogateProfileView({
                     value={`${surrogate.primary.firstname} ${surrogate.primary.lastname}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Full Name
                         </span>
                       </InputAdornment>
@@ -162,7 +162,7 @@ export default function SurrogateProfileView({
                     value={`${surrogate.address}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Address
                         </span>
                       </InputAdornment>
@@ -178,7 +178,7 @@ export default function SurrogateProfileView({
                     value={`${surrogate.primary.email}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Primary Email Address
                         </span>
                       </InputAdornment>
@@ -195,7 +195,7 @@ export default function SurrogateProfileView({
                     value={`${surrogate.primary.phone}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Primary Phone Number
                         </span>
                       </InputAdornment>
@@ -214,7 +214,7 @@ export default function SurrogateProfileView({
                     }`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Pairing Status
                         </span>
                       </InputAdornment>
@@ -230,7 +230,7 @@ export default function SurrogateProfileView({
                     value={surrogate.primary.nin}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           NIN
                         </span>
                       </InputAdornment>
@@ -261,7 +261,7 @@ export default function SurrogateProfileView({
                           value={info.value}
                           startAdornment={
                             <InputAdornment position="start">
-                              <span className="fw-500 poppins px-15 black-text">
+                              <span className="fw-500 poppins px-13 black-text">
                                 {info.kyc}
                               </span>
                             </InputAdornment>
@@ -276,7 +276,7 @@ export default function SurrogateProfileView({
                 <Divider style={{ width: "100%" }} />
               </div>
               <div className="flex-row space-between modal-input-row">
-                <span className="poppins px-16">
+                <span className="poppins px-14">
                   &nbsp;&nbsp;<u>Next of Kin Details</u>
                 </span>
               </div>
@@ -288,7 +288,7 @@ export default function SurrogateProfileView({
                     value={surrogate.primary.nok.fullname}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Fullname
                         </span>
                       </InputAdornment>
@@ -308,7 +308,7 @@ export default function SurrogateProfileView({
                     value={`${surrogate.primary.nok.nin}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           NIN
                         </span>
                       </InputAdornment>
@@ -326,7 +326,7 @@ export default function SurrogateProfileView({
                     value={`${surrogate.primary.nok.phone}`}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Phone
                         </span>
                       </InputAdornment>
@@ -342,7 +342,7 @@ export default function SurrogateProfileView({
                     value={surrogate.primary.nok.address}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Address
                         </span>
                       </InputAdornment>
@@ -358,7 +358,7 @@ export default function SurrogateProfileView({
                     value={surrogate.primary.nok.relationship}
                     startAdornment={
                       <InputAdornment position="start">
-                        <span className="fw-500 poppins px-15 black-text">
+                        <span className="fw-500 poppins px-13 black-text">
                           Relationship
                         </span>
                       </InputAdornment>

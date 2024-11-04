@@ -35,7 +35,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
 
   const defaultHalfInputProps = {
     variant: "standard",
-    className: "modal-input-half px-14",
+    className: "modal-input-half px-12",
     spellCheck: false,
   };
 
@@ -110,7 +110,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
           </span>
           <br />
           <center>
-            <span className="modal-about modal-about-create-pairing poppins px-15">
+            <span className="modal-about modal-about-create-pairing poppins px-13">
               Kindly select the parent and the corresponding surrogate
             </span>
           </center>
@@ -118,7 +118,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
           <div className="modal-form-create-pairing-container flex-column align-center">
             <div className="modal-form-create-pairing flex-column">
               <br />
-              <span className="fw-600 poppins px-24">
+              <span className="fw-600 poppins px-21">
                 Parent + Surrogate Match
               </span>
               <br />
@@ -208,7 +208,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
                         className="modal-form-image"
                       />
                     </div>
-                    <div className="pairing-person-tag poppins px-15">
+                    <div className="pairing-person-tag poppins px-13">
                       Parent Image
                     </div>
                   </div>
@@ -220,7 +220,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
                         className="modal-form-image"
                       />
                     </div>
-                    <div className="pairing-person-tag poppins px-15">
+                    <div className="pairing-person-tag poppins px-13">
                       Surrogate Image
                     </div>
                   </div>
@@ -245,7 +245,7 @@ export default function CreatePairing({ showCreatePairingModal }) {
                   pairingForm.parentID.length === 0 ||
                   pairingForm.parentID.length === 0
                 }
-                className="purple-btn-default px-16 poppins pointer pairing-modal-submit uppercase modal-form-submit"
+                className="purple-btn-default px-14 poppins pointer pairing-modal-submit uppercase modal-form-submit"
                 onClick={() => {
                   Pair();
                 }}

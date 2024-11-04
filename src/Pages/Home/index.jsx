@@ -95,7 +95,7 @@ export default function Home() {
           <DashboardOverview />
           <div className="recent-blocks flex-row">
             <div className="recent-block flex-column">
-              <span className="px-16 cinzel">RECENT PARENTS</span>
+              <span className="px-14 cinzel">RECENT PARENTS</span>
               {isViewParent && (
                 <ParentProfileView
                   showViewParentModal={showViewParentModal}
@@ -112,7 +112,7 @@ export default function Home() {
                         onClick={() => {
                           navigate(`/dashboard/parent/${parent.id}`);
                         }}
-                        className="poppins fw-500 px-18 capitalize underline pointer recent-block-text"
+                        className="poppins fw-500 px-16 capitalize underline pointer recent-block-text"
                       >
                         {parent.primary.firstname} {parent.primary.lastname}
                       </span>
@@ -122,7 +122,7 @@ export default function Home() {
               </div>
               <div className="flex-row width-100 justify-end align-center">
                 <span
-                  className="px-16 fw-500 underline pointer poppins"
+                  className="px-14 fw-500 underline pointer poppins"
                   onClick={() => {
                     navigate("/dashboard/parents");
                   }}
@@ -132,7 +132,7 @@ export default function Home() {
               </div>
             </div>
             <div className="recent-block flex-column">
-              <span className="px-16 cinzel">RECENT SURROGATES</span>
+              <span className="px-14 cinzel">RECENT SURROGATES</span>
               <br />
               {isViewSurrogate && (
                 <SurrogateProfileView
@@ -151,7 +151,7 @@ export default function Home() {
                           // showViewSurrogateModal(true);
                           navigate(`/dashboard/surrogate/${surrogate.id}`);
                         }}
-                        className="poppins fw-500 px-18 capitalize underline pointer recent-block-text"
+                        className="poppins fw-500 px-16 capitalize underline pointer recent-block-text"
                       >
                         {surrogate.primary.firstname}{" "}
                         {surrogate.primary.lastname}
@@ -162,7 +162,7 @@ export default function Home() {
               </div>
               <div className="flex-row width-100 justify-end align-center">
                 <span
-                  className="px-16 fw-500 underline pointer poppins"
+                  className="px-14 fw-500 underline pointer poppins"
                   onClick={() => {
                     navigate("/dashboard/surrogates");
                   }}
@@ -174,10 +174,10 @@ export default function Home() {
           </div>
 
           {/* <div className="flex-row space-between align-center">
-            <span className="poppins fw-500 px-18 surrogate-reports-head">
+            <span className="poppins fw-500 px-16 surrogate-reports-head">
               Your Surrogate Reports
             </span>
-            <span className="poppins fw-500 px-16 purple-default-text view-more-reports">
+            <span className="poppins fw-500 px-14 purple-default-text view-more-reports">
               View More
             </span>
           </div> */}
@@ -196,10 +196,10 @@ export default function Home() {
             <div className="default-modal-content surrogate-report-modal flex-column">
               <div className="flex-row align-center">
                 <div className="flex-column">
-                  <span className="cinzel px-16 gray-secondary-text surrogate-report-type">
+                  <span className="cinzel px-14 gray-secondary-text surrogate-report-type">
                     {surrogateReportModalDetails.content?.type}
                   </span>
-                  <span className="cinzel px-19 surrogate-report-title">
+                  <span className="cinzel px-17 surrogate-report-title">
                     {surrogateReportModalDetails.content?.title}
                   </span>
                 </div>
@@ -212,10 +212,10 @@ export default function Home() {
               </div>
               <br />
               <br />
-              <span className="fw-700 cinzel px-19">FULL REPORT</span>
+              <span className="fw-700 cinzel px-17">FULL REPORT</span>
               <br />
               <br />
-              <span className="px-15 gray-secondary-text poppins full-surrogate-report-body modal-scrollbar">
+              <span className="px-13 gray-secondary-text poppins full-surrogate-report-body modal-scrollbar">
                 {surrogateReportModalDetails.content?.body}
                 <br />
                 <br />
@@ -249,10 +249,10 @@ export default function Home() {
                   <div className="surrogate-report flex-column" key={index}>
                     <div className="flex-row surrogate-report-top space-between">
                       <div className="flex-column">
-                        <span className="cinzel px-14 gray-secondary-text surrogate-report-type">
+                        <span className="cinzel px-12 gray-secondary-text surrogate-report-type">
                           {report.type}
                         </span>
-                        <span className="cinzel px-16 surrogate-report-title">
+                        <span className="cinzel px-14 surrogate-report-title">
                           {report.title}
                         </span>
                       </div>
@@ -262,7 +262,7 @@ export default function Home() {
                         className="surrogate-report-avatar"
                       />
                     </div>
-                    <span className="surrogate-report-body poppins px-14 fw-300">
+                    <span className="surrogate-report-body poppins px-12 fw-300">
                       {report.body.length > 120
                         ? `${report.body.substring(0, 120)}...`
                         : report.body}
@@ -280,7 +280,7 @@ export default function Home() {
                       </span>
 
                       <span
-                        className="px-14 poppins fw-500 pointer"
+                        className="px-12 poppins fw-500 pointer"
                         onClick={() => {
                           setSurrogateReportModalDetails({
                             state: true,
@@ -297,7 +297,7 @@ export default function Home() {
             )}
           </div> */}
           {/* <>
-            <span className="poppins fw-500 px-18">Your Surrogate Media</span>
+            <span className="poppins fw-500 px-16">Your Surrogate Media</span>
             <div ref={sliderRef} className="keen-slider">
               <div className="keen-slider__slide surrogate-media-item">
                 <YoutubeEmbed embedId={"CuSxk_DNau8"} />

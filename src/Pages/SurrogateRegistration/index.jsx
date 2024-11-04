@@ -128,11 +128,11 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
-    className: "modal-input-full px-14",
+    className: "modal-input-full px-12",
   };
   const defaultHalfInputProps = {
     variant: "standard",
-    className: "modal-input-half px-14",
+    className: "modal-input-half px-12",
     spellCheck: false,
   };
   const fileIsLarge = () => {
@@ -444,7 +444,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
             create surrogate profile
           </span>
           <br />
-          <span className="modal-about poppins px-15">
+          <span className="modal-about poppins px-13">
             Fill in the data for surrogate profile correctly. It will take a
             couple of minutes
           </span>
@@ -453,7 +453,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
             <div className="modal-form-container flex-row">
               <div className="modal-form flex-column">
                 <br />
-                <span className="fw-600 poppins px-24">Surrogate Bio-Data</span>
+                <span className="fw-600 poppins px-21">Surrogate Bio-Data</span>
                 <br />
                 <div className="flex-row space-between modal-input-row">
                   <TextField
@@ -635,12 +635,12 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         className="modal-form-image"
                       />
                     ) : (
-                      <span className="px-16 poppins">No Image Selected</span>
+                      <span className="px-14 poppins">No Image Selected</span>
                     )}
                   </div>
                   <br />
                   <span
-                    className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
+                    className="purple-btn-default px-14 poppins pointer width-100 surrogate-form-btn"
                     onClick={() => {
                       primaryImageUploadRef.current.click();
                     }}
@@ -661,12 +661,12 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         className="modal-form-image"
                       />
                     ) : (
-                      <span className="px-16 poppins">No Image Selected</span>
+                      <span className="px-14 poppins">No Image Selected</span>
                     )}
                   </div>
                   <br />
                   <span
-                    className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
+                    className="purple-btn-default px-14 poppins pointer width-100 surrogate-form-btn"
                     onClick={() => {
                       secondaryImageUploadRef.current.click();
                     }}
@@ -681,7 +681,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 </span>
                 <br />
                 <span
-                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                  className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                   onClick={() => {
                     setCurrentFormSection(2);
                   }}
@@ -694,7 +694,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
             <div className="modal-form-container flex-row">
               <div className="modal-form flex-column">
                 <br />
-                <span className="fw-600 poppins px-24">
+                <span className="fw-600 poppins px-21">
                   Surrogate Health Information
                 </span>
                 <br />
@@ -1115,7 +1115,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 <br />
                 <div className="width-100 flex-column">
                   <span
-                    className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                    className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                     onClick={() => {
                       setCurrentFormSection(1);
                     }}
@@ -1125,7 +1125,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <br />
                   <button
                     disabled={formSubmitting}
-                    className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                    className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                     onClick={() => {
                       UpdateFormErrors();
                       setFormSubmitting(true);

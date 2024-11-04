@@ -18,7 +18,7 @@ import ImageSelectorPlaceholder from "../../Assets/IMG/ImageSelectorPlaceholder.
 import Confirmation from "../Confirmation";
 
 import { DefaultContext } from "../Dashboard";
-import { initialParent } from "../../Assets/Data";
+import { CountriesList, initialParent } from "../../Assets/Data";
 import { validatePhone } from "../../Lib/Validate";
 import { validateEmail } from "../../App";
 import { useEffect } from "react";
@@ -84,11 +84,11 @@ export default function ParentUpdate({
   const defaultFullInputProps = {
     variant: "outlined",
     spellCheck: false,
-    className: "modal-input-full px-14",
+    className: "modal-input-full px-12",
   };
   const defaultHalfInputProps = {
     ...defaultFullInputProps,
-    className: "modal-input-half px-14",
+    className: "modal-input-half px-12",
   };
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -112,6 +112,10 @@ export default function ParentUpdate({
     primaryEmail: false,
     spouseEmail: false,
     address: false,
+    city: false,
+    state: false,
+    country: false,
+    area: false,
     primaryPhone: false,
     spousePhone: false,
   });
@@ -139,6 +143,10 @@ export default function ParentUpdate({
       spouseFirstName: isLengthError(parentForm.spouse.firstname),
       spouseLastName: isLengthError(parentForm.spouse.lastname),
       address: isLengthError(parentForm.address),
+      city: isLengthError(parentForm.city),
+      state: isLengthError(parentForm.state),
+      country: isLengthError(parentForm.country),
+      area: isLengthError(parentForm.area),
       primaryEmailAddress: !isPrimaryEmailValid,
       spouseEmail: !isSpouseEmailValid,
       primaryPhone: !isPrimaryPhoneValid,
@@ -164,6 +172,10 @@ export default function ParentUpdate({
         if (!spouseImage && !primaryImage) {
           const data = {
             address: parentForm.address,
+            city: parentForm.city,
+            state: parentForm.state,
+            country: parentForm.country,
+            area: parentForm.area,
             parentID: parentForm.id,
             status: parentForm.status,
             primary: { ...parentForm.primary, image: initialPrimaryImage },
@@ -310,7 +322,7 @@ export default function ParentUpdate({
             <>
               <div className="modal-form flex-column">
                 <br />
-                <span className="fw-600 poppins px-24">Parent Bio-Data</span>
+                <span className="fw-600 poppins px-21">Parent Bio-Data</span>
                 <br />
                 <div className="flex-row space-between modal-input-row">
                   <TextField
@@ -371,6 +383,77 @@ export default function ParentUpdate({
                       setParentForm({
                         ...parentForm,
                         address: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <TextField
+                    label="City"
+                    value={parentForm.city}
+                    error={formErrors.city}
+                    {...defaultHalfInputProps}
+                    onChange={(e) =>
+                      setParentForm({
+                        ...parentForm,
+                        city: e.target.value,
+                      })
+                    }
+                  />
+                  <TextField
+                    label="State"
+                    value={parentForm.state}
+                    error={formErrors.state}
+                    {...defaultHalfInputProps}
+                    onChange={(e) =>
+                      setParentForm({
+                        ...parentForm,
+                        state: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <FormControl {...defaultHalfInputProps}>
+                    <InputLabel
+                      variant="standard"
+                      htmlFor="uncontrolled-native"
+                    >
+                      Country
+                    </InputLabel>
+                    <Select
+                      label="Country"
+                      placeholder="Select country"
+                      value={parentForm.country}
+                      error={formErrors.country}
+                      onChange={(e) =>
+                        setParentForm({
+                          ...parentForm,
+                          country: e.target.value,
+                        })
+                      }
+                    >
+                      {CountriesList.map((country, index) => {
+                        return (
+                          <MenuItem
+                            value={country.name}
+                            key={`${country.iso_alpha2}-${country.iso_alpha3}`}
+                          >
+                            {country.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    label="Area"
+                    value={parentForm.area}
+                    error={formErrors.area}
+                    {...defaultHalfInputProps}
+                    onChange={(e) =>
+                      setParentForm({
+                        ...parentForm,
+                        area: e.target.value,
                       })
                     }
                   />
@@ -482,7 +565,7 @@ export default function ParentUpdate({
             <>
               <div className="modal-form flex-column">
                 <br />
-                <span className="fw-600 poppins px-24">Spouse Bio-Data</span>
+                <span className="fw-600 poppins px-21">Spouse Bio-Data</span>
                 <br />
                 <div className="flex-row space-between modal-input-row">
                   <TextField
@@ -667,7 +750,7 @@ export default function ParentUpdate({
               Cancel
             </Button>
             <button
-              className="purple-btn-default px-16 poppins pointer uppercase modal-form-submit"
+              className="purple-btn-default px-14 poppins pointer uppercase modal-form-submit"
               onClick={() => {
                 UpdateFormErrors();
                 setFormSubmitting(true);

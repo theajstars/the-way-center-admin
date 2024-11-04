@@ -27,7 +27,7 @@ export default function CustomSelect({
           setSelectOpen(!isSelectOpen);
         }}
       >
-        <div className="select-input poppins px-14 flex-row">
+        <div className="select-input poppins px-12 flex-row">
           {selectedOption.value.length > 0 ? selectedOption.title : placeholder}
         </div>
         <motion.span

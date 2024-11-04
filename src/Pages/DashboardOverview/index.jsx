@@ -24,7 +24,7 @@ export default function DashboardOverview() {
         <span className="cinzel px-28 dashboard-block-header">PARENTS</span>
         <div className="flex-row dashboard-block-footer">
           <span
-            className="pointer px-17 fw-500 poppins underline"
+            className="pointer px-15 fw-500 poppins underline"
             onClick={() => {
               setAddNewParent(true);
             }}
@@ -43,7 +43,7 @@ export default function DashboardOverview() {
         <span className="cinzel px-28 dashboard-block-header">SURROGATES</span>
         <div className="flex-row dashboard-block-footer">
           <span
-            className="pointer px-17 fw-500 poppins underline"
+            className="pointer px-15 fw-500 poppins underline"
             onClick={() => {
               setAddNewSurrogate(true);
             }}
@@ -64,7 +64,7 @@ export default function DashboardOverview() {
         <span className="cinzel px-28 dashboard-block-header">PAIRINGS</span>
         <div className="flex-row dashboard-block-footer">
           <span
-            className="pointer px-17 fw-500 poppins underline"
+            className="pointer px-15 fw-500 poppins underline"
             onClick={() => {
               setAddNewPairing(true);
             }}
