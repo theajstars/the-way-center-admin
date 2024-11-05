@@ -1162,7 +1162,7 @@ export default function SurrogateUpdate({
               /> */}
               <FormControl variant="standard" {...defaultHalfInputProps}>
                 <InputLabel id="demo-simple-select-standard-label">
-                  Are you a first time surrogate
+                  Your Surrogacy Experience
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
@@ -1182,11 +1182,20 @@ export default function SurrogateUpdate({
                   }
                   label="Experience"
                 >
-                  <MenuItem value={"Yes"} key={"Yes"}>
-                    Yes
+                  <MenuItem value={"1"} key={"1"}>
+                    First Time
                   </MenuItem>
-                  <MenuItem value={"No"} key={"No"}>
-                    No
+                  <MenuItem value={"2"} key={"2"}>
+                    Second Time
+                  </MenuItem>
+                  <MenuItem value={"3"} key={"3"}>
+                    Third Time
+                  </MenuItem>
+                  <MenuItem value={"4"} key={"4"}>
+                    Fourth Time
+                  </MenuItem>
+                  <MenuItem value={"5"} key={"5"}>
+                    Fifth Time
                   </MenuItem>
                 </Select>
               </FormControl>
