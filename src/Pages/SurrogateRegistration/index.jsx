@@ -127,10 +127,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     nextOfKin_name: false,
     nextOfKin_phone: false,
     nextOfKin_address: false,
-    nextOfKinCity: false,
-    nextOfKinState: false,
-    nextOfKinCountry: false,
-    nextOfKinArea: false,
+    nextOfKin_city: false,
+    nextOfKin_state: false,
+    nextOfKin_country: false,
+    nextOfKin_area: false,
     nextOfKin_nationalIdentificationNumber: false,
 
     sibling_name: false,
@@ -200,6 +200,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
 
       nextOfKin_name: surrogateForm.nextOfKin.name.length === 0,
       nextOfKin_address: surrogateForm.nextOfKin.address.length === 0,
+      nextOfKin_city: surrogateForm.nextOfKin.city.length === 0,
+      nextOfKin_area: surrogateForm.nextOfKin.area.length === 0,
+      nextOfKin_country: surrogateForm.nextOfKin.country.length === 0,
+      nextOfKin_state: surrogateForm.nextOfKin.state.length === 0,
       nextOfKin_phone: !isNexfOfKinPrimaryPhoneValid,
       nextOfKin_nationalIdentificationNumber: !isNexfOfKinNINValid,
 
@@ -645,7 +649,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   />
                 </div>
                 <div className="flex-row space-between modal-input-row">
-                  <TextField
+                  {/* <TextField
                     label="Experience"
                     value={surrogateForm.experience}
                     error={formErrors.experience}
@@ -656,7 +660,33 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         experience: e.target.value,
                       })
                     }
-                  />
+                  /> */}
+                  <FormControl variant="standard" fullWidth>
+                    <InputLabel id="demo-simple-select-standard-label">
+                      Are you a first time surrogate
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={surrogateForm.experience}
+                      error={formErrors.experience}
+                      {...defaultFullInputProps}
+                      onChange={(e) =>
+                        setSurrogateForm({
+                          ...surrogateForm,
+                          experience: e.target.value,
+                        })
+                      }
+                      label="Experience"
+                    >
+                      <MenuItem value={"Yes"} key={"Yes"}>
+                        Yes
+                      </MenuItem>
+                      <MenuItem value={"No"} key={"No"}>
+                        No
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
@@ -1082,7 +1112,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <TextField
                     label="City"
                     value={surrogateForm.nextOfKin.city}
-                    error={formErrors.nextOfKinCity}
+                    error={formErrors.nextOfKin_city}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -1097,7 +1127,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <TextField
                     label="State"
                     value={surrogateForm.nextOfKin.state}
-                    error={formErrors.nextOfKinState}
+                    error={formErrors.nextOfKin_state}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
                       setSurrogateForm({
@@ -1122,7 +1152,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                       label="Country"
                       placeholder="Select country"
                       value={surrogateForm.nextOfKin.country}
-                      error={formErrors.nextOfKinCountry}
+                      error={formErrors.nextOfKin_country}
                       onChange={(e) =>
                         setSurrogateForm({
                           ...surrogateForm,
@@ -1148,7 +1178,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <TextField
                     label="Area"
                     value={surrogateForm.nextOfKin.area}
-                    error={formErrors.nextOfKinArea}
+                    error={formErrors.nextOfKin_area}
                     {...defaultHalfInputProps}
                     onChange={(e) =>
                       setSurrogateForm({

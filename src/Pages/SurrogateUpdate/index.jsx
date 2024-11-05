@@ -160,6 +160,10 @@ export default function SurrogateUpdate({
     email: false,
     phone: false,
     address: false,
+    city: false,
+    state: false,
+    country: false,
+    area: false,
     dateOfBirth: false,
     tribe: false,
     religion: false,
@@ -173,6 +177,10 @@ export default function SurrogateUpdate({
     nokFullname: false,
     nokRelationship: false,
     nokAddress: false,
+    nokCity: false,
+    nokState: false,
+    nokCountry: false,
+    nokArea: false,
     nokPhone: false,
     nokNin: false,
     status: false,
@@ -199,6 +207,10 @@ export default function SurrogateUpdate({
       // dateOfBirth: surrogateForm.dateOfBirth.length === 0,
 
       address: surrogateForm.address.length === 0,
+      city: surrogateForm?.city?.length === 0,
+      state: surrogateForm?.state?.length === 0,
+      country: surrogateForm?.country?.length === 0,
+      area: surrogateForm?.area?.length === 0,
       phone: !isPhoneValid,
       email: !isEmailValid,
 
@@ -213,7 +225,11 @@ export default function SurrogateUpdate({
       hivStatus: getExtendedInfoValue("hivStatus").length === 0,
 
       nokFullname: surrogateForm.primary.nok.fullname.length === 0,
-      nokAddress: surrogateForm.primary.nok.address.length === 0,
+      nokAddress: surrogateForm?.primary?.nok?.address?.length === 0,
+      nokCity: surrogateForm?.primary?.nok?.city?.length === 0,
+      nokCountry: surrogateForm?.primary?.nok?.country?.length === 0,
+      nokArea: surrogateForm?.primary?.nok?.area?.length === 0,
+      nokState: surrogateForm?.primary?.nok?.state?.length === 0,
       nokPhone: surrogateForm.primary.nok.phone.length === 0,
       nokNin: surrogateForm.primary.nok.nin.length === 0,
 
@@ -527,6 +543,74 @@ export default function SurrogateUpdate({
                   setSurrogateForm({
                     ...surrogateForm,
                     address: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="flex-row space-between modal-input-row">
+              <TextField
+                label="City"
+                value={surrogateForm?.city}
+                error={formErrors.city}
+                {...defaultHalfInputProps}
+                onChange={(e) =>
+                  setSurrogateForm({
+                    ...surrogateForm,
+                    city: e.target.value,
+                  })
+                }
+              />
+              <TextField
+                label="State"
+                value={surrogateForm?.state}
+                error={formErrors.state}
+                {...defaultHalfInputProps}
+                onChange={(e) =>
+                  setSurrogateForm({
+                    ...surrogateForm,
+                    state: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="flex-row space-between modal-input-row">
+              <FormControl {...defaultHalfInputProps}>
+                <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                  Country
+                </InputLabel>
+                <Select
+                  label="Country"
+                  placeholder="Select country"
+                  value={surrogateForm?.country}
+                  error={formErrors.country}
+                  onChange={(e) =>
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      country: e.target.value,
+                    })
+                  }
+                >
+                  {CountriesList.map((country, index) => {
+                    return (
+                      <MenuItem
+                        value={country.name}
+                        key={`${country.iso_alpha2}-${country.iso_alpha3}`}
+                      >
+                        {country.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              <TextField
+                label="Area"
+                value={surrogateForm?.area}
+                error={formErrors.area}
+                {...defaultHalfInputProps}
+                onChange={(e) =>
+                  setSurrogateForm({
+                    ...surrogateForm,
+                    area: e.target.value,
                   })
                 }
               />
@@ -862,6 +946,99 @@ export default function SurrogateUpdate({
             </div>
             <div className="flex-row space-between modal-input-row">
               <TextField
+                label="City"
+                value={surrogateForm.primary.nok.city}
+                error={formErrors.nokCity}
+                {...defaultHalfInputProps}
+                onChange={(e) =>
+                  setSurrogateForm({
+                    ...surrogateForm,
+                    primary: {
+                      ...surrogateForm.primary,
+                      nok: {
+                        ...surrogateForm.primary.nok,
+                        city: e.target.value,
+                      },
+                    },
+                  })
+                }
+              />
+              <TextField
+                label="State"
+                value={surrogateForm.primary.nok.state}
+                error={formErrors.nokState}
+                {...defaultHalfInputProps}
+                onChange={(e) =>
+                  setSurrogateForm({
+                    ...surrogateForm,
+                    primary: {
+                      ...surrogateForm.primary,
+                      nok: {
+                        ...surrogateForm.primary.nok,
+                        state: e.target.value,
+                      },
+                    },
+                  })
+                }
+              />
+            </div>
+            <div className="flex-row space-between modal-input-row">
+              <FormControl {...defaultHalfInputProps}>
+                <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                  Country
+                </InputLabel>
+                <Select
+                  label="Country"
+                  placeholder="Select country"
+                  value={surrogateForm.primary.nok.country}
+                  error={formErrors.nokCountry}
+                  {...defaultHalfInputProps}
+                  onChange={(e) =>
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      primary: {
+                        ...surrogateForm.primary,
+                        nok: {
+                          ...surrogateForm.primary.nok,
+                          country: e.target.value,
+                        },
+                      },
+                    })
+                  }
+                >
+                  {CountriesList.map((country, index) => {
+                    return (
+                      <MenuItem
+                        value={country.name}
+                        key={`${country.iso_alpha2}-${country.iso_alpha3}`}
+                      >
+                        {country.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              <TextField
+                label="Area"
+                value={surrogateForm.primary.nok.area}
+                error={formErrors.nokArea}
+                {...defaultHalfInputProps}
+                onChange={(e) =>
+                  setSurrogateForm({
+                    ...surrogateForm,
+                    primary: {
+                      ...surrogateForm.primary,
+                      nok: {
+                        ...surrogateForm.primary.nok,
+                        area: e.target.value,
+                      },
+                    },
+                  })
+                }
+              />
+            </div>
+            <div className="flex-row space-between modal-input-row">
+              <TextField
                 label="Next of Kin Phone Number"
                 value={surrogateForm.primary.nok.phone}
                 error={formErrors.nokPhone}
@@ -960,7 +1137,7 @@ export default function SurrogateUpdate({
                   </MenuItem>
                 </Select>
               </FormControl>
-              <TextField
+              {/* <TextField
                 label="Experience"
                 value={surrogateForm.primary.experience}
                 error={formErrors.experience}
@@ -974,7 +1151,33 @@ export default function SurrogateUpdate({
                     },
                   })
                 }
-              />
+              /> */}
+              <FormControl variant="standard" {...defaultHalfInputProps}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Are you a first time surrogate
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  value={surrogateForm.experience}
+                  error={formErrors.experience}
+                  {...defaultFullInputProps}
+                  onChange={(e) =>
+                    setSurrogateForm({
+                      ...surrogateForm,
+                      experience: e.target.value,
+                    })
+                  }
+                  label="Experience"
+                >
+                  <MenuItem value={"Yes"} key={"Yes"}>
+                    Yes
+                  </MenuItem>
+                  <MenuItem value={"No"} key={"No"}>
+                    No
+                  </MenuItem>
+                </Select>
+              </FormControl>
             </div>
           </div>
           <div className="flex-column modal-form-right space-between">
