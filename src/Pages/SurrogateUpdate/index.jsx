@@ -311,6 +311,10 @@ export default function SurrogateUpdate({
           email: surrogateForm.primary.email,
           phone: surrogateForm.primary.phone,
           address: surrogateForm.primary.address,
+          city: surrogateForm.country,
+          state: surrogateForm.state.state,
+          area: surrogateForm.area,
+          country: surrogateForm.country,
           dateOfBirth: "",
           tribe: surrogateForm.primary.tribe,
           religion: surrogateForm.primary.religion,
@@ -324,6 +328,10 @@ export default function SurrogateUpdate({
             fullname: surrogateForm.primary.nok.fullname,
             relationship: surrogateForm.primary.nok.relationship,
             address: surrogateForm.primary.nok.address,
+            city: surrogateForm.primary.nok.city,
+            state: surrogateForm.primary.nok.state,
+            area: surrogateForm.primary.nok.area,
+            country: surrogateForm.primary.nok.country,
             phone: surrogateForm.primary.nok.phone,
             nin: surrogateForm.primary.nok.nin,
           },
@@ -1159,13 +1167,17 @@ export default function SurrogateUpdate({
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  value={surrogateForm.experience}
+                  value={surrogateForm.primary.experience}
                   error={formErrors.experience}
                   {...defaultFullInputProps}
                   onChange={(e) =>
                     setSurrogateForm({
                       ...surrogateForm,
-                      experience: e.target.value,
+                      primary: {
+                        ...surrogateForm.primary,
+
+                        experience: e.target.value,
+                      },
                     })
                   }
                   label="Experience"
