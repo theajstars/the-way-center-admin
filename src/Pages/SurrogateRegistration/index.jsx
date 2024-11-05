@@ -34,6 +34,10 @@ const initialSurrogateForm = {
   dateOfBirth: dayjs("2023-01-01"),
   placeOfBirth: "Nigeria",
   address: "",
+  city: "",
+  state: "",
+  country: "",
+  area: "",
   primaryPhone: "",
   primaryEmailAddress: "",
   bankVerificationNumber: "",
@@ -64,6 +68,10 @@ const initialSurrogateForm = {
   nextOfKin: {
     name: "",
     address: "",
+    city: "",
+    state: "",
+    country: "",
+    area: "",
     phone: "",
     relationship: "Father",
     nationalIdentificationNumber: "",
@@ -89,6 +97,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     dateOfBirth: false,
     placeOfBirth: false,
     address: false,
+    city: false,
+    state: false,
+    country: false,
+    area: false,
     tribe: false,
     religion: false,
     experience: false,
@@ -115,11 +127,19 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     nextOfKin_name: false,
     nextOfKin_phone: false,
     nextOfKin_address: false,
+    nextOfKinCity: false,
+    nextOfKinState: false,
+    nextOfKinCountry: false,
+    nextOfKinArea: false,
     nextOfKin_nationalIdentificationNumber: false,
 
     sibling_name: false,
     sibling_phone: false,
   });
+
+  useEffect(() => {
+    console.log("Fucking changed!", formSubmitting);
+  }, [formSubmitting]);
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
@@ -162,6 +182,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       firstName: surrogateForm.firstName.length === 0,
       lastName: surrogateForm.lastName.length === 0,
       address: surrogateForm.address.length === 0,
+      city: surrogateForm.city.length === 0,
+      state: surrogateForm.state.length === 0,
+      country: surrogateForm.country.length === 0,
+      area: surrogateForm.area.length === 0,
       primaryPhone: !isPrimaryPhoneValid,
       primaryEmailAddress: !isEmailValid,
       bankVerificationNumber: !is_BVN_Valid,
@@ -262,6 +286,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       const {
         name: nextOfKin_name,
         address: nextOfKin_address,
+        city: nextOfKin_city,
+        state: nextOfKin_state,
+        country: nextOfKin_country,
+        area: nextOfKin_area,
         phone: nextOfKin_phone,
         nationalIdentificationNumber: nextOfKin_nationalIdentificationNumber,
         relationship: nextOfKin_relationship,
@@ -272,6 +300,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         email: surrogateForm.primaryEmailAddress,
         phone: surrogateForm.primaryPhone,
         address: surrogateForm.address,
+        city: surrogateForm.city,
+        state: surrogateForm.state,
+        country: surrogateForm.country,
+        area: surrogateForm.area,
         dateOfBirth: dayjs(surrogateForm.dateOfBirth).format("YYYY-MM-DD"),
         tribe: surrogateForm.tribe,
         religion: surrogateForm.religion,
@@ -287,6 +319,10 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
           fullname: nextOfKin_name,
           relationship: nextOfKin_relationship,
           address: nextOfKin_address,
+          state: nextOfKin_state,
+          area: nextOfKin_area,
+          country: nextOfKin_country,
+          city: nextOfKin_city,
           phone: nextOfKin_phone,
           nin: nextOfKin_nationalIdentificationNumber,
         },
@@ -533,6 +569,77 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                       setSurrogateForm({
                         ...surrogateForm,
                         address: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <TextField
+                    label="City"
+                    value={surrogateForm.city}
+                    error={formErrors.city}
+                    {...defaultHalfInputProps}
+                    onChange={(e) =>
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        city: e.target.value,
+                      })
+                    }
+                  />
+                  <TextField
+                    label="State"
+                    value={surrogateForm.state}
+                    error={formErrors.state}
+                    {...defaultHalfInputProps}
+                    onChange={(e) =>
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        state: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <FormControl {...defaultHalfInputProps}>
+                    <InputLabel
+                      variant="standard"
+                      htmlFor="uncontrolled-native"
+                    >
+                      Country
+                    </InputLabel>
+                    <Select
+                      label="Country"
+                      placeholder="Select country"
+                      value={surrogateForm.country}
+                      error={formErrors.country}
+                      onChange={(e) =>
+                        setSurrogateForm({
+                          ...surrogateForm,
+                          country: e.target.value,
+                        })
+                      }
+                    >
+                      {CountriesList.map((country, index) => {
+                        return (
+                          <MenuItem
+                            value={country.name}
+                            key={`${country.iso_alpha2}-${country.iso_alpha3}`}
+                          >
+                            {country.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    label="Area"
+                    value={surrogateForm.area}
+                    error={formErrors.area}
+                    {...defaultHalfInputProps}
+                    onChange={(e) =>
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        area: e.target.value,
                       })
                     }
                   />
@@ -966,6 +1073,89 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         nextOfKin: {
                           ...surrogateForm.nextOfKin,
                           address: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <TextField
+                    label="City"
+                    value={surrogateForm.nextOfKin.city}
+                    error={formErrors.nextOfKinCity}
+                    {...defaultHalfInputProps}
+                    onChange={(e) =>
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        nextOfKin: {
+                          ...surrogateForm.nextOfKin,
+                          city: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                  <TextField
+                    label="State"
+                    value={surrogateForm.nextOfKin.state}
+                    error={formErrors.nextOfKinState}
+                    {...defaultHalfInputProps}
+                    onChange={(e) =>
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        nextOfKin: {
+                          ...surrogateForm.nextOfKin,
+                          state: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex-row space-between modal-input-row">
+                  <FormControl {...defaultHalfInputProps}>
+                    <InputLabel
+                      variant="standard"
+                      htmlFor="uncontrolled-native"
+                    >
+                      Country
+                    </InputLabel>
+                    <Select
+                      label="Country"
+                      placeholder="Select country"
+                      value={surrogateForm.nextOfKin.country}
+                      error={formErrors.nextOfKinCountry}
+                      onChange={(e) =>
+                        setSurrogateForm({
+                          ...surrogateForm,
+                          nextOfKin: {
+                            ...surrogateForm.nextOfKin,
+                            country: e.target.value,
+                          },
+                        })
+                      }
+                    >
+                      {CountriesList.map((country, index) => {
+                        return (
+                          <MenuItem
+                            value={country.name}
+                            key={`${country.iso_alpha2}-${country.iso_alpha3}`}
+                          >
+                            {country.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    label="Area"
+                    value={surrogateForm.nextOfKin.area}
+                    error={formErrors.nextOfKinArea}
+                    {...defaultHalfInputProps}
+                    onChange={(e) =>
+                      setSurrogateForm({
+                        ...surrogateForm,
+                        nextOfKin: {
+                          ...surrogateForm.nextOfKin,
+                          area: e.target.value,
                         },
                       })
                     }

@@ -39,6 +39,10 @@ export default function CreatePairing({ showCreatePairingModal }) {
     spellCheck: false,
   };
 
+  useEffect(() => {
+    console.log({ pairingForm, parents });
+  }, [pairingForm, parents]);
+
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const getConfirmationModalStatus = (value) => {
     setShowConfirmationModal(value);
@@ -143,6 +147,9 @@ export default function CreatePairing({ showCreatePairingModal }) {
                           setPairingForm({
                             ...pairingForm,
                             parentID: e.target.value,
+                            parentImage: parents.find(
+                              (p) => p.id === e.target.value
+                            )?.primary?.image,
                           });
                         }}
                         label="Parent"
@@ -179,6 +186,9 @@ export default function CreatePairing({ showCreatePairingModal }) {
                           setPairingForm({
                             ...pairingForm,
                             surrogateID: e.target.value,
+                            surrogateImage: surrogates.find(
+                              (p) => p.id === e.target.value
+                            )?.primary?.mainImage,
                           });
                         }}
                         label="Surrogate"
