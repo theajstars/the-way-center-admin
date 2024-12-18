@@ -104,7 +104,7 @@ export default function Home() {
               )}
               <br />
               <div className="flex-column">
-                {ContextConsumer.Parents.map((parent, index) => {
+                {ContextConsumer.Parents?.map((parent, index) => {
                   return (
                     <>
                       <span
@@ -141,7 +141,7 @@ export default function Home() {
                 />
               )}
               <div className="flex-column">
-                {ContextConsumer.Surrogates.map((surrogate, index) => {
+                {ContextConsumer.Surrogates?.map((surrogate, index) => {
                   return (
                     <>
                       <span
@@ -243,7 +243,7 @@ export default function Home() {
             </div>
           </Modal>
           {/* <div className="surrogate-reports flex-row space-between">
-            {SurrogateReports.slice(0, getSurrogateOverviewCount()).map(
+            {SurrogateReports.slice(0, getSurrogateOverviewCount())?.map(
               (report, index) => {
                 return (
                   <div className="surrogate-report flex-column" key={index}>
