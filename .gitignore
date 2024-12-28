@@ -10,7 +10,8 @@
 
 # production
 /build
-
+/console.rar
+/console.zip
 # misc
 .DS_Store
 .env.local
