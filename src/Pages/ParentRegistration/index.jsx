@@ -42,11 +42,11 @@ export default function ParentRegistration({ showAddParentModal }) {
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
-    className: "modal-input-full px-12",
+    className: "modal-input-full px-14",
   };
   const defaultHalfInputProps = {
     variant: "standard",
-    className: "modal-input-half px-12",
+    className: "modal-input-half px-14",
     spellCheck: false,
   };
   const fileIsLarge = () => {
@@ -253,7 +253,7 @@ export default function ParentRegistration({ showAddParentModal }) {
         <div className="default-modal-content modal-scrollbar surrogate-report-modal flex-column">
           <span className="cinzel px-30 uppercase">create parent account</span>
           <br />
-          <span className="modal-about poppins px-13">
+          <span className="modal-about poppins px-15">
             Fill in the data for parent profile correctly. It will take a couple
             of minutes
           </span>
@@ -261,7 +261,7 @@ export default function ParentRegistration({ showAddParentModal }) {
           <div className="modal-form-container flex-row">
             <div className="modal-form flex-column">
               <br />
-              <span className="fw-600 poppins px-21">Parent Bio-Data</span>
+              <span className="fw-600 poppins px-24">Parent Bio-Data</span>
               <br />
               <div className="flex-row space-between modal-input-row">
                 <TextField
@@ -458,12 +458,12 @@ export default function ParentRegistration({ showAddParentModal }) {
                       className="modal-form-image"
                     />
                   ) : (
-                    <span className="px-14 poppins">No Image Selected</span>
+                    <span className="px-16 poppins">No Image Selected</span>
                   )}
                 </div>
                 <br />
                 <span
-                  className="purple-btn-default px-14 poppins pointer width-100"
+                  className="purple-btn-default px-16 poppins pointer width-100"
                   style={{
                     borderColor: formErrors.primaryImage
                       ? "red"
@@ -486,12 +486,12 @@ export default function ParentRegistration({ showAddParentModal }) {
                       className="modal-form-image"
                     />
                   ) : (
-                    <span className="px-14 poppins">No Image Selected</span>
+                    <span className="px-16 poppins">No Image Selected</span>
                   )}
                 </div>
                 <br />
                 <span
-                  className="purple-btn-default px-14 poppins pointer width-100"
+                  className="purple-btn-default px-16 poppins pointer width-100"
                   style={{
                     borderColor: formErrors.secondaryImage
                       ? "red"
@@ -507,7 +507,7 @@ export default function ParentRegistration({ showAddParentModal }) {
               <br />
               <button
                 disabled={formSubmitting}
-                className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit"
+                className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit"
                 onClick={() => {
                   UpdateFormErrors();
                   setFormSubmitting(true);

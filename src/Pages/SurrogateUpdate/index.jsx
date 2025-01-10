@@ -52,11 +52,11 @@ export default function SurrogateUpdate({
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
-    className: "modal-input-full px-12",
+    className: "modal-input-full px-14",
   };
   const defaultHalfInputProps = {
     variant: "standard",
-    className: "modal-input-half px-12",
+    className: "modal-input-half px-14",
     spellCheck: false,
   };
 
@@ -160,10 +160,6 @@ export default function SurrogateUpdate({
     email: false,
     phone: false,
     address: false,
-    city: false,
-    state: false,
-    country: false,
-    area: false,
     dateOfBirth: false,
     tribe: false,
     religion: false,
@@ -177,10 +173,6 @@ export default function SurrogateUpdate({
     nokFullname: false,
     nokRelationship: false,
     nokAddress: false,
-    nokCity: false,
-    nokState: false,
-    nokCountry: false,
-    nokArea: false,
     nokPhone: false,
     nokNin: false,
     status: false,
@@ -207,10 +199,6 @@ export default function SurrogateUpdate({
       // dateOfBirth: surrogateForm.dateOfBirth.length === 0,
 
       address: surrogateForm.address.length === 0,
-      city: surrogateForm?.city?.length === 0,
-      state: surrogateForm?.state?.length === 0,
-      country: surrogateForm?.country?.length === 0,
-      area: surrogateForm?.area?.length === 0,
       phone: !isPhoneValid,
       email: !isEmailValid,
 
@@ -225,11 +213,7 @@ export default function SurrogateUpdate({
       hivStatus: getExtendedInfoValue("hivStatus").length === 0,
 
       nokFullname: surrogateForm.primary.nok.fullname.length === 0,
-      nokAddress: surrogateForm?.primary?.nok?.address?.length === 0,
-      nokCity: surrogateForm?.primary?.nok?.city?.length === 0,
-      nokCountry: surrogateForm?.primary?.nok?.country?.length === 0,
-      nokArea: surrogateForm?.primary?.nok?.area?.length === 0,
-      nokState: surrogateForm?.primary?.nok?.state?.length === 0,
+      nokAddress: surrogateForm.primary.nok.address.length === 0,
       nokPhone: surrogateForm.primary.nok.phone.length === 0,
       nokNin: surrogateForm.primary.nok.nin.length === 0,
 
@@ -311,10 +295,6 @@ export default function SurrogateUpdate({
           email: surrogateForm.primary.email,
           phone: surrogateForm.primary.phone,
           address: surrogateForm.primary.address,
-          city: surrogateForm.country,
-          state: surrogateForm.state.state,
-          area: surrogateForm.area,
-          country: surrogateForm.country,
           dateOfBirth: "",
           tribe: surrogateForm.primary.tribe,
           religion: surrogateForm.primary.religion,
@@ -328,10 +308,6 @@ export default function SurrogateUpdate({
             fullname: surrogateForm.primary.nok.fullname,
             relationship: surrogateForm.primary.nok.relationship,
             address: surrogateForm.primary.nok.address,
-            city: surrogateForm.primary.nok.city,
-            state: surrogateForm.primary.nok.state,
-            area: surrogateForm.primary.nok.area,
-            country: surrogateForm.primary.nok.country,
             phone: surrogateForm.primary.nok.phone,
             nin: surrogateForm.primary.nok.nin,
           },
@@ -455,7 +431,7 @@ export default function SurrogateUpdate({
       <div className="surrogate-content flex-column">
         <span className="cinzel px-30 uppercase">update surrogate profile</span>
         <br />
-        <span className="modal-about poppins px-13">
+        <span className="modal-about poppins px-15">
           Fill in the data for surrogate profile correctly. It will take a
           couple of minutes
         </span>
@@ -463,7 +439,7 @@ export default function SurrogateUpdate({
         <div className="modal-form-container flex-row">
           <div className="modal-form flex-column">
             <br />
-            <span className="fw-600 poppins px-21">Surrogate Bio-Data</span>
+            <span className="fw-600 poppins px-24">Surrogate Bio-Data</span>
             <br />
             <div className="flex-row space-between modal-input-row">
               <TextField
@@ -551,74 +527,6 @@ export default function SurrogateUpdate({
                   setSurrogateForm({
                     ...surrogateForm,
                     address: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="flex-row space-between modal-input-row">
-              <TextField
-                label="City"
-                value={surrogateForm?.city}
-                error={formErrors.city}
-                {...defaultHalfInputProps}
-                onChange={(e) =>
-                  setSurrogateForm({
-                    ...surrogateForm,
-                    city: e.target.value,
-                  })
-                }
-              />
-              <TextField
-                label="State"
-                value={surrogateForm?.state}
-                error={formErrors.state}
-                {...defaultHalfInputProps}
-                onChange={(e) =>
-                  setSurrogateForm({
-                    ...surrogateForm,
-                    state: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="flex-row space-between modal-input-row">
-              <FormControl {...defaultHalfInputProps}>
-                <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                  Country
-                </InputLabel>
-                <Select
-                  label="Country"
-                  placeholder="Select country"
-                  value={surrogateForm?.country}
-                  error={formErrors.country}
-                  onChange={(e) =>
-                    setSurrogateForm({
-                      ...surrogateForm,
-                      country: e.target.value,
-                    })
-                  }
-                >
-                  {CountriesList.map((country, index) => {
-                    return (
-                      <MenuItem
-                        value={country.name}
-                        key={`${country.iso_alpha2}-${country.iso_alpha3}`}
-                      >
-                        {country.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-              <TextField
-                label="Area"
-                value={surrogateForm?.area}
-                error={formErrors.area}
-                {...defaultHalfInputProps}
-                onChange={(e) =>
-                  setSurrogateForm({
-                    ...surrogateForm,
-                    area: e.target.value,
                   })
                 }
               />
@@ -761,7 +669,7 @@ export default function SurrogateUpdate({
               </div>
               <br />
               <span
-                className="purple-btn-default px-14 poppins pointer width-100 surrogate-form-btn"
+                className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
                 onClick={() => {
                   primaryImageUploadRef.current.click();
                 }}
@@ -778,7 +686,7 @@ export default function SurrogateUpdate({
               </div>
               <br />
               <span
-                className="purple-btn-default px-14 poppins pointer width-100 surrogate-form-btn"
+                className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
                 onClick={() => {
                   secondaryImageUploadRef.current.click();
                 }}
@@ -793,7 +701,7 @@ export default function SurrogateUpdate({
         <div className="modal-form-container flex-row">
           <div className="modal-form flex-column">
             <br />
-            <span className="fw-600 poppins px-21">
+            <span className="fw-600 poppins px-24">
               Surrogate Health Information
             </span>
             <br />
@@ -954,99 +862,6 @@ export default function SurrogateUpdate({
             </div>
             <div className="flex-row space-between modal-input-row">
               <TextField
-                label="City"
-                value={surrogateForm.primary.nok.city}
-                error={formErrors.nokCity}
-                {...defaultHalfInputProps}
-                onChange={(e) =>
-                  setSurrogateForm({
-                    ...surrogateForm,
-                    primary: {
-                      ...surrogateForm.primary,
-                      nok: {
-                        ...surrogateForm.primary.nok,
-                        city: e.target.value,
-                      },
-                    },
-                  })
-                }
-              />
-              <TextField
-                label="State"
-                value={surrogateForm.primary.nok.state}
-                error={formErrors.nokState}
-                {...defaultHalfInputProps}
-                onChange={(e) =>
-                  setSurrogateForm({
-                    ...surrogateForm,
-                    primary: {
-                      ...surrogateForm.primary,
-                      nok: {
-                        ...surrogateForm.primary.nok,
-                        state: e.target.value,
-                      },
-                    },
-                  })
-                }
-              />
-            </div>
-            <div className="flex-row space-between modal-input-row">
-              <FormControl {...defaultHalfInputProps}>
-                <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                  Country
-                </InputLabel>
-                <Select
-                  label="Country"
-                  placeholder="Select country"
-                  value={surrogateForm.primary.nok.country}
-                  error={formErrors.nokCountry}
-                  {...defaultHalfInputProps}
-                  onChange={(e) =>
-                    setSurrogateForm({
-                      ...surrogateForm,
-                      primary: {
-                        ...surrogateForm.primary,
-                        nok: {
-                          ...surrogateForm.primary.nok,
-                          country: e.target.value,
-                        },
-                      },
-                    })
-                  }
-                >
-                  {CountriesList.map((country, index) => {
-                    return (
-                      <MenuItem
-                        value={country.name}
-                        key={`${country.iso_alpha2}-${country.iso_alpha3}`}
-                      >
-                        {country.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-              <TextField
-                label="Area"
-                value={surrogateForm.primary.nok.area}
-                error={formErrors.nokArea}
-                {...defaultHalfInputProps}
-                onChange={(e) =>
-                  setSurrogateForm({
-                    ...surrogateForm,
-                    primary: {
-                      ...surrogateForm.primary,
-                      nok: {
-                        ...surrogateForm.primary.nok,
-                        area: e.target.value,
-                      },
-                    },
-                  })
-                }
-              />
-            </div>
-            <div className="flex-row space-between modal-input-row">
-              <TextField
                 label="Next of Kin Phone Number"
                 value={surrogateForm.primary.nok.phone}
                 error={formErrors.nokPhone}
@@ -1145,7 +960,7 @@ export default function SurrogateUpdate({
                   </MenuItem>
                 </Select>
               </FormControl>
-              {/* <TextField
+              <TextField
                 label="Experience"
                 value={surrogateForm.primary.experience}
                 error={formErrors.experience}
@@ -1159,46 +974,7 @@ export default function SurrogateUpdate({
                     },
                   })
                 }
-              /> */}
-              <FormControl variant="standard" {...defaultHalfInputProps}>
-                <InputLabel id="demo-simple-select-standard-label">
-                  Your Surrogacy Experience
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={surrogateForm.primary.experience}
-                  error={formErrors.experience}
-                  {...defaultFullInputProps}
-                  onChange={(e) =>
-                    setSurrogateForm({
-                      ...surrogateForm,
-                      primary: {
-                        ...surrogateForm.primary,
-
-                        experience: e.target.value,
-                      },
-                    })
-                  }
-                  label="Experience"
-                >
-                  <MenuItem value={"1"} key={"1"}>
-                    First Time
-                  </MenuItem>
-                  <MenuItem value={"2"} key={"2"}>
-                    Second Time
-                  </MenuItem>
-                  <MenuItem value={"3"} key={"3"}>
-                    Third Time
-                  </MenuItem>
-                  <MenuItem value={"4"} key={"4"}>
-                    Fourth Time
-                  </MenuItem>
-                  <MenuItem value={"5"} key={"5"}>
-                    Fifth Time
-                  </MenuItem>
-                </Select>
-              </FormControl>
+              />
             </div>
           </div>
           <div className="flex-column modal-form-right space-between">
@@ -1263,7 +1039,7 @@ export default function SurrogateUpdate({
                 style={{
                   opacity: formSubmitting || imageUploading ? "0.5" : "1",
                 }}
-                className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                 onClick={() => {
                   // setCurrentFormSection(2);
                   setFormSubmitting(true);

@@ -34,10 +34,6 @@ const initialSurrogateForm = {
   dateOfBirth: dayjs("2023-01-01"),
   placeOfBirth: "Nigeria",
   address: "",
-  city: "",
-  state: "",
-  country: "",
-  area: "",
   primaryPhone: "",
   primaryEmailAddress: "",
   bankVerificationNumber: "",
@@ -68,10 +64,6 @@ const initialSurrogateForm = {
   nextOfKin: {
     name: "",
     address: "",
-    city: "",
-    state: "",
-    country: "",
-    area: "",
     phone: "",
     relationship: "Father",
     nationalIdentificationNumber: "",
@@ -97,10 +89,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     dateOfBirth: false,
     placeOfBirth: false,
     address: false,
-    city: false,
-    state: false,
-    country: false,
-    area: false,
     tribe: false,
     religion: false,
     experience: false,
@@ -127,19 +115,11 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
     nextOfKin_name: false,
     nextOfKin_phone: false,
     nextOfKin_address: false,
-    nextOfKin_city: false,
-    nextOfKin_state: false,
-    nextOfKin_country: false,
-    nextOfKin_area: false,
     nextOfKin_nationalIdentificationNumber: false,
 
     sibling_name: false,
     sibling_phone: false,
   });
-
-  useEffect(() => {
-    console.log("Fucking changed!", formSubmitting);
-  }, [formSubmitting]);
   const primaryImageUploadRef = useRef();
   const secondaryImageUploadRef = useRef();
 
@@ -148,11 +128,11 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
-    className: "modal-input-full px-12",
+    className: "modal-input-full px-14",
   };
   const defaultHalfInputProps = {
     variant: "standard",
-    className: "modal-input-half px-12",
+    className: "modal-input-half px-14",
     spellCheck: false,
   };
   const fileIsLarge = () => {
@@ -182,10 +162,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       firstName: surrogateForm.firstName.length === 0,
       lastName: surrogateForm.lastName.length === 0,
       address: surrogateForm.address.length === 0,
-      city: surrogateForm.city.length === 0,
-      state: surrogateForm.state.length === 0,
-      country: surrogateForm.country.length === 0,
-      area: surrogateForm.area.length === 0,
       primaryPhone: !isPrimaryPhoneValid,
       primaryEmailAddress: !isEmailValid,
       bankVerificationNumber: !is_BVN_Valid,
@@ -200,10 +176,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
 
       nextOfKin_name: surrogateForm.nextOfKin.name.length === 0,
       nextOfKin_address: surrogateForm.nextOfKin.address.length === 0,
-      nextOfKin_city: surrogateForm.nextOfKin.city.length === 0,
-      nextOfKin_area: surrogateForm.nextOfKin.area.length === 0,
-      nextOfKin_country: surrogateForm.nextOfKin.country.length === 0,
-      nextOfKin_state: surrogateForm.nextOfKin.state.length === 0,
       nextOfKin_phone: !isNexfOfKinPrimaryPhoneValid,
       nextOfKin_nationalIdentificationNumber: !isNexfOfKinNINValid,
 
@@ -290,10 +262,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
       const {
         name: nextOfKin_name,
         address: nextOfKin_address,
-        city: nextOfKin_city,
-        state: nextOfKin_state,
-        country: nextOfKin_country,
-        area: nextOfKin_area,
         phone: nextOfKin_phone,
         nationalIdentificationNumber: nextOfKin_nationalIdentificationNumber,
         relationship: nextOfKin_relationship,
@@ -304,10 +272,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
         email: surrogateForm.primaryEmailAddress,
         phone: surrogateForm.primaryPhone,
         address: surrogateForm.address,
-        city: surrogateForm.city,
-        state: surrogateForm.state,
-        country: surrogateForm.country,
-        area: surrogateForm.area,
         dateOfBirth: dayjs(surrogateForm.dateOfBirth).format("YYYY-MM-DD"),
         tribe: surrogateForm.tribe,
         religion: surrogateForm.religion,
@@ -323,10 +287,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
           fullname: nextOfKin_name,
           relationship: nextOfKin_relationship,
           address: nextOfKin_address,
-          state: nextOfKin_state,
-          area: nextOfKin_area,
-          country: nextOfKin_country,
-          city: nextOfKin_city,
           phone: nextOfKin_phone,
           nin: nextOfKin_nationalIdentificationNumber,
         },
@@ -484,7 +444,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
             create surrogate profile
           </span>
           <br />
-          <span className="modal-about poppins px-13">
+          <span className="modal-about poppins px-15">
             Fill in the data for surrogate profile correctly. It will take a
             couple of minutes
           </span>
@@ -493,7 +453,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
             <div className="modal-form-container flex-row">
               <div className="modal-form flex-column">
                 <br />
-                <span className="fw-600 poppins px-21">Surrogate Bio-Data</span>
+                <span className="fw-600 poppins px-24">Surrogate Bio-Data</span>
                 <br />
                 <div className="flex-row space-between modal-input-row">
                   <TextField
@@ -579,77 +539,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
-                    label="City"
-                    value={surrogateForm.city}
-                    error={formErrors.city}
-                    {...defaultHalfInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        city: e.target.value,
-                      })
-                    }
-                  />
-                  <TextField
-                    label="State"
-                    value={surrogateForm.state}
-                    error={formErrors.state}
-                    {...defaultHalfInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        state: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <FormControl {...defaultHalfInputProps}>
-                    <InputLabel
-                      variant="standard"
-                      htmlFor="uncontrolled-native"
-                    >
-                      Country
-                    </InputLabel>
-                    <Select
-                      label="Country"
-                      placeholder="Select country"
-                      value={surrogateForm.country}
-                      error={formErrors.country}
-                      onChange={(e) =>
-                        setSurrogateForm({
-                          ...surrogateForm,
-                          country: e.target.value,
-                        })
-                      }
-                    >
-                      {CountriesList.map((country, index) => {
-                        return (
-                          <MenuItem
-                            value={country.name}
-                            key={`${country.iso_alpha2}-${country.iso_alpha3}`}
-                          >
-                            {country.name}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                  <TextField
-                    label="Area"
-                    value={surrogateForm.area}
-                    error={formErrors.area}
-                    {...defaultHalfInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        area: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  {/* <TextField
                     label="Experience"
                     value={surrogateForm.experience}
                     error={formErrors.experience}
@@ -660,42 +549,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         experience: e.target.value,
                       })
                     }
-                  /> */}
-                  <FormControl variant="standard" fullWidth>
-                    <InputLabel id="demo-simple-select-standard-label">
-                      Your Surrogacy Experience
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={surrogateForm.experience}
-                      error={formErrors.experience}
-                      {...defaultFullInputProps}
-                      onChange={(e) =>
-                        setSurrogateForm({
-                          ...surrogateForm,
-                          experience: e.target.value,
-                        })
-                      }
-                      label="Experience"
-                    >
-                      <MenuItem value={"1"} key={"1"}>
-                        First Time
-                      </MenuItem>
-                      <MenuItem value={"2"} key={"2"}>
-                        Second Time
-                      </MenuItem>
-                      <MenuItem value={"3"} key={"3"}>
-                        Third Time
-                      </MenuItem>
-                      <MenuItem value={"4"} key={"4"}>
-                        Fourth Time
-                      </MenuItem>
-                      <MenuItem value={"5"} key={"5"}>
-                        Fifth Time
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
+                  />
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
@@ -781,12 +635,12 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         className="modal-form-image"
                       />
                     ) : (
-                      <span className="px-14 poppins">No Image Selected</span>
+                      <span className="px-16 poppins">No Image Selected</span>
                     )}
                   </div>
                   <br />
                   <span
-                    className="purple-btn-default px-14 poppins pointer width-100 surrogate-form-btn"
+                    className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
                     onClick={() => {
                       primaryImageUploadRef.current.click();
                     }}
@@ -807,12 +661,12 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                         className="modal-form-image"
                       />
                     ) : (
-                      <span className="px-14 poppins">No Image Selected</span>
+                      <span className="px-16 poppins">No Image Selected</span>
                     )}
                   </div>
                   <br />
                   <span
-                    className="purple-btn-default px-14 poppins pointer width-100 surrogate-form-btn"
+                    className="purple-btn-default px-16 poppins pointer width-100 surrogate-form-btn"
                     onClick={() => {
                       secondaryImageUploadRef.current.click();
                     }}
@@ -827,7 +681,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 </span>
                 <br />
                 <span
-                  className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                   onClick={() => {
                     setCurrentFormSection(2);
                   }}
@@ -840,7 +694,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
             <div className="modal-form-container flex-row">
               <div className="modal-form flex-column">
                 <br />
-                <span className="fw-600 poppins px-21">
+                <span className="fw-600 poppins px-24">
                   Surrogate Health Information
                 </span>
                 <br />
@@ -1119,89 +973,6 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 </div>
                 <div className="flex-row space-between modal-input-row">
                   <TextField
-                    label="City"
-                    value={surrogateForm.nextOfKin.city}
-                    error={formErrors.nextOfKin_city}
-                    {...defaultHalfInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        nextOfKin: {
-                          ...surrogateForm.nextOfKin,
-                          city: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                  <TextField
-                    label="State"
-                    value={surrogateForm.nextOfKin.state}
-                    error={formErrors.nextOfKin_state}
-                    {...defaultHalfInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        nextOfKin: {
-                          ...surrogateForm.nextOfKin,
-                          state: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <FormControl {...defaultHalfInputProps}>
-                    <InputLabel
-                      variant="standard"
-                      htmlFor="uncontrolled-native"
-                    >
-                      Country
-                    </InputLabel>
-                    <Select
-                      label="Country"
-                      placeholder="Select country"
-                      value={surrogateForm.nextOfKin.country}
-                      error={formErrors.nextOfKin_country}
-                      onChange={(e) =>
-                        setSurrogateForm({
-                          ...surrogateForm,
-                          nextOfKin: {
-                            ...surrogateForm.nextOfKin,
-                            country: e.target.value,
-                          },
-                        })
-                      }
-                    >
-                      {CountriesList.map((country, index) => {
-                        return (
-                          <MenuItem
-                            value={country.name}
-                            key={`${country.iso_alpha2}-${country.iso_alpha3}`}
-                          >
-                            {country.name}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                  <TextField
-                    label="Area"
-                    value={surrogateForm.nextOfKin.area}
-                    error={formErrors.nextOfKin_area}
-                    {...defaultHalfInputProps}
-                    onChange={(e) =>
-                      setSurrogateForm({
-                        ...surrogateForm,
-                        nextOfKin: {
-                          ...surrogateForm.nextOfKin,
-                          area: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex-row space-between modal-input-row">
-                  <TextField
                     label="Next of Kin Phone Number"
                     placeholder="0802-345-6789"
                     value={surrogateForm.nextOfKin.phone}
@@ -1344,7 +1115,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                 <br />
                 <div className="width-100 flex-column">
                   <span
-                    className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                    className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                     onClick={() => {
                       setCurrentFormSection(1);
                     }}
@@ -1354,7 +1125,7 @@ export default function SurrogateRegistration({ showAddSurrogateModal }) {
                   <br />
                   <button
                     disabled={formSubmitting}
-                    className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                    className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                     onClick={() => {
                       UpdateFormErrors();
                       setFormSubmitting(true);

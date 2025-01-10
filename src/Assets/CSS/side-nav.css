@@ -29,7 +29,7 @@
   box-sizing: border-box;
 }
 .side-nav-image {
-  width: 120px;
+  width: 200px;
 }
 .side-nav-links {
   align-items: center;
@@ -40,8 +40,8 @@
 .side-nav-link {
   width: 70%;
   box-sizing: content-box !important;
-  height: 35px;
-  margin: 7px 0;
+  height: 45px;
+  margin: 10px 0;
   padding-left: 20%;
   margin-left: 10%;
   cursor: pointer;

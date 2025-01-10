@@ -166,7 +166,7 @@ export default function Messages() {
       </Typography>
       <div className="home-page">
         <span
-          className="toggle-messages px-16 pointer"
+          className="toggle-messages px-18 pointer"
           onClick={() => {
             setSidebarOpen(!isSidebarOpen);
           }}
@@ -183,7 +183,7 @@ export default function Messages() {
               }}
             >
               {/* <div className="messages-search-container align-center flex-row">
-                <span className="messages-search-icon px-13">
+                <span className="messages-search-icon px-15">
                   <i className="far fa-search" />
                 </span>
                 <input
@@ -192,12 +192,12 @@ export default function Messages() {
                   spellCheck={false}
                   value={searchString}
                   onChange={(e) => setSearchString(e.target.value)}
-                  className="messages-search poppins px-13"
+                  className="messages-search poppins px-15"
                 />
               </div> */}
 
               <div className="sidebar-section flex-column width-100">
-                <span className="px-18 poppins fw-600">Parents</span>
+                <span className="px-20 poppins fw-600">Parents</span>
 
                 {ContextConsumer.Parents.map((parent) => {
                   return (
@@ -215,7 +215,7 @@ export default function Messages() {
                           className="sidebar-item-image"
                         />
                         <div className="flex-column sidebar-item-details">
-                          <span className="px-13 fw-500 poppins capitalize">
+                          <span className="px-15 fw-500 poppins capitalize">
                             {parent.primary.firstname}&nbsp;
                             {parent.primary.lastname}
                           </span>
@@ -239,13 +239,13 @@ export default function Messages() {
                         className="chat-section-avatar"
                       />
                       <div className="flex-column">
-                        <span className="poppins px-14 fw-500">
+                        <span className="poppins px-16 fw-500">
                           {currentParent.primary.firstname}{" "}
                           {currentParent.primary.lastname}
                         </span>
                       </div>
                     </div>
-                    <span className="chat-menu-btn flex-row align-center justify-center pointer px-14 purple-default-text">
+                    <span className="chat-menu-btn flex-row align-center justify-center pointer px-16 purple-default-text">
                       <i className="fas fa-ellipsis-v" />
                     </span>
                   </div>
@@ -293,7 +293,7 @@ export default function Messages() {
                       spellCheck={false}
                       value={messageText}
                       onChange={(e) => setMessageText(e.target.value)}
-                      className="send-message-input poppins px-13"
+                      className="send-message-input poppins px-15"
                       onKeyDown={(e) => {
                         // Check if key is enter key
                         if (e.keyCode === 13) {
@@ -302,7 +302,7 @@ export default function Messages() {
                       }}
                     />
                     <span
-                      className="px-18 pointer"
+                      className="px-20 pointer"
                       onClick={() => {
                         fileUploadRef.current.click();
                       }}
@@ -311,7 +311,7 @@ export default function Messages() {
                     </span>
                   </div>
                   <button
-                    className="send-message-btn uppercase poppins white-text px-13"
+                    className="send-message-btn uppercase poppins white-text px-15"
                     onClick={SendMessage}
                     disabled={messageSending}
                     style={{
@@ -346,7 +346,7 @@ function ReceivedMessage({ time, message, isMedia, media }) {
     <div className="flex-column">
       <div className="flex-row received-message-container">
         <div className="message-badge received-message-badge"></div>
-        <span className="message-text poppins px-13 received-message-text">
+        <span className="message-text poppins px-15 received-message-text">
           {isMedia ? (
             <div
               className="flex-row align-center pointer"
@@ -377,7 +377,7 @@ function SentMessage({ time, message, isMedia, media }) {
   return (
     <div className="flex-column align-end">
       <div className="flex-row sent-message-container">
-        <span className="message-text poppins px-13 sent-message-text white-text">
+        <span className="message-text poppins px-15 sent-message-text white-text">
           {isMedia ? (
             <div
               className="flex-row align-center pointer"

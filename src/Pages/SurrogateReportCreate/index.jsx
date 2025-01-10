@@ -55,11 +55,11 @@ export default function SurrogateReportCreate({
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
-    className: "modal-input-full px-12",
+    className: "modal-input-full px-14",
   };
   const defaultHalfInputProps = {
     variant: "standard",
-    className: "modal-input-half px-12",
+    className: "modal-input-half px-14",
     spellCheck: false,
   };
 
@@ -265,7 +265,7 @@ export default function SurrogateReportCreate({
             create surrogate report
           </span>
           <br />
-          <span className="modal-about poppins px-13">
+          <span className="modal-about poppins px-15">
             Fill in the data for surrogate report correctly. It will take a
             couple of minutes
           </span>
@@ -274,7 +274,7 @@ export default function SurrogateReportCreate({
             <div className="modal-form-container flex-row">
               <div className="modal-form flex-column">
                 <br />
-                <span className="fw-600 poppins px-21">
+                <span className="fw-600 poppins px-24">
                   Surrogate Health Update
                 </span>
                 <br />
@@ -449,7 +449,7 @@ export default function SurrogateReportCreate({
               <div className="flex-column modal-form-right space-between">
                 <span></span>
                 <span
-                  className="purple-btn-default px-14 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
+                  className="purple-btn-default px-16 poppins pointer width-100 uppercase modal-form-submit surrogate-form-btn"
                   onClick={() => {
                     UpdateFormErrors();
                     setFormSubmitting(true);

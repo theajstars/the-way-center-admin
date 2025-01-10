@@ -10,8 +10,7 @@
 
 # production
 /build
-/console.rar
-/console.zip
+
 # misc
 .DS_Store
 .env.local
@@ -22,5 +21,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-console_build.rar

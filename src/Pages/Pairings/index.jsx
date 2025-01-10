@@ -94,11 +94,11 @@ export default function Pairings() {
   const defaultFullInputProps = {
     variant: "standard",
     spellCheck: false,
-    className: "modal-input-full px-12",
+    className: "modal-input-full px-14",
   };
   const defaultHalfInputProps = {
     variant: "outlined",
-    className: "filter-input px-12",
+    className: "filter-input px-14",
     spellCheck: false,
     size: "small",
   };
@@ -166,7 +166,7 @@ export default function Pairings() {
       <br />
       <br />
       <div className="flex-row space-between align-center reports-top">
-        <span className="poppins fw-500 px-16 surrogate-reports-head">
+        <span className="poppins fw-500 px-18 surrogate-reports-head">
           Pairings
         </span>
         <div className="flex-row align-center">
@@ -265,16 +265,16 @@ export default function Pairings() {
           <ChakraProvider>
             <TableContainer>
               <center>
-                <Text className="fw-500 px-16">Current Pairings</Text>
+                <Text className="fw-500 px-18">Current Pairings</Text>
               </center>
               <br />
               <Table variant="simple" colorScheme="whiteAlpha">
                 <Thead>
                   <Tr>
-                    <Th className="px-15 capitalize">Pairing ID</Th>
-                    <Th className="px-15 capitalize">Parent name</Th>
-                    <Th className="px-15 capitalize">Surrogate Name</Th>
-                    <Th className="px-15 capitalize">Toggle Status</Th>
+                    <Th className="px-17 capitalize">Pairing ID</Th>
+                    <Th className="px-17 capitalize">Parent name</Th>
+                    <Th className="px-17 capitalize">Surrogate Name</Th>
+                    <Th className="px-17 capitalize">Toggle Status</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -356,17 +356,17 @@ export default function Pairings() {
           <ChakraProvider>
             <TableContainer>
               <center>
-                <Text className="fw-500 px-16">Pairing Requests</Text>
+                <Text className="fw-500 px-18">Pairing Requests</Text>
               </center>
               <br />
               <Table variant="simple" colorScheme="whiteAlpha">
                 <Thead>
                   <Tr>
-                    <Th className="px-15 capitalize">Parent name</Th>
-                    <Th className="px-15 capitalize">Religion</Th>
-                    <Th className="px-15 capitalize">Tribe</Th>
-                    <Th className="px-15 capitalize">Age Range</Th>
-                    <Th className="px-15 capitalize">Education Level</Th>
+                    <Th className="px-17 capitalize">Parent name</Th>
+                    <Th className="px-17 capitalize">Religion</Th>
+                    <Th className="px-17 capitalize">Tribe</Th>
+                    <Th className="px-17 capitalize">Age Range</Th>
+                    <Th className="px-17 capitalize">Education Level</Th>
                   </Tr>
                 </Thead>
                 <Tbody>

@@ -118,7 +118,7 @@ export default function Parents() {
       <div className="home-container flex-row">
         <div className="home-container-right flex-column">
           <DashboardOverview />
-          <span className="px-18 fw-600 poppins uppercase">
+          <span className="px-20 fw-600 poppins uppercase">
             Recent Parent(s)
           </span>
           {isViewParent && (
@@ -200,7 +200,7 @@ export default function Parents() {
               <br />
               <br />
               {/* <div className="flex-row width-100 align-center justify-end">
-                <Text className="poppins underline px-12 fw-500 pointer">
+                <Text className="poppins underline px-14 fw-500 pointer">
                   View All Parents
                 </Text>
               </div> */}
@@ -209,7 +209,7 @@ export default function Parents() {
 
             <div className="flex-row space-between small-tables-row">
               <TableContainer className="recent-table-container-small table-white">
-                <Text className="cinzel px-13 uppercase">
+                <Text className="cinzel px-15 uppercase">
                   recent paired parents
                 </Text>
                 <br />
@@ -265,13 +265,13 @@ export default function Parents() {
                 <br />
                 <br />
                 {/* <div className="flex-row width-100 align-center justify-end">
-                  <Text className="poppins underline px-12 fw-500 pointer">
+                  <Text className="poppins underline px-14 fw-500 pointer">
                     View All Paired Parents
                   </Text>
                 </div> */}
               </TableContainer>
               <TableContainer className="recent-table-container-small table-white">
-                <Text className="cinzel px-13 uppercase">unpaired parents</Text>
+                <Text className="cinzel px-15 uppercase">unpaired parents</Text>
                 <br />
                 <Table variant="simple" colorScheme="whiteAlpha">
                   <Tbody>

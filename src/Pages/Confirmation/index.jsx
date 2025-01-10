@@ -33,7 +33,7 @@ export default function Confirmation({
                 <span>
                   {parentName}
                   <br />
-                  <span className="px-12">is now matched with</span>
+                  <span className="px-14">is now matched with</span>
                   <br />
                   {surrogateName}
                 </span>

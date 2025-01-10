@@ -150,7 +150,7 @@ export default function Team() {
   };
   const defaultHalfInputProps = {
     variant: "standard",
-    className: "modal-input-half px-12",
+    className: "modal-input-half px-14",
     spellCheck: false,
   };
   return (
@@ -162,7 +162,7 @@ export default function Team() {
       <br />
       <br />
       <div className="flex-row space-between align-center reports-top">
-        <span className="poppins fw-500 px-16 surrogate-reports-head">
+        <span className="poppins fw-500 px-18 surrogate-reports-head">
           Team
         </span>
         <div className="flex-row align-center">
@@ -201,10 +201,10 @@ export default function Team() {
               <Table variant="simple" colorScheme="whiteAlpha">
                 <Thead>
                   <Tr>
-                    <Th className="px-15 capitalize">Email</Th>
-                    <Th className="px-15 capitalize">Name</Th>
-                    <Th className="px-15 capitalize">Phone</Th>
-                    <Th className="px-15 capitalize">Priviledged Account</Th>
+                    <Th className="px-17 capitalize">Email</Th>
+                    <Th className="px-17 capitalize">Name</Th>
+                    <Th className="px-17 capitalize">Phone</Th>
+                    <Th className="px-17 capitalize">Priviledged Account</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -286,7 +286,7 @@ export default function Team() {
           <br />
           <br />
           <center>
-            <span className="modal-about modal-about-create-pairing poppins px-13">
+            <span className="modal-about modal-about-create-pairing poppins px-15">
               Fill in the details to create a new team member
             </span>
           </center>
